@@ -1,0 +1,15 @@
+{
+  "name": "bonlab-prototype-html",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BONLAB website with a visual page editor",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "grapesjs": "^0.22.12",
+    "lucide": "^0.468.0"
+  }
+}

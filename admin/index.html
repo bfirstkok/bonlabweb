@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BONLAB Site Editor</title>
+    <link rel="stylesheet" href="/vendor/grapesjs/css/grapes.min.css">
+    <link rel="stylesheet" href="/admin/editor.css">
+</head>
+<body>
+    <main id="login-view" class="login-view">
+        <section class="login-panel" aria-labelledby="login-title">
+            <div class="brand-lockup">
+                <span class="brand-mark">B</span>
+                <span>BONLAB</span>
+            </div>
+            <div class="login-copy">
+                <span class="kicker">SITE EDITOR</span>
+                <h1 id="login-title">จัดการหน้าเว็บไซต์</h1>
+                <p>เข้าสู่ระบบเพื่อแก้ไขข้อความ รูปภาพ และเลย์เอาต์ของเว็บไซต์</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <label>
+                    <span>ชื่อผู้ใช้</span>
+                    <span class="input-wrap"><i data-lucide="user"></i><input id="username" name="username" autocomplete="username" required></span>
+                </label>
+                <label>
+                    <span>รหัสผ่าน</span>
+                    <span class="input-wrap"><i data-lucide="lock-keyhole"></i><input id="password" name="password" type="password" autocomplete="current-password" required></span>
+                </label>
+                <p id="login-error" class="form-error" role="alert"></p>
+                <button class="login-button" type="submit"><span>เข้าสู่ระบบ</span><i data-lucide="arrow-right"></i></button>
+            </form>
+        </section>
+        <aside class="login-visual" aria-hidden="true">
+            <img src="/assets/bonlab-lab-cover.jpg" alt="">
+            <div class="visual-caption"><span>Broadband Optical Network Laboratory</span><strong>Research built in hardware.</strong></div>
+        </aside>
+    </main>
+
+    <main id="editor-view" class="editor-app" hidden>
+        <header class="editor-header">
+            <div class="editor-brand"><span class="brand-mark small">B</span><span>BONLAB</span><span class="editor-badge">Editor</span></div>
+            <div class="page-control">
+                <label for="page-select">กำลังแก้ไข</label>
+                <select id="page-select" aria-label="เลือกหน้าเว็บ"></select>
+            </div>
+            <div class="header-actions">
+                <div class="segmented" aria-label="ขนาดหน้าจอ">
+                    <button type="button" data-device="Desktop" class="icon-button active" title="เดสก์ท็อป"><i data-lucide="monitor"></i></button>
+                    <button type="button" data-device="Tablet" class="icon-button" title="แท็บเล็ต"><i data-lucide="tablet"></i></button>
+                    <button type="button" data-device="Mobile portrait" class="icon-button" title="มือถือ"><i data-lucide="smartphone"></i></button>
+                </div>
+                <button id="undo-button" type="button" class="icon-button" title="ย้อนกลับ"><i data-lucide="undo-2"></i></button>
+                <button id="redo-button" type="button" class="icon-button" title="ทำซ้ำ"><i data-lucide="redo-2"></i></button>
+                <button id="preview-button" type="button" class="action-button secondary"><i data-lucide="external-link"></i><span>ดูหน้าเว็บ</span></button>
+                <button id="save-button" type="button" class="action-button primary"><i data-lucide="save"></i><span>บันทึก</span></button>
+                <button id="logout-button" type="button" class="icon-button" title="ออกจากระบบ"><i data-lucide="log-out"></i></button>
+            </div>
+        </header>
+
+        <section class="editor-workspace">
+            <aside class="editor-sidebar">
+                <nav class="sidebar-tabs" aria-label="เครื่องมือแก้ไข">
+                    <button type="button" class="tab-button active" data-panel="blocks-panel"><i data-lucide="layout-grid"></i><span>เพิ่ม</span></button>
+                    <button type="button" class="tab-button" data-panel="styles-panel"><i data-lucide="sliders-horizontal"></i><span>รูปแบบ</span></button>
+                    <button type="button" class="tab-button" data-panel="traits-panel"><i data-lucide="settings-2"></i><span>ตั้งค่า</span></button>
+                    <button type="button" class="tab-button" data-panel="layers-panel"><i data-lucide="layers-3"></i><span>เลเยอร์</span></button>
+                </nav>
+                <div class="sidebar-content">
+                    <div id="blocks-panel" class="tool-panel active"><div class="panel-heading"><strong>องค์ประกอบ</strong><span>ลากไปวางบนหน้าเว็บ</span></div><div id="blocks"></div></div>
+                    <div id="styles-panel" class="tool-panel"><div class="panel-heading"><strong>รูปแบบ</strong><span>เลือกชิ้นงานก่อนปรับแต่ง</span></div><div id="styles"></div></div>
+                    <div id="traits-panel" class="tool-panel"><div class="panel-heading"><strong>ตั้งค่า</strong><span>แก้ลิงก์ ข้อความกำกับ และข้อมูลชิ้นงาน</span></div><button id="replace-image-button" type="button" class="upload-button" hidden><i data-lucide="image-up"></i><span>เปลี่ยนรูปภาพ</span></button><input id="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden><div id="traits"></div></div>
+                    <div id="layers-panel" class="tool-panel"><div class="panel-heading"><strong>โครงสร้างหน้า</strong><span>ลากเพื่อจัดลำดับองค์ประกอบ</span></div><div id="layers"></div></div>
+                </div>
+            </aside>
+
+            <div class="canvas-area">
+                <div id="loading-state" class="loading-state"><span class="spinner"></span><span>กำลังเปิดหน้าเว็บ...</span></div>
+                <div id="gjs"></div>
+                <div class="editor-statusbar"><span id="save-status"><span class="status-dot"></span>พร้อมแก้ไข</span><span>ดับเบิลคลิกข้อความเพื่อแก้ไข · ลาก section เพื่อจัดลำดับ</span></div>
+            </div>
+        </section>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="/vendor/grapesjs/grapes.min.js"></script>
+    <script src="/vendor/lucide/lucide.js"></script>
+    <script src="/admin/editor.js"></script>
+</body>
+</html>
