@@ -1,0 +1,85 @@
+---
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { 
+	title = "BONLAB — Broadband Optical Network Laboratory | RMUTI",
+	description = "BONLAB (Broadband Optical Network Laboratory) researches optical communications, 128-QAM SC-FDM, underwater VLC, and real-time FPGA DSP hardware systems at RMUTI Khon Kaen Campus."
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-container">
+            <a href="/index.html" class="logo">
+                <span class="logo-mark" aria-hidden="true">B</span>
+                <span>BONLAB</span>
+            </a>
+            <nav class="main-nav">
+                <a href="/about.html">About</a>
+                <a href="/research.html">Research</a>
+                <a href="/partners.html">Partners</a>
+                <a href="/news.html">News</a>
+                <a href="/team.html">Team</a>
+                <a href="/contact.html" class="nav-button">Contact</a>
+            </nav>
+            <button class="mobile-menu-button" aria-label="Open menu">
+                ☰
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <slot />
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <a href="/index.html" class="footer-logo">
+                    BONLAB
+                </a>
+                <p>
+                    Research · Innovation · Impact<br>
+                    RMUTI Khon Kaen Campus
+                </p>
+            </div>
+            <div>
+                <h4>Explore</h4>
+                <a href="/about.html">About</a>
+                <a href="/research.html">Research</a>
+                <a href="/partners.html">Partners</a>
+            </div>
+            <div>
+                <h4>Information</h4>
+                <a href="/news.html">News</a>
+                <a href="/team.html">Team</a>
+                <a href="/contact.html">Contact</a>
+            </div>
+            <div>
+                <h4>Connect</h4>
+                <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener">Facebook Page</a>
+                <a href="https://sites.google.com/site/adcsbonlab/home" target="_blank" rel="noopener">Official Google Site</a>
+                <a href="https://orcid.org/0000-0002-8698-5407" target="_blank" rel="noopener">ORCID Profile</a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            © 2026 BONLAB — Broadband Optical Network Laboratory. All rights reserved.
+        </div>
+    </footer>
+
+    <script is:inline src="/assets/script.js"></script>
+</body>
+</html>
+

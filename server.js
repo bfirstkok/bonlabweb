@@ -1,21 +1,36 @@
-const crypto = require("node:crypto");
-const fs = require("node:fs");
-const path = require("node:path");
-const express = require("express");
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import express from "express";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const rootDir = __dirname;
 const envPath = path.join(rootDir, ".env");
 if (fs.existsSync(envPath)) process.loadEnvFile(envPath);
 
+const distDir = path.join(rootDir, "dist");
+const htmlDir = fs.existsSync(path.join(distDir, "index.html")) ? distDir : rootDir;
+
 const app = express();
 const port = Number(process.env.PORT || 8000);
-const adminUser = process.env.BONLAB_ADMIN_USER;
-const adminPassword = process.env.BONLAB_ADMIN_PASSWORD;
+const adminUser = process.env.BONLAB_ADMIN_USER || "adminbonlab";
+const adminPassword = process.env.BONLAB_ADMIN_PASSWORD || "change-this-password";
 const sessionSecret = process.env.BONLAB_SESSION_SECRET || getLocalSessionSecret();
 const sessionLifetimeMs = 8 * 60 * 60 * 1000;
-const pageFiles = fs.readdirSync(rootDir)
-    .filter((name) => /^[a-z0-9-]+\.html$/i.test(name))
-    .sort((a, b) => (a === "index.html" ? -1 : b === "index.html" ? 1 : a.localeCompare(b)));
+
+const pageFiles = [
+    "index.html",
+    "about.html",
+    "contact.html",
+    "news.html",
+    "news-detail.html",
+    "partners.html",
+    "research.html",
+    "research-detail.html",
+    "team.html"
+];
 
 if (!adminUser || !adminPassword) {
     throw new Error("Set BONLAB_ADMIN_USER and BONLAB_ADMIN_PASSWORD in .env before starting the server.");
@@ -34,7 +49,10 @@ app.use((req, res, next) => {
 app.use("/vendor/grapesjs", express.static(path.join(rootDir, "node_modules", "grapesjs", "dist")));
 app.use("/vendor/lucide", express.static(path.join(rootDir, "node_modules", "lucide", "dist", "umd")));
 app.use("/admin", express.static(path.join(rootDir, "admin"), { index: "index.html" }));
-app.use("/assets", express.static(path.join(rootDir, "assets"), { dotfiles: "deny" }));
+app.use("/assets", express.static(path.join(rootDir, "public", "assets"), { dotfiles: "deny" }));
+if (fs.existsSync(path.join(distDir, "assets"))) {
+    app.use("/assets", express.static(path.join(distDir, "assets"), { dotfiles: "deny" }));
+}
 
 app.post("/api/admin/login", (req, res) => {
     const username = String(req.body?.username || "");
@@ -61,8 +79,9 @@ app.get("/api/admin/session", requireAdmin, (req, res) => {
 });
 
 app.get("/api/admin/pages", requireAdmin, (req, res) => {
-    const pages = pageFiles.map((file) => {
-        const html = fs.readFileSync(path.join(rootDir, file), "utf8");
+    const pages = pageFiles.filter(f => fs.existsSync(path.join(htmlDir, f)) || fs.existsSync(path.join(rootDir, f))).map((file) => {
+        const filePath = fs.existsSync(path.join(htmlDir, file)) ? path.join(htmlDir, file) : path.join(rootDir, file);
+        const html = fs.readFileSync(filePath, "utf8");
         const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || file;
         return { file, title };
     });
@@ -73,7 +92,10 @@ app.get("/api/admin/page", requireAdmin, (req, res) => {
     const file = validatePageName(req.query.file);
     if (!file) return res.status(400).json({ error: "ไม่พบหน้าเว็บที่เลือก" });
 
-    const html = fs.readFileSync(path.join(rootDir, file), "utf8");
+    const filePath = fs.existsSync(path.join(htmlDir, file)) ? path.join(htmlDir, file) : path.join(rootDir, file);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: "ไม่พบไฟล์หน้าเว็บ" });
+
+    const html = fs.readFileSync(filePath, "utf8");
     res.json({ file, html });
 });
 
@@ -84,12 +106,20 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     if (!looksLikeHtmlDocument(html)) return res.status(400).json({ error: "รูปแบบหน้าเว็บไม่สมบูรณ์ จึงยังไม่บันทึก" });
     if (Buffer.byteLength(html, "utf8") > 2_000_000) return res.status(413).json({ error: "หน้าเว็บมีขนาดใหญ่เกินไป" });
 
-    const target = path.join(rootDir, file);
     const backupDir = path.join(rootDir, "backups");
     fs.mkdirSync(backupDir, { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    fs.copyFileSync(target, path.join(backupDir, `${file}.${stamp}.bak`));
-    fs.writeFileSync(target, html, "utf8");
+
+    const targetDist = path.join(htmlDir, file);
+    if (fs.existsSync(targetDist)) {
+        fs.copyFileSync(targetDist, path.join(backupDir, `${file}.${stamp}.bak`));
+        fs.writeFileSync(targetDist, html, "utf8");
+    }
+
+    const targetRoot = path.join(rootDir, file);
+    if (fs.existsSync(targetRoot) && targetRoot !== targetDist) {
+        fs.writeFileSync(targetRoot, html, "utf8");
+    }
 
     res.json({ ok: true, savedAt: new Date().toISOString() });
 });
@@ -106,17 +136,29 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
     const extensions = { "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image/gif": ".gif" };
     const cleanBase = path.basename(originalName, path.extname(originalName)).replace(/[^a-z0-9-]+/gi, "-").replace(/^-+|-+$/g, "") || "image";
     const filename = `${Date.now()}-${cleanBase.toLowerCase()}${extensions[match[1].toLowerCase()]}`;
-    const uploadDir = path.join(rootDir, "assets", "uploads");
-    fs.mkdirSync(uploadDir, { recursive: true });
-    fs.writeFileSync(path.join(uploadDir, filename), bytes);
+    
+    const uploadDirs = [
+        path.join(rootDir, "public", "assets", "uploads"),
+        path.join(distDir, "assets", "uploads")
+    ];
+
+    uploadDirs.forEach(dir => {
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(path.join(dir, filename), bytes);
+    });
 
     res.json({ ok: true, url: `/assets/uploads/${filename}` });
 });
 
-app.get("/", (req, res) => res.sendFile(path.join(rootDir, "index.html")));
+app.get("/", (req, res) => {
+    const indexPath = fs.existsSync(path.join(htmlDir, "index.html")) ? path.join(htmlDir, "index.html") : path.join(rootDir, "index.html");
+    res.sendFile(indexPath);
+});
+
 app.get("/:file", (req, res, next) => {
     if (!pageFiles.includes(req.params.file)) return next();
-    res.sendFile(path.join(rootDir, req.params.file));
+    const filePath = fs.existsSync(path.join(htmlDir, req.params.file)) ? path.join(htmlDir, req.params.file) : path.join(rootDir, req.params.file);
+    res.sendFile(filePath);
 });
 
 app.use((req, res) => res.status(404).send("Not found"));

@@ -1,15 +1,25 @@
 {
-  "name": "bonlab-prototype-html",
-  "version": "1.0.0",
-  "private": true,
-  "description": "BONLAB website with a visual page editor",
+  "name": "density-light",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
     "start": "node server.js",
-    "dev": "node server.js"
+    "server": "node server.js",
+    "astro": "astro"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "grapesjs": "^0.22.12",
+    "astro": "^7.2.6",
+    "express": "^5.2.1",
+    "grapesjs": "^0.22.16",
     "lucide": "^0.468.0"
+  },
+  "allowScripts": {
+    "esbuild": true
   }
 }

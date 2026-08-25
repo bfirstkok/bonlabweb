@@ -1,27 +1,46 @@
-# BONLAB Website
+# BONLAB — Astro Frontend & Express Admin CMS
 
-Static BONLAB pages with a server-backed visual editor at `/admin`.
+โปรเจกต์เว็บไซต์ BONLAB ที่ผสาน **Astro Frontend** (ดีไซน์ตาม Prototype) เข้ากับ **Express.js Backend + Visual Page Editor (GrapesJS)** จาก `bonlabweb`
 
-## Local setup
+---
 
-1. Install dependencies:
+## 🚀 คำสั่งเริ่มต้นใช้งาน (Commands)
 
-   ```bash
-   npm install
-   ```
+| คำสั่ง | การทำงาน |
+| :--- | :--- |
+| `npm run start` | รันระบบ Full-stack (Express + Admin Visual Editor) ที่ `http://localhost:8000` |
+| `npm run dev` | รัน Astro Dev Server เฉพาะหน้าเว็บที่ `http://localhost:4321` |
+| `npm run build` | บิลด์หน้าเว็บ Astro ทั้งหมดเป็น Static HTML ลงในโฟลเดอร์ `dist/` |
 
-2. Copy `.env.example` to `.env` and set the admin username, password, and a long random session secret.
+---
 
-3. Start the website:
+## 🔐 การเข้าใช้งาน Admin Visual Editor
 
-   ```bash
-   npm start
-   ```
+1. เริ่มต้นรันเซิร์ฟเวอร์: `npm start`
+2. เปิดเบราว์เซอร์ไปที่: `http://localhost:8000/admin`
+3. เข้าสู่ระบบด้วยข้อมูลเริ่มต้นใน `.env`:
+   - **Username:** `adminbonlab`
+   - **Password:** `change-this-password`
+4. เมื่อแก้ไขหน้าเว็บและกด **Save**:
+   - ระบบจะบันทึกการเปลี่ยนแปลงลงไฟล์ HTML ทันที
+   - ระบบจะสร้างไฟล์สำรองอัตโนมัติในโฟลเดอร์ `backups/`
 
-The public website runs at `http://localhost:8000/` and the editor at `http://localhost:8000/admin/`.
+---
 
-## Editor
+## 📁 โครงสร้างโปรเจกต์ (Project Structure)
 
-The editor can update text, links, images, styles, and page structure across all HTML pages. Every save creates a local backup in `backups/` before replacing the page file.
+```text
+density-light/
+├── admin/                  # หน้าตาและระบบ Visual Editor (GrapesJS)
+├── backups/                # ไฟล์สำรอง HTML อัตโนมัติเมื่อมีการบันทึกผ่าน Admin
+├── public/assets/          # ไฟล์ Style, Script, รูปภาพ และ Uploads
+├── src/
+│   ├── layouts/
+│   │   └── Layout.astro    # Common Layout (Header, Footer, Meta)
+│   └── pages/              # หน้าเว็บ Astro ทั้ง 9 หน้า
+├── .env                    # การตั้งค่าพอร์ตและรหัสผ่าน Admin
+├── server.js               # Backend Server (Express + Auth + Editor API)
+├── astro.config.mjs        # การตั้งค่า Astro Build
+└── package.json
+```
 
-The admin editor requires the Node server. Static-only hosting such as GitHub Pages cannot persist editor changes.
