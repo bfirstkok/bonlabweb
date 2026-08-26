@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="casBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#003366"/>
+      <stop offset="100%" stop-color="#004b99"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#casBlue)"/>
+  <circle cx="80" cy="80" r="70" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="80" cy="80" r="66" fill="none" stroke="#60a5fa" stroke-width="1" stroke-dasharray="2 2"/>
+  
+  <!-- CAS Emblem Inner Cogwheel & Atomic Orbit Symbol -->
+  <circle cx="80" cy="66" r="28" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="80" cy="66" r="24" fill="#002244"/>
+  
+  <!-- Atomic Orbits -->
+  <ellipse cx="80" cy="66" rx="22" ry="7" fill="none" stroke="#93c5fd" stroke-width="1.8" transform="rotate(-30 80 66)"/>
+  <ellipse cx="80" cy="66" rx="22" ry="7" fill="none" stroke="#93c5fd" stroke-width="1.8" transform="rotate(30 80 66)"/>
+  <ellipse cx="80" cy="66" rx="22" ry="7" fill="none" stroke="#60a5fa" stroke-width="1.8" transform="rotate(90 80 66)"/>
+  <circle cx="80" cy="66" r="5" fill="#facc15"/>
+  
+  <!-- Orbit Electrons -->
+  <circle cx="63" cy="56" r="2.2" fill="#ffffff"/>
+  <circle cx="97" cy="76" r="2.2" fill="#ffffff"/>
+  
+  <!-- Text Section -->
+  <rect x="22" y="104" width="116" height="24" rx="6" fill="#001833" stroke="#60a5fa" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="13" fill="#ffffff" text-anchor="middle" letter-spacing="2">CIOMP · CAS</text>
+  <text x="80" y="142" font-family="'Inter', Arial, sans-serif" font-size="7" font-weight="600" fill="#93c5fd" text-anchor="middle" letter-spacing="0.5">CHINESE ACADEMY OF SCIENCES</text>
+</svg>

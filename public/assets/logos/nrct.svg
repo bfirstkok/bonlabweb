@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="nrctBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="60%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="nrctGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#nrctBg)"/>
+  <circle cx="80" cy="80" r="70" fill="none" stroke="#fef08a" stroke-width="1.5" opacity="0.8"/>
+  
+  <!-- NRCT Emblem Shield & Torch of Knowledge -->
+  <path d="M80 26 L108 38 L104 68 Q80 96 80 96 Q80 96 56 68 L52 38 Z" fill="none" stroke="url(#nrctGold)" stroke-width="2.5"/>
+  <!-- Torch / Flame -->
+  <path d="M80 40 Q86 48 80 60 Q74 48 80 40 Z" fill="#ef4444"/>
+  <polygon points="76,60 84,60 82,78 78,78" fill="url(#nrctGold)"/>
+  
+  <!-- Text Section -->
+  <rect x="22" y="104" width="116" height="24" rx="6" fill="#0f172a" stroke="#fef08a" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="2.5">NRCT</text>
+  <text x="80" y="142" font-family="'Sarabun', Arial, sans-serif" font-size="7" font-weight="700" fill="#fef08a" text-anchor="middle" letter-spacing="0.5">สำนักงานการวิจัยแห่งชาติ (วช.)</text>
+</svg>

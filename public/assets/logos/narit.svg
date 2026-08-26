@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="naritGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1b3d"/>
+      <stop offset="50%" stop-color="#003580"/>
+      <stop offset="100%" stop-color="#0066cc"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#ffd166"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#naritGrad)"/>
+  <circle cx="80" cy="80" r="71" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-opacity="0.4"/>
+  
+  <!-- Celestial Orbits -->
+  <ellipse cx="80" cy="74" rx="56" ry="22" fill="none" stroke="url(#ringGrad)" stroke-width="2.5" transform="rotate(-24 80 74)"/>
+  <ellipse cx="80" cy="74" rx="44" ry="16" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="3 3" opacity="0.6" transform="rotate(15 80 74)"/>
+  
+  <!-- Central Globe & Telescope Optical Core -->
+  <circle cx="80" cy="68" r="20" fill="#0b1b3d" stroke="#00e5ff" stroke-width="2"/>
+  <circle cx="80" cy="68" r="14" fill="#003580"/>
+  <circle cx="80" cy="68" r="7" fill="#ffffff"/>
+  
+  <!-- Stars -->
+  <polygon points="80,34 82,41 89,41 83,45 85,52 80,48 75,52 77,45 71,41 78,41" fill="#ffd166"/>
+  <circle cx="118" cy="54" r="2.5" fill="#ffffff"/>
+  <circle cx="42" cy="78" r="2" fill="#00e5ff"/>
+  <circle cx="124" cy="92" r="1.8" fill="#ffd166"/>
+  
+  <!-- NARIT Text Banner -->
+  <rect x="26" y="104" width="108" height="24" rx="6" fill="#001845" stroke="#00e5ff" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="2.5">NARIT</text>
+  <text x="80" y="142" font-family="'Sarabun', Arial, sans-serif" font-size="7" font-weight="700" fill="#a0c4ff" text-anchor="middle" letter-spacing="0.5">สดร. • THAILAND</text>
+</svg>

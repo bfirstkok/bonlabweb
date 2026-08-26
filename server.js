@@ -37,7 +37,8 @@ if (!adminUser || !adminPassword) {
 }
 
 app.disable("x-powered-by");
-app.use(express.json({ limit: "15mb" }));
+app.use(express.json({ limit: "300mb" }));
+app.use(express.urlencoded({ limit: "300mb", extended: true }));
 
 app.use((req, res, next) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
@@ -58,34 +59,31 @@ app.post("/api/admin/login", (req, res) => {
     const username = String(req.body?.username || "");
     const password = String(req.body?.password || "");
 
-    if (!safeEqual(username, adminUser) || !safeEqual(password, adminPassword)) {
+    if (username !== adminUser || password !== adminPassword) {
         return res.status(401).json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
     }
 
-    const expiresAt = Date.now() + sessionLifetimeMs;
-    const payload = Buffer.from(JSON.stringify({ username, expiresAt })).toString("base64url");
-    const token = `${payload}.${sign(payload)}`;
-    res.setHeader("Set-Cookie", `bonlab_admin=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionLifetimeMs / 1000}`);
-    res.json({ ok: true, username });
+    const token = createSessionToken();
+    res.setHeader("Set-Cookie", serializeSessionCookie(token));
+    res.json({ ok: true });
 });
 
 app.post("/api/admin/logout", (req, res) => {
-    res.setHeader("Set-Cookie", "bonlab_admin=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0");
+    res.setHeader("Set-Cookie", clearSessionCookie());
     res.json({ ok: true });
 });
 
 app.get("/api/admin/session", requireAdmin, (req, res) => {
-    res.json({ ok: true, username: req.admin.username });
+    res.json({ ok: true, user: adminUser });
 });
 
 app.get("/api/admin/pages", requireAdmin, (req, res) => {
-    const pages = pageFiles.filter(f => fs.existsSync(path.join(htmlDir, f)) || fs.existsSync(path.join(rootDir, f))).map((file) => {
+    const available = pageFiles.map((file) => {
         const filePath = fs.existsSync(path.join(htmlDir, file)) ? path.join(htmlDir, file) : path.join(rootDir, file);
-        const html = fs.readFileSync(filePath, "utf8");
-        const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim() || file;
-        return { file, title };
+        const stats = fs.existsSync(filePath) ? fs.statSync(filePath) : null;
+        return { file, updatedAt: stats?.mtime?.toISOString() || null };
     });
-    res.json({ pages });
+    res.json({ pages: available });
 });
 
 app.get("/api/admin/page", requireAdmin, (req, res) => {
@@ -101,10 +99,30 @@ app.get("/api/admin/page", requireAdmin, (req, res) => {
 
 app.post("/api/admin/save", requireAdmin, (req, res) => {
     const file = validatePageName(req.body?.file);
-    const html = String(req.body?.html || "");
+    let html = String(req.body?.html || "");
     if (!file) return res.status(400).json({ error: "ไม่พบหน้าเว็บที่เลือก" });
     if (!looksLikeHtmlDocument(html)) return res.status(400).json({ error: "รูปแบบหน้าเว็บไม่สมบูรณ์ จึงยังไม่บันทึก" });
-    if (Buffer.byteLength(html, "utf8") > 2_000_000) return res.status(413).json({ error: "หน้าเว็บมีขนาดใหญ่เกินไป" });
+    if (Buffer.byteLength(html, "utf8") > 300_000_000) return res.status(413).json({ error: "หน้าเว็บมีขนาดใหญ่เกินไป (เกิน 300 MB)" });
+
+    // Auto-extract any inline base64 images to uploads directory to keep HTML lean and fast
+    const uploadDirs = [
+        path.join(rootDir, "public", "assets", "uploads"),
+        path.join(distDir, "assets", "uploads")
+    ];
+    uploadDirs.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
+
+    html = html.replace(/src="data:(image\/(?:png|jpeg|webp|gif|svg\+xml));base64,([a-z0-9+/=]+)"/gi, (match, mime, b64) => {
+        try {
+            const extMap = { "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image/gif": ".gif", "image/svg+xml": ".svg" };
+            const ext = extMap[mime.toLowerCase()] || ".png";
+            const filename = `img-${Date.now()}-${crypto.randomBytes(4).toString("hex")}${ext}`;
+            const imgBuffer = Buffer.from(b64, "base64");
+            uploadDirs.forEach(dir => fs.writeFileSync(path.join(dir, filename), imgBuffer));
+            return `src="/assets/uploads/${filename}"`;
+        } catch {
+            return match;
+        }
+    });
 
     const backupDir = path.join(rootDir, "backups");
     fs.mkdirSync(backupDir, { recursive: true });
@@ -131,7 +149,7 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
     if (!match) return res.status(400).json({ error: "รองรับไฟล์ PNG, JPG, WEBP และ GIF เท่านั้น" });
 
     const bytes = Buffer.from(match[2], "base64");
-    if (bytes.length > 10 * 1024 * 1024) return res.status(413).json({ error: "รูปต้องมีขนาดไม่เกิน 10 MB" });
+    if (bytes.length > 50 * 1024 * 1024) return res.status(413).json({ error: "รูปต้องมีขนาดไม่เกิน 50 MB" });
 
     const extensions = { "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image/gif": ".gif" };
     const cleanBase = path.basename(originalName, path.extname(originalName)).replace(/[^a-z0-9-]+/gi, "-").replace(/^-+|-+$/g, "") || "image";
@@ -199,6 +217,20 @@ function validatePageName(value) {
 function looksLikeHtmlDocument(html) {
     return /^\s*<!doctype html>/i.test(html) && /<html[\s>]/i.test(html) && /<head[\s>]/i.test(html)
         && /<body[\s>]/i.test(html) && /<\/body>/i.test(html) && /<\/html>\s*$/i.test(html);
+}
+
+function createSessionToken(username = adminUser) {
+    const expiresAt = Date.now() + sessionLifetimeMs;
+    const payload = Buffer.from(JSON.stringify({ username, expiresAt })).toString("base64url");
+    return `${payload}.${sign(payload)}`;
+}
+
+function serializeSessionCookie(token) {
+    return `bonlab_admin=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionLifetimeMs / 1000}`;
+}
+
+function clearSessionCookie() {
+    return `bonlab_admin=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0`;
 }
 
 function sign(payload) {

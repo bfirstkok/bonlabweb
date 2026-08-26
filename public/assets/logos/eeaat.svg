@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="eeaatBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="60%" stop-color="#172554"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#eeaatBg)"/>
+  <circle cx="80" cy="80" r="70" fill="none" stroke="#facc15" stroke-width="1.5" opacity="0.8"/>
+  
+  <!-- Electrical High Voltage Spark / Gear Symbol -->
+  <circle cx="80" cy="62" r="26" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-dasharray="6 3"/>
+  <polygon points="84,34 68,60 82,60 74,90 94,56 80,56" fill="#facc15" stroke="#ca8a04" stroke-width="1"/>
+  
+  <!-- Text Section -->
+  <rect x="22" y="104" width="116" height="24" rx="6" fill="#0f172a" stroke="#facc15" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="12" fill="#ffffff" text-anchor="middle" letter-spacing="2">EEAAT · EECON</text>
+  <text x="80" y="142" font-family="'Sarabun', Arial, sans-serif" font-size="7" font-weight="700" fill="#fef08a" text-anchor="middle" letter-spacing="0.5">สมาคมวิชาการทางวิศวกรรมไฟฟ้า</text>
+</svg>

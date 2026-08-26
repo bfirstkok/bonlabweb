@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ieeeBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00629B"/>
+      <stop offset="100%" stop-color="#004b77"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#ieeeBg)"/>
+  <circle cx="80" cy="80" r="70" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+  
+  <!-- Classic IEEE Kite / Diamond with Magnetic Field / Right-hand rule symbol -->
+  <polygon points="80,26 106,62 80,98 54,62" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <!-- Right hand rule arrows -->
+  <ellipse cx="80" cy="62" rx="16" ry="10" fill="none" stroke="#ffffff" stroke-width="2"/>
+  <line x1="80" y1="36" x2="80" y2="88" stroke="#ffffff" stroke-width="2.5"/>
+  <polygon points="80,30 76,40 84,40" fill="#ffffff"/>
+  
+  <!-- Text Section -->
+  <rect x="22" y="104" width="116" height="24" rx="6" fill="#003554" stroke="#ffffff" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="2.5">IEEE</text>
+  <text x="80" y="142" font-family="'Inter', Arial, sans-serif" font-size="7" font-weight="700" fill="#bae6fd" text-anchor="middle" letter-spacing="0.8">THAILAND SECTION</text>
+</svg>

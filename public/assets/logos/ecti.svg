@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="ectiBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#ectiBg)"/>
+  <circle cx="80" cy="80" r="70" fill="none" stroke="#e0f2fe" stroke-width="1.5" opacity="0.8"/>
+  
+  <!-- Sine wave & digital pulses (ECTI Association signature) -->
+  <path d="M34 64 Q50 36 65 64 T96 64 T126 64" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M34 64 Q50 92 65 64 T96 64 T126 64" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Electronic Nodes -->
+  <circle cx="34" cy="64" r="3.5" fill="#ffffff"/>
+  <circle cx="65" cy="64" r="3.5" fill="#ffffff"/>
+  <circle cx="96" cy="64" r="3.5" fill="#ffffff"/>
+  <circle cx="126" cy="64" r="3.5" fill="#ffffff"/>
+  
+  <!-- Text Section -->
+  <rect x="22" y="104" width="116" height="24" rx="6" fill="#0c4a6e" stroke="#e0f2fe" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="2.5">ECTI</text>
+  <text x="80" y="142" font-family="'Inter', Arial, sans-serif" font-size="7" font-weight="700" fill="#bae6fd" text-anchor="middle" letter-spacing="0.5">ASSOCIATION · THAILAND</text>
+</svg>

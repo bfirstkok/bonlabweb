@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Universität Paderborn Official Monogram Logo -->
+  <g fill="#0c2340">
+    <!-- Left Polygon Pillar 1 -->
+    <polygon points="85,295 148,245 148,370 85,415" />
+    
+    <!-- Polygon Pillar 2 -->
+    <polygon points="172,175 232,125 232,305 172,350" />
+    
+    <!-- Central Tower Pillar 3 (Tallest) -->
+    <polygon points="256,55 318,5 318,235 256,280" />
+    
+    <!-- Right Wing Pillar 4 -->
+    <polygon points="342,125 400,175 400,400 342,355" />
+    
+    <!-- Base Horizontal Connecting Fold / Shadow -->
+    <polygon points="85,295 148,370 232,305 318,235 400,400 392,415 85,415" opacity="0.95" />
+  </g>
+</svg>
