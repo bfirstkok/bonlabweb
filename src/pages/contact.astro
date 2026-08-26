@@ -7,149 +7,171 @@ const description = "Contact BONLAB at Rajamangala University of Technology Isan
 
 <Layout title={title} description={description}>
 <section class="page-hero">
-
     <div class="container">
-
-        <span class="eyebrow">
+        <span class="eyebrow" data-i18n="contact-hero-eyebrow">
             CONTACT BONLAB
         </span>
-
-        <h1>
+        <h1 data-i18n="contact-page-title">
             Let's Collaborate & Build Research
         </h1>
-
-        <p>
+        <p data-i18n="contact-page-copy">
             Connect with us to discuss joint research projects, graduate student opportunities, or FPGA digital hardware prototyping.
         </p>
-
     </div>
-
 </section>
 
-
 <section class="section">
-
     <div class="container contact-grid">
-
-        <div>
-
-            <span class="eyebrow">
-                GET IN TOUCH
-            </span>
-
-            <h2>
-                Official Laboratory Information
-            </h2>
-
-            <p>
-                Broadband Optical Network Laboratory (BON LAB)<br>
-                Department of Electronics and Telecommunication Engineering, Faculty of Engineering,<br>
-                Rajamangala University of Technology Isan (RMUTI), Khon Kaen Campus.
-            </p>
-
-
-            <div class="contact-info">
-
-                <div>
-
-                    <strong>
-                        Email Address
-                    </strong>
-
-                    <a href="mailto:kidsanapong.pu@rmuti.ac.th">kidsanapong.pu@rmuti.ac.th</a>
-                    <a href="mailto:puntsri@ieee.org">puntsri@ieee.org</a>
-
+        <!-- LEFT COLUMN: LABORATORY CONTACT INFORMATION -->
+        <div class="contact-card contact-info-card">
+            <div class="card-header">
+                <span class="eyebrow" data-i18n="contact-info-eyebrow">
+                    GET IN TOUCH
+                </span>
+                <h2 data-i18n="contact-info-title">
+                    Official Laboratory Information
+                </h2>
+                <div class="lab-org-box">
+                    <span class="lab-name" data-i18n="contact-lab-name">Broadband Optical Network Laboratory (BON LAB)</span>
+                    <span class="lab-dept" data-i18n="contact-dept">Department of Electronics and Telecommunication Engineering, Faculty of Engineering,</span>
+                    <span class="lab-univ" data-i18n="contact-univ">Rajamangala University of Technology Isan (RMUTI), Khon Kaen Campus.</span>
                 </div>
-
-
-                <div>
-
-                    <strong>
-                        Laboratory Location
-                    </strong>
-
-                    <span>150 Srijan Road, Tambon Nai Mueang, Mueang Khon Kaen District, Khon Kaen 40000, Thailand</span>
-
-                </div>
-
-                <div>
-
-                    <strong>
-                        Phone
-                    </strong>
-
-                    <a href="tel:0918652766">091 865 2766</a>
-
-                </div>
-
-                <div>
-
-                    <strong>
-                        Online & Social Channels
-                    </strong>
-
-                    <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener">Facebook Official Page</a>
-                    <a href="https://www.facebook.com/groups/893539197500742" target="_blank" rel="noopener">Facebook Research Group</a>
-                    <a href="https://www.youtube.com/channel/UCKpW8647_GDEORLrdKXUJuA" target="_blank" rel="noopener">YouTube Channel</a>
-                    <a href="https://sites.google.com/site/adcsbonlab/home" target="_blank" rel="noopener">Official Google Site</a>
-                    <span>Instagram: @bon_laboratory</span>
-
-                </div>
-
             </div>
 
+            <div class="contact-info-list">
+                <div class="contact-item">
+                    <div class="contact-item-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-content">
+                        <strong data-i18n="contact-email-label">Email Address</strong>
+                        <div class="contact-links-group">
+                            <a href="mailto:kidsanapong.pu@rmuti.ac.th" class="contact-link">kidsanapong.pu@rmuti.ac.th</a>
+                            <a href="mailto:puntsri@ieee.org" class="contact-link">puntsri@ieee.org</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-item-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-content">
+                        <strong data-i18n="contact-location-label">Laboratory Location</strong>
+                        <span data-i18n="contact-location-value">150 Srijan Road, Tambon Nai Mueang, Mueang Khon Kaen District, Khon Kaen 40000, Thailand</span>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-item-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-content">
+                        <strong data-i18n="contact-phone-label">Phone</strong>
+                        <a href="tel:0918652766" class="contact-link">091 865 2766</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-item-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                            <path d="M2 12h20"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-content">
+                        <strong data-i18n="contact-social-label">Online & Social Channels</strong>
+                        <div class="social-badges-grid">
+                            <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener" class="social-badge" data-i18n="contact-social-fb-page">Facebook Official Page</a>
+                            <a href="https://www.facebook.com/groups/893539197500742" target="_blank" rel="noopener" class="social-badge" data-i18n="contact-social-fb-group">Facebook Research Group</a>
+                            <a href="https://www.youtube.com/channel/UCKpW8647_GDEORLrdKXUJuA" target="_blank" rel="noopener" class="social-badge" data-i18n="contact-social-yt">YouTube Channel</a>
+                            <a href="https://sites.google.com/site/adcsbonlab/home" target="_blank" rel="noopener" class="social-badge" data-i18n="contact-social-site">Official Google Site</a>
+                            <span class="social-badge social-badge-plain">Instagram: @bon_laboratory</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- RIGHT COLUMN: CONTACT INQUIRY FORM -->
+        <form class="contact-form contact-card" action="#" method="post">
+            <div class="card-header">
+                <span class="eyebrow" data-i18n="contact-form-eyebrow">
+                    SEND AN INQUIRY
+                </span>
+                <h2 data-i18n="contact-form-title">
+                    Send Us a Message
+                </h2>
+                <p class="form-desc" data-i18n="contact-form-desc">
+                    Fill out the form below and we will get back to you as soon as possible.
+                </p>
+            </div>
 
-        <form class="contact-form" action="#" method="post">
+            <div class="form-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <span data-i18n="contact-name-label">Your Name</span>
+                            <input
+                                type="text"
+                                placeholder="Enter your full name"
+                                data-i18n-placeholder="contact-name-placeholder"
+                                required
+                            >
+                        </label>
+                    </div>
 
-            <label>
-                Your Name
-                <input
-                    type="text"
-                    placeholder="Enter your name"
-                    required
-                >
-            </label>
+                    <div class="form-group">
+                        <label>
+                            <span data-i18n="contact-email-label">Email Address</span>
+                            <input
+                                type="email"
+                                placeholder="your.email@organization.com"
+                                data-i18n-placeholder="contact-email-placeholder"
+                                required
+                            >
+                        </label>
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <label>
+                        <span data-i18n="contact-subject-label">Subject / Topic</span>
+                        <input
+                            type="text"
+                            placeholder="Research inquiry / Collaboration / Joining the Lab"
+                            data-i18n-placeholder="contact-subject-placeholder"
+                            required
+                        >
+                    </label>
+                </div>
 
-            <label>
-                Email Address
-                <input
-                    type="email"
-                    placeholder="your.email@organization.com"
-                    required
-                >
-            </label>
+                <div class="form-group">
+                    <label>
+                        <span data-i18n="contact-message-label">Message</span>
+                        <textarea
+                            rows="4"
+                            placeholder="Tell us about your inquiry, research proposal, or questions..."
+                            data-i18n-placeholder="contact-message-placeholder"
+                            required
+                        ></textarea>
+                    </label>
+                </div>
 
-
-            <label>
-                Subject / Topic
-                <input
-                    type="text"
-                    placeholder="Research inquiry / Collaboration / Joining the Lab"
-                    required
-                >
-            </label>
-
-
-            <label>
-                Message
-                <textarea
-                    rows="5"
-                    placeholder="Tell us about your inquiry or proposal..."
-                    required
-                ></textarea>
-            </label>
-
-
-            <button type="submit" class="button button-primary">
-                Send Inquiry →
-            </button>
-
+                <button type="submit" class="button button-primary submit-btn">
+                    <span data-i18n="contact-submit-button">Send Inquiry →</span>
+                </button>
+            </div>
         </form>
-
     </div>
-
 </section>
 </Layout>
