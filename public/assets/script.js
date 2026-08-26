@@ -721,9 +721,28 @@ document.querySelector(".contact-form")?.addEventListener("submit", event => {
 });
 
 document.querySelectorAll(".filter-button").forEach(button => button.addEventListener("click", () => {
-    document.querySelectorAll(".filter-button").forEach(item => item.classList.remove("active"));
+    const parentSection = button.closest(".section") || document;
+    parentSection.querySelectorAll(".filter-button").forEach(item => item.classList.remove("active"));
     button.classList.add("active");
+
+    const filterVal = button.dataset.filter || "all";
+    const targets = parentSection.querySelectorAll("[data-category]");
+    targets.forEach(el => {
+        if (filterVal === "all" || el.dataset.category === filterVal || (el.dataset.category && el.dataset.category.includes(filterVal))) {
+            el.style.display = "";
+            el.style.opacity = "0";
+            el.style.transform = "translateY(8px)";
+            setTimeout(() => {
+                el.style.transition = "opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)";
+                el.style.opacity = "1";
+                el.style.transform = "translateY(0)";
+            }, 15);
+        } else {
+            el.style.display = "none";
+        }
+    });
 }));
+
 
 applyTheme(safeStorage.get("bonlab-theme") || "light");
 applyLanguage(language);
