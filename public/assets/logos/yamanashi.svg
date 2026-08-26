@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="yamanashiBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4a044e"/>
+      <stop offset="50%" stop-color="#701a75"/>
+      <stop offset="100%" stop-color="#86198f"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="80" cy="80" r="74" fill="url(#yamanashiBg)"/>
+  <circle cx="80" cy="80" r="70" fill="none" stroke="#f5d0fe" stroke-width="1.5" opacity="0.8"/>
+  <circle cx="80" cy="80" r="66" fill="none" stroke="#e879f9" stroke-width="1" stroke-dasharray="3 3"/>
+  
+  <!-- Mount Fuji & Yamanashi Grape Vine Monogram "Y" -->
+  <path d="M42 42 L65 72 L65 94 L95 94 L95 72 L118 42 L98 42 L80 65 L62 42 Z" fill="#ffffff"/>
+  <!-- Grape Nodes / Optical Light Nodes -->
+  <circle cx="80" cy="34" r="5" fill="#f0abfc"/>
+  <circle cx="68" cy="48" r="4" fill="#f5d0fe"/>
+  <circle cx="92" cy="48" r="4" fill="#f5d0fe"/>
+  
+  <!-- Text Section -->
+  <rect x="18" y="104" width="124" height="24" rx="6" fill="#2e0234" stroke="#f5d0fe" stroke-width="1"/>
+  <text x="80" y="121" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="11.5" fill="#ffffff" text-anchor="middle" letter-spacing="1.2">YAMANASHI UNIV</text>
+  <text x="80" y="142" font-family="'Noto Sans JP', 'Inter', Arial, sans-serif" font-size="7.5" font-weight="700" fill="#f5d0fe" text-anchor="middle" letter-spacing="1">山梨大学 • JAPAN</text>
+</svg>
