@@ -1,67 +1,260 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-const title = "128-QAM SC-FDM Optical Wireless System — BONLAB";
-const description = "Detailed research overview of BONLAB";
+const title = "Hardware-Oriented Communication Research — BONLAB";
+const description = "Technical architecture, experimental laboratory testbeds, mathematical modeling, and real-time FPGA digital signal processing at BONLAB RMUTI Khon Kaen Campus.";
 ---
 
 <Layout title={title} description={description}>
-<section class="detail-hero">
+<!-- DETAIL HERO -->
+<section class="page-hero">
     <div class="container">
-        <a href="research.html" class="back-link">← Back to Research</a>
-        <span class="eyebrow">OPTICAL WIRELESS COMMUNICATIONS · FPGA PROTOTYPING</span>
-        <h1>128-QAM SC-FDM Optical Wireless System</h1>
-        <p>Real-time digital signal processing, high-order constellation mapping, and hardware verification for high-speed optical communications.</p>
+        <a href="research.html" class="back-link" data-i18n="detail-back-link" style="display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; font-weight: 700; color: #38bdf8;">
+            ← Back to Research Overview
+        </a>
+        <span class="eyebrow" data-i18n="detail-hero-eyebrow">
+            BONLAB FLAGSHIP RESEARCH & HARDWARE REALIZATION
+        </span>
+        <h1 data-i18n="detail-hero-title">
+            Hardware-Oriented Communication Research
+        </h1>
+        <p data-i18n="detail-hero-desc">
+            In-depth technical architecture, experimental laboratory testbeds, mathematical modeling, and real-time FPGA digital signal processing implementations at RMUTI Khon Kaen Campus.
+        </p>
     </div>
 </section>
 
+<!-- MAIN DETAIL CONTENT WITH INTERACTIVE PROJECT TABS -->
 <section class="section">
-    <div class="container detail-layout">
-        <article class="detail-content">
-            <img class="project-image" src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication System Constellation and FPGA Testbed">
-            
-            <h2>Project Overview</h2>
-            <p>At BONLAB, we investigate the realization of Single-Carrier Frequency Division Multiplexing (SC-FDM) combined with high-order Quadrature Amplitude Modulation (128-QAM) for optical wireless links. SC-FDM provides lower Peak-to-Average Power Ratio (PAPR) compared to traditional OFDM, making it exceptionally well-suited for optical emitters with nonlinear transfer characteristics.</p>
-            
-            <p>Our team implements real-time baseband DSP blocks directly into FPGA hardware, validating theoretical error-vector magnitude (EVM) and bit error rate (BER) through physical optical channels.</p>
+    <div class="container">
+        <!-- Interactive Project Selector Tabs -->
+        <div class="filter-bar" style="margin-bottom: 35px;">
+            <button type="button" class="filter-button active" data-filter="p1" data-i18n="detail-tab-128qam">📡 128-QAM SC-FDM System</button>
+            <button type="button" class="filter-button" data-filter="p2" data-i18n="detail-tab-fpga">🧩 FPGA Real-time DSP</button>
+            <button type="button" class="filter-button" data-filter="p3" data-i18n="detail-tab-vlc">🌊 Underwater VLC (IoUT)</button>
+            <button type="button" class="filter-button" data-filter="p4" data-i18n="detail-tab-health">🩺 Smart Healthcare IoT</button>
+        </div>
 
-            <h2>Key Innovations & Technical Highlights</h2>
-            <ul class="detail-list">
-                <li><strong>High Spectral Efficiency:</strong> 128-QAM modulation constellation design providing dense information throughput.</li>
-                <li><strong>Low PAPR Performance:</strong> SC-FDM discrete Fourier transform (DFT) precoding to prevent laser diode saturation.</li>
-                <li><strong>FPGA Real-Time DSP:</strong> Pipelined digital filtering, equalization, and symbol synchronization implemented on programmable digital hardware.</li>
-                <li><strong>Low Phase-Noise PLL:</strong> Customized phase-locked loop synchronization reducing phase jitter in optical carrier recovery.</li>
-            </ul>
+        <div class="detail-layout">
+            <!-- LEFT MAIN CONTENT -->
+            <div class="detail-main">
+                <!-- PROJECT 1: 128-QAM SC-FDM -->
+                <article class="detail-project-pane" data-category="p1">
+                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
+                        <img src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication System" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    </div>
+                    
+                    <span class="pub-tag-pill" data-i18n="p1-badge" style="color: #1746a2; background: #edf4ff; font-weight: 800; margin-bottom: 12px; display: inline-block;">
+                        OPTICAL WIRELESS COMMUNICATIONS · EXPERIMENTAL TESTBED
+                    </span>
+                    <h2 data-i18n="p1-title" style="font-size: 28px; font-weight: 800; color: #091e42; margin-bottom: 16px;">
+                        128-QAM SC-FDM Optical Wireless Communication System
+                    </h2>
 
-            <h2>Laboratory Verification & Testbeds</h2>
-            <p>Experiments were conducted in the BONLAB facilities at RMUTI Khon Kaen Campus using high-bandwidth arbitrary waveform generators, mixed-signal oscilloscopes, semiconductor laser modules, and high-speed photodetectors.</p>
+                    <h3 data-i18n="p1-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
+                        Executive Summary & System Architecture
+                    </h3>
+                    <p data-i18n="p1-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                        At BONLAB, we investigate and demonstrate the hardware realization of Single-Carrier Frequency Division Multiplexing (SC-FDM) combined with high-order 128-QAM constellation mapping for high-speed optical wireless channels. Traditional OFDM suffers from severe Peak-to-Average Power Ratio (PAPR), causing nonlinear clipping and distortion in semiconductor laser diodes and high-power LEDs. By incorporating Discrete Fourier Transform (DFT) precoding, SC-FDM drastically suppresses PAPR while preserving the multipath mitigation benefits of multicarrier systems.
+                    </p>
+                    <p data-i18n="p1-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                        Our team designed and verified the entire physical layer transceivers on FPGA hardware pipelines, establishing seamless constellation demodulation, low error-vector magnitude (EVM), and robust transmission over atmospheric and optical wireless testbeds.
+                    </p>
 
-            <h2>Official Research Profile</h2>
-            <p>For more research publications, datasets, and citation metrics, visit our official Scopus / ORCID profile.</p>
-            <a class="text-link" href="https://orcid.org/0000-0002-8698-5407" target="_blank" rel="noopener">View Assoc. Prof. Dr. Kidsanapong Puntsri on ORCID →</a>
-        </article>
+                    <h3 data-i18n="p1-inno-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 30px; margin-bottom: 15px;">
+                        Core Technical Innovations
+                    </h3>
+                    <ul class="detail-list" style="display: flex; flex-direction: column; gap: 12px; padding-left: 0; list-style: none;">
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>⚡</span>
+                            <span><strong data-i18n="p1-inno-1-title">Dense Spectral Efficiency:</strong> <span data-i18n="p1-inno-1-desc">128-QAM constellation packing delivering high data throughput per unit optical bandwidth.</span></span>
+                        </li>
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>📉</span>
+                            <span><strong data-i18n="p1-inno-2-title">Low PAPR Transmission:</strong> <span data-i18n="p1-inno-2-desc">DFT-spread multicarrier architecture effectively mitigating optical emitter nonlinearity and power clipping.</span></span>
+                        </li>
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>🧩</span>
+                            <span><strong data-i18n="p1-inno-3-title">FPGA Real-Time Baseband DSP:</strong> <span data-i18n="p1-inno-3-desc">Full hardware pipeline incorporating cyclic prefix insertion, channel equalization, and carrier phase synchronization.</span></span>
+                        </li>
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>⚙️</span>
+                            <span><strong data-i18n="p1-inno-4-title">Phase-Jitter Suppression:</strong> <span data-i18n="p1-inno-4-desc">Low phase-noise PLL tracking circuits eliminating carrier offset in high-order constellation demapping.</span></span>
+                        </li>
+                    </ul>
 
-        <aside class="detail-sidebar">
-            <div class="sidebar-card">
-                <h3>Research Specifications</h3>
-                <div class="info-row"><span>Field</span><strong>Optical Communications</strong></div>
-                <div class="info-row"><span>Modulation</span><strong>128-QAM SC-FDM</strong></div>
-                <div class="info-row"><span>Hardware</span><strong>FPGA + Optical Front-End</strong></div>
-                <div class="info-row"><span>Lab</span><strong>BONLAB</strong></div>
-                <div class="info-row"><span>Campus</span><strong>RMUTI Khon Kaen</strong></div>
+                    <h3 data-i18n="p1-lab-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 30px; margin-bottom: 10px;">
+                        Laboratory Experimental Setup & Instrumentation
+                    </h3>
+                    <p data-i18n="p1-lab-desc" style="font-size: 15px; line-height: 1.7; color: #334155;">
+                        Physical laboratory verification conducted at BONLAB RMUTI Khon Kaen utilizing high-speed arbitrary waveform generators (AWG), high-bandwidth digital oscilloscopes, semiconductor laser modules, variable optical attenuators (VOA), and avalanche photodiode (APD) optical receiver front-ends.
+                    </p>
+                </article>
+
+                <!-- PROJECT 2: FPGA DSP -->
+                <article class="detail-project-pane" data-category="p2" style="display: none;">
+                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
+                        <img src="assets/news-16qam.jpg" alt="Real-time FPGA DSP Transceiver & AWGN Hardware Engine" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    </div>
+                    
+                    <span class="pub-tag-pill" data-i18n="p2-badge" style="color: #6d28d9; background: #ede9fe; font-weight: 800; margin-bottom: 12px; display: inline-block;">
+                        FPGA & REAL-TIME HARDWARE PROTOTYPING
+                    </span>
+                    <h2 data-i18n="p2-title" style="font-size: 28px; font-weight: 800; color: #091e42; margin-bottom: 16px;">
+                        Real-time FPGA DSP Transceiver & AWGN Hardware Engine
+                    </h2>
+
+                    <h3 data-i18n="p2-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
+                        Executive Summary & Architecture
+                    </h3>
+                    <p data-i18n="p2-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                        BONLAB specializes in translating theoretical digital communications into real-time programmable hardware logic (FPGA). We developed pipelined hardware modules for 16-QAM and 64-QAM transceivers, including a reconfigurable Additive White Gaussian Noise (AWGN) channel emulator based on the Box-Muller method combined with CORDIC square root calculation engines.
+                    </p>
+                    <p data-i18n="p2-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                        This hardware testbed allows direct, real-time Bit Error Rate (BER) characterization entirely inside FPGA silicon at clock rates exceeding 200 MHz, without relying on slow software-based computer simulations.
+                    </p>
+
+                    <h3 data-i18n="p2-inno-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 30px; margin-bottom: 15px;">
+                        Hardware Capabilities & Key Features
+                    </h3>
+                    <ul class="detail-list" style="display: flex; flex-direction: column; gap: 12px; padding-left: 0; list-style: none;">
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>🎲</span>
+                            <span><strong data-i18n="p2-inno-1-title">Box-Muller CORDIC AWGN Generator:</strong> <span data-i18n="p2-inno-1-desc">Hardware-efficient generation of true Gaussian noise distributions for high-speed channel emulation.</span></span>
+                        </li>
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>⚡</span>
+                            <span><strong data-i18n="p2-inno-2-title">Pipelined IFFT/FFT Engines:</strong> <span data-i18n="p2-inno-2-desc">High-throughput parallel architecture for real-time multicarrier modulation and demodulation.</span></span>
+                        </li>
+                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
+                            <span>📊</span>
+                            <span><strong data-i18n="p2-inno-3-title">Automated BER Measurement:</strong> <span data-i18n="p2-inno-3-desc">Real-time hardware bit error counter measuring millions of transmitted bits per second.</span></span>
+                        </li>
+                    </ul>
+                </article>
+
+                <!-- PROJECT 3: UNDERWATER VLC -->
+                <article class="detail-project-pane" data-category="p3" style="display: none;">
+                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
+                        <img src="assets/bonlab-lab-cover.jpg" alt="Underwater VLC Monitoring & Internet of Underwater Things (IoUT)" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    </div>
+                    
+                    <span class="pub-tag-pill" data-i18n="p3-badge" style="color: #0369a1; background: #e0f2fe; font-weight: 800; margin-bottom: 12px; display: inline-block;">
+                        VISIBLE LIGHT COMMUNICATION · AQUATIC MONITORING
+                    </span>
+                    <h2 data-i18n="p3-title" style="font-size: 28px; font-weight: 800; color: #091e42; margin-bottom: 16px;">
+                        Underwater VLC Monitoring & Internet of Underwater Things (IoUT)
+                    </h2>
+
+                    <h3 data-i18n="p3-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
+                        Executive Summary & Underwater Testbed
+                    </h3>
+                    <p data-i18n="p3-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                        Standard radio frequency (RF) signals suffer extreme attenuation in water, making high-speed underwater communication a major technological challenge. BONLAB developed Visible Light Communication (VLC) optical transceivers using blue-green semiconductor optical emitters operating in the minimum attenuation optical window of clear and turbid water.
+                    </p>
+                    <p data-i18n="p3-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                        We constructed a dedicated laboratory water tank testbed equipped with optical transmitters, underwater sensor probes, and digital receiver circuits to validate telemetry for aquatic environmental monitoring and IoUT sensor nodes.
+                    </p>
+                </article>
+
+                <!-- PROJECT 4: HEALTHCARE IOT -->
+                <article class="detail-project-pane" data-category="p4" style="display: none;">
+                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
+                        <img src="assets/news-nursing-project.jpg" alt="Smart Photonic Vital-Sign IoT Monitor" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    </div>
+                    
+                    <span class="pub-tag-pill" data-i18n="p4-badge" style="color: #b45309; background: #fef3c7; font-weight: 800; margin-bottom: 12px; display: inline-block;">
+                        SMART HEALTHCARE · NATIONAL SILVER MEDAL
+                    </span>
+                    <h2 data-i18n="p4-title" style="font-size: 28px; font-weight: 800; color: #091e42; margin-bottom: 16px;">
+                        Smart Photonic Vital-Sign IoT Monitor
+                    </h2>
+
+                    <h3 data-i18n="p4-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
+                        Executive Summary & Applied Health Technology
+                    </h3>
+                    <p data-i18n="p4-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                        Awarded the Silver Medal at the Thailand Research Expo (มหกรรมงานวิจัยแห่งชาติ), this project applies microcontroller systems and optical photonic sensors to capture and process vital signs (heart rate, SpO2, body temperature) in real time.
+                    </p>
+                    <p data-i18n="p4-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                        Mentored by Assoc. Prof. Dr. Kidsanapong Puntsri, student engineers developed a complete hardware unit with cloud IoT telemetry, enabling healthcare staff to monitor patient telemetry remotely with high precision.
+                    </p>
+                </article>
             </div>
-            <div class="sidebar-card">
-                <h3>Principal Investigator</h3>
-                <p><strong>Assoc. Prof. Dr. Kidsanapong Puntsri</strong></p>
-                <p>Head of BON LAB · IEEE Senior Member</p>
-                <a class="text-link" href="mailto:kidsanapong.pu@rmuti.ac.th">kidsanapong.pu@rmuti.ac.th</a>
-            </div>
-            <div class="sidebar-card">
-                <h3>Related Research</h3>
-                <p><a class="text-link" href="research.html">Underwater Monitoring using VLC →</a></p>
-                <p><a class="text-link" href="research.html">Real DSP for High Speed Transceivers →</a></p>
-            </div>
-        </aside>
+
+            <!-- RIGHT SIDEBAR (TECHNICAL SPECIFICATIONS & CONTACT) -->
+            <aside class="detail-sidebar">
+                <!-- 1. Technical Specs -->
+                <div class="sidebar-card" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+                    <h3 data-i18n="detail-side-specs-title" style="font-size: 18px; font-weight: 800; color: #091e42; margin-bottom: 15px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px;">
+                        Technical Specifications
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13.5px;">
+                        <div>
+                            <span data-i18n="detail-spec-lab" style="color: #64748b; font-weight: 700; display: block;">Laboratory:</span>
+                            <strong style="color: #091e42;">BON LAB (Est. 2016)</strong>
+                        </div>
+                        <div>
+                            <span data-i18n="detail-spec-dept" style="color: #64748b; font-weight: 700; display: block;">Department:</span>
+                            <strong data-i18n="detail-spec-dept-val" style="color: #091e42;">Electronics & Telecom Engineering</strong>
+                        </div>
+                        <div>
+                            <span data-i18n="detail-spec-inst" style="color: #64748b; font-weight: 700; display: block;">Institution:</span>
+                            <strong data-i18n="detail-spec-inst-val" style="color: #091e42;">RMUTI Khon Kaen Campus</strong>
+                        </div>
+                        <div>
+                            <span data-i18n="detail-spec-hardware" style="color: #64748b; font-weight: 700; display: block;">Hardware Platforms:</span>
+                            <strong data-i18n="detail-spec-hardware-val" style="color: #1746a2;">Xilinx FPGA, AWG, DSO, Optoelectronics</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Principal Investigator Card -->
+                <div class="sidebar-card" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+                    <h3 data-i18n="detail-side-pi-title" style="font-size: 18px; font-weight: 800; color: #091e42; margin-bottom: 15px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px;">
+                        Principal Investigator
+                    </h3>
+                    <strong data-i18n="detail-side-pi-name" style="font-size: 15px; color: #091e42; display: block; margin-bottom: 4px;">
+                        Assoc. Prof. Dr. Kidsanapong Puntsri
+                    </strong>
+                    <div data-i18n="detail-side-pi-role" style="font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 12px;">
+                        Head of BON LAB · IEEE Senior Member
+                    </div>
+                    <a href="mailto:kidsanapong.pu@rmuti.ac.th" class="profile-quick-btn" style="text-decoration: none; font-size: 12px; margin-bottom: 8px;">
+                        ✉️ kidsanapong.pu@rmuti.ac.th
+                    </a>
+                    <a href="about.html" class="text-link" style="font-size: 13px; font-weight: 700;">
+                        View Full Academic Profile →
+                    </a>
+                </div>
+
+                <!-- 3. Publications Link -->
+                <div class="sidebar-card" style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+                    <h3 data-i18n="detail-side-pub-title" style="font-size: 18px; font-weight: 800; color: #091e42; margin-bottom: 15px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px;">
+                        Related Publications
+                    </h3>
+                    <p style="font-size: 13.5px; color: #475569; line-height: 1.6; margin-bottom: 14px;">
+                        Explore 88+ published research articles, citations, and conference papers:
+                    </p>
+                    <a href="https://scholar.google.com/citations?user=lo9l-hMAAAAJ&hl=th&oi=ao" target="_blank" rel="noopener" class="button button-outline" data-i18n="detail-side-pub-btn" style="width: 100%; text-align: center; justify-content: center; font-size: 13px; padding: 8px 12px;">
+                        View Complete Scholar Profile ↗
+                    </a>
+                </div>
+
+                <!-- 4. Contact Action -->
+                <div class="sidebar-card" style="background: linear-gradient(135deg, #1746a2, #001f54); color: #ffffff; border-radius: 16px; padding: 22px; box-shadow: 0 8px 24px rgba(23,70,162,0.25);">
+                    <h3 data-i18n="detail-side-contact-title" style="font-size: 18px; font-weight: 800; color: #ffffff; margin-bottom: 10px;">
+                        Collaboration Inquiries
+                    </h3>
+                    <p data-i18n="detail-side-contact-desc" style="font-size: 13.5px; color: #bfdbfe; line-height: 1.6; margin-bottom: 16px;">
+                        Interested in joint research, graduate thesis opportunities, or hardware prototyping?
+                    </p>
+                    <a href="contact.html" class="button button-primary" data-i18n="detail-side-contact-btn" style="background: #ffffff; color: #1746a2; width: 100%; text-align: center; justify-content: center; font-size: 13px; font-weight: 800;">
+                        Contact BONLAB →
+                    </a>
+                </div>
+            </aside>
+        </div>
     </div>
 </section>
 </Layout>
