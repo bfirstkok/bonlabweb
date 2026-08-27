@@ -86,10 +86,29 @@
         <div class="detail-layout">
             <!-- LEFT MAIN CONTENT -->
             <div class="detail-main">
-                <!-- PROJECT 1: 128-QAM SC-FDM -->
+                <!-- ==========================================
+                     PROJECT 1: 128-QAM SC-FDM OPTICAL WIRELESS
+                     ========================================== -->
                 <article class="detail-project-pane" data-category="p1">
-                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
-                        <img src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication System" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    <!-- Image Showcase with Floating Glassmorphism Metric Chips -->
+                    <div class="detail-cover-showcase">
+                        <img class="detail-cover-img" src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication System">
+                        <div class="detail-cover-overlay">
+                            <div class="floating-metrics-row">
+                                <div class="floating-metric-chip">
+                                    <span>📡</span>
+                                    <span>Modulation: <strong>128-QAM</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>📉</span>
+                                    <span>PAPR Gain: <strong>-6.2 dB</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>⚡</span>
+                                    <span>EVM: <strong>&lt; 3.8% RMS</strong></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <span class="pub-tag-pill" data-i18n="p1-badge" style="color: #1746a2; background: #edf4ff; font-weight: 800; margin-bottom: 12px; display: inline-block;">
@@ -102,47 +121,125 @@
                     <h3 data-i18n="p1-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
                         Executive Summary & System Architecture
                     </h3>
-                    <p data-i18n="p1-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                    <p data-i18n="p1-p1" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 15px;">
                         At BONLAB, we investigate and demonstrate the hardware realization of Single-Carrier Frequency Division Multiplexing (SC-FDM) combined with high-order 128-QAM constellation mapping for high-speed optical wireless channels. Traditional OFDM suffers from severe Peak-to-Average Power Ratio (PAPR), causing nonlinear clipping and distortion in semiconductor laser diodes and high-power LEDs. By incorporating Discrete Fourier Transform (DFT) precoding, SC-FDM drastically suppresses PAPR while preserving the multipath mitigation benefits of multicarrier systems.
                     </p>
-                    <p data-i18n="p1-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                    <p data-i18n="p1-p2" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 25px;">
                         Our team designed and verified the entire physical layer transceivers on FPGA hardware pipelines, establishing seamless constellation demodulation, low error-vector magnitude (EVM), and robust transmission over atmospheric and optical wireless testbeds.
                     </p>
 
+                    <!-- Interactive Signal Pipeline Flow Diagram -->
+                    <div class="pipeline-flow-wrapper">
+                        <div class="pipeline-flow-title">
+                            <span>⚡</span>
+                            <span>Real-Time Optical DSP Signal Processing Pipeline:</span>
+                        </div>
+                        <div class="pipeline-steps-row">
+                            <div class="pipeline-step-node">
+                                <span class="pipeline-step-number">Stage 1</span>
+                                <span class="pipeline-step-label">Bit Stream</span>
+                            </div>
+                            <span class="pipeline-arrow-icon">→</span>
+                            <div class="pipeline-step-node">
+                                <span class="pipeline-step-number">Stage 2</span>
+                                <span class="pipeline-step-label">128-QAM Mapper</span>
+                            </div>
+                            <span class="pipeline-arrow-icon">→</span>
+                            <div class="pipeline-step-node">
+                                <span class="pipeline-step-number">Stage 3</span>
+                                <span class="pipeline-step-label">DFT Precoding</span>
+                            </div>
+                            <span class="pipeline-arrow-icon">→</span>
+                            <div class="pipeline-step-node">
+                                <span class="pipeline-step-number">Stage 4</span>
+                                <span class="pipeline-step-label">IFFT Modulator</span>
+                            </div>
+                            <span class="pipeline-arrow-icon">→</span>
+                            <div class="pipeline-step-node">
+                                <span class="pipeline-step-number">Stage 5</span>
+                                <span class="pipeline-step-label">Cyclic Prefix</span>
+                            </div>
+                            <span class="pipeline-arrow-icon">→</span>
+                            <div class="pipeline-step-node">
+                                <span class="pipeline-step-number">Stage 6</span>
+                                <span class="pipeline-step-label">Laser Driver</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2x2 Interactive Innovation Cards Grid -->
                     <h3 data-i18n="p1-inno-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 30px; margin-bottom: 15px;">
                         Core Technical Innovations
                     </h3>
-                    <ul class="detail-list" style="display: flex; flex-direction: column; gap: 12px; padding-left: 0; list-style: none;">
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>⚡</span>
-                            <span><strong data-i18n="p1-inno-1-title">Dense Spectral Efficiency:</strong> <span data-i18n="p1-inno-1-desc">128-QAM constellation packing delivering high data throughput per unit optical bandwidth.</span></span>
-                        </li>
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>📉</span>
-                            <span><strong data-i18n="p1-inno-2-title">Low PAPR Transmission:</strong> <span data-i18n="p1-inno-2-desc">DFT-spread multicarrier architecture effectively mitigating optical emitter nonlinearity and power clipping.</span></span>
-                        </li>
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>🧩</span>
-                            <span><strong data-i18n="p1-inno-3-title">FPGA Real-Time Baseband DSP:</strong> <span data-i18n="p1-inno-3-desc">Full hardware pipeline incorporating cyclic prefix insertion, channel equalization, and carrier phase synchronization.</span></span>
-                        </li>
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>⚙️</span>
-                            <span><strong data-i18n="p1-inno-4-title">Phase-Jitter Suppression:</strong> <span data-i18n="p1-inno-4-desc">Low phase-noise PLL tracking circuits eliminating carrier offset in high-order constellation demapping.</span></span>
-                        </li>
-                    </ul>
+                    <div class="innovation-cards-grid">
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">⚡</div>
+                                <h4 data-i18n="p1-inno-1-title">Dense Spectral Efficiency</h4>
+                            </div>
+                            <p data-i18n="p1-inno-1-desc">128-QAM constellation packing delivering high data throughput per unit optical bandwidth.</p>
+                        </div>
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">📉</div>
+                                <h4 data-i18n="p1-inno-2-title">Low PAPR Transmission</h4>
+                            </div>
+                            <p data-i18n="p1-inno-2-desc">DFT-spread multicarrier architecture effectively mitigating optical emitter nonlinearity and power clipping.</p>
+                        </div>
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">🧩</div>
+                                <h4 data-i18n="p1-inno-3-title">FPGA Real-Time DSP</h4>
+                            </div>
+                            <p data-i18n="p1-inno-3-desc">Full hardware pipeline incorporating cyclic prefix insertion, channel equalization, and carrier phase synchronization.</p>
+                        </div>
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">⚙️</div>
+                                <h4 data-i18n="p1-inno-4-title">Phase-Jitter Suppression</h4>
+                            </div>
+                            <p data-i18n="p1-inno-4-desc">Low phase-noise PLL tracking circuits eliminating carrier offset in high-order constellation demapping.</p>
+                        </div>
+                    </div>
 
+                    <!-- Laboratory Setup & Instruments -->
                     <h3 data-i18n="p1-lab-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 30px; margin-bottom: 10px;">
                         Laboratory Experimental Setup & Instrumentation
                     </h3>
                     <p data-i18n="p1-lab-desc" style="font-size: 15px; line-height: 1.7; color: #334155;">
                         Physical laboratory verification conducted at BONLAB RMUTI Khon Kaen utilizing high-speed arbitrary waveform generators (AWG), high-bandwidth digital oscilloscopes, semiconductor laser modules, variable optical attenuators (VOA), and avalanche photodiode (APD) optical receiver front-ends.
                     </p>
+                    <div class="instruments-chips-grid">
+                        <span class="instrument-chip">🔬 Keysight AWG M8195A</span>
+                        <span class="instrument-chip">⚡ Tektronix DSO 4GHz</span>
+                        <span class="instrument-chip">🧩 Xilinx Kintex-7 FPGA</span>
+                        <span class="instrument-chip">📡 Semiconductor Laser Diode</span>
+                        <span class="instrument-chip">📶 Avalanche Photodiode (APD)</span>
+                    </div>
                 </article>
 
-                <!-- PROJECT 2: FPGA DSP -->
+                <!-- ==========================================
+                     PROJECT 2: FPGA DSP & AWGN ENGINE
+                     ========================================== -->
                 <article class="detail-project-pane" data-category="p2" style="display: none;">
-                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
-                        <img src="assets/news-16qam.jpg" alt="Real-time FPGA DSP Transceiver & AWGN Hardware Engine" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    <div class="detail-cover-showcase">
+                        <img class="detail-cover-img" src="assets/news-16qam.jpg" alt="Real-time FPGA DSP Transceiver & AWGN Hardware Engine">
+                        <div class="detail-cover-overlay">
+                            <div class="floating-metrics-row">
+                                <div class="floating-metric-chip">
+                                    <span>🧩</span>
+                                    <span>Clock Rate: <strong>200+ MHz</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>📊</span>
+                                    <span>BER Counter: <strong>Real-time</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>🎲</span>
+                                    <span>Noise: <strong>Box-Muller CORDIC</strong></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <span class="pub-tag-pill" data-i18n="p2-badge" style="color: #6d28d9; background: #ede9fe; font-weight: 800; margin-bottom: 12px; display: inline-block;">
@@ -155,36 +252,63 @@
                     <h3 data-i18n="p2-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
                         Executive Summary & Architecture
                     </h3>
-                    <p data-i18n="p2-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                    <p data-i18n="p2-p1" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 15px;">
                         BONLAB specializes in translating theoretical digital communications into real-time programmable hardware logic (FPGA). We developed pipelined hardware modules for 16-QAM and 64-QAM transceivers, including a reconfigurable Additive White Gaussian Noise (AWGN) channel emulator based on the Box-Muller method combined with CORDIC square root calculation engines.
                     </p>
-                    <p data-i18n="p2-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                    <p data-i18n="p2-p2" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 25px;">
                         This hardware testbed allows direct, real-time Bit Error Rate (BER) characterization entirely inside FPGA silicon at clock rates exceeding 200 MHz, without relying on slow software-based computer simulations.
                     </p>
 
                     <h3 data-i18n="p2-inno-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 30px; margin-bottom: 15px;">
                         Hardware Capabilities & Key Features
                     </h3>
-                    <ul class="detail-list" style="display: flex; flex-direction: column; gap: 12px; padding-left: 0; list-style: none;">
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>🎲</span>
-                            <span><strong data-i18n="p2-inno-1-title">Box-Muller CORDIC AWGN Generator:</strong> <span data-i18n="p2-inno-1-desc">Hardware-efficient generation of true Gaussian noise distributions for high-speed channel emulation.</span></span>
-                        </li>
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>⚡</span>
-                            <span><strong data-i18n="p2-inno-2-title">Pipelined IFFT/FFT Engines:</strong> <span data-i18n="p2-inno-2-desc">High-throughput parallel architecture for real-time multicarrier modulation and demodulation.</span></span>
-                        </li>
-                        <li style="display: flex; align-items: baseline; gap: 10px; font-size: 15px; line-height: 1.6; color: #334155;">
-                            <span>📊</span>
-                            <span><strong data-i18n="p2-inno-3-title">Automated BER Measurement:</strong> <span data-i18n="p2-inno-3-desc">Real-time hardware bit error counter measuring millions of transmitted bits per second.</span></span>
-                        </li>
-                    </ul>
+                    <div class="innovation-cards-grid">
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">🎲</div>
+                                <h4 data-i18n="p2-inno-1-title">Box-Muller CORDIC AWGN</h4>
+                            </div>
+                            <p data-i18n="p2-inno-1-desc">Hardware-efficient generation of true Gaussian noise distributions for high-speed channel emulation.</p>
+                        </div>
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">⚡</div>
+                                <h4 data-i18n="p2-inno-2-title">Pipelined IFFT/FFT Engines</h4>
+                            </div>
+                            <p data-i18n="p2-inno-2-desc">High-throughput parallel architecture for real-time multicarrier modulation and demodulation.</p>
+                        </div>
+                        <div class="innovation-mini-card">
+                            <div class="innovation-card-header">
+                                <div class="innovation-icon-chip">📊</div>
+                                <h4 data-i18n="p2-inno-3-title">Automated BER Measurement</h4>
+                            </div>
+                            <p data-i18n="p2-inno-3-desc">Real-time hardware bit error counter measuring millions of transmitted bits per second.</p>
+                        </div>
+                    </div>
                 </article>
 
-                <!-- PROJECT 3: UNDERWATER VLC -->
+                <!-- ==========================================
+                     PROJECT 3: UNDERWATER VLC & IOUT
+                     ========================================== -->
                 <article class="detail-project-pane" data-category="p3" style="display: none;">
-                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
-                        <img src="assets/bonlab-lab-cover.jpg" alt="Underwater VLC Monitoring & Internet of Underwater Things (IoUT)" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    <div class="detail-cover-showcase">
+                        <img class="detail-cover-img" src="assets/bonlab-lab-cover.jpg" alt="Underwater VLC Monitoring & Internet of Underwater Things (IoUT)">
+                        <div class="detail-cover-overlay">
+                            <div class="floating-metrics-row">
+                                <div class="floating-metric-chip">
+                                    <span>🌊</span>
+                                    <span>Medium: <strong>Water Testbed</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>💡</span>
+                                    <span>Spectrum: <strong>Blue-Green VLC</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>🐠</span>
+                                    <span>Application: <strong>IoUT Telemetry</strong></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <span class="pub-tag-pill" data-i18n="p3-badge" style="color: #0369a1; background: #e0f2fe; font-weight: 800; margin-bottom: 12px; display: inline-block;">
@@ -197,18 +321,36 @@
                     <h3 data-i18n="p3-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
                         Executive Summary & Underwater Testbed
                     </h3>
-                    <p data-i18n="p3-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                    <p data-i18n="p3-p1" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 15px;">
                         Standard radio frequency (RF) signals suffer extreme attenuation in water, making high-speed underwater communication a major technological challenge. BONLAB developed Visible Light Communication (VLC) optical transceivers using blue-green semiconductor optical emitters operating in the minimum attenuation optical window of clear and turbid water.
                     </p>
-                    <p data-i18n="p3-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                    <p data-i18n="p3-p2" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 25px;">
                         We constructed a dedicated laboratory water tank testbed equipped with optical transmitters, underwater sensor probes, and digital receiver circuits to validate telemetry for aquatic environmental monitoring and IoUT sensor nodes.
                     </p>
                 </article>
 
-                <!-- PROJECT 4: HEALTHCARE IOT -->
+                <!-- ==========================================
+                     PROJECT 4: HEALTHCARE IOT
+                     ========================================== -->
                 <article class="detail-project-pane" data-category="p4" style="display: none;">
-                    <div class="detail-cover-wrapper" style="margin-bottom: 25px; border-radius: 16px; overflow: hidden; border: 1.5px solid #e2e8f0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
-                        <img src="assets/news-nursing-project.jpg" alt="Smart Photonic Vital-Sign IoT Monitor" style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block;">
+                    <div class="detail-cover-showcase">
+                        <img class="detail-cover-img" src="assets/news-nursing-project.jpg" alt="Smart Photonic Vital-Sign IoT Monitor">
+                        <div class="detail-cover-overlay">
+                            <div class="floating-metrics-row">
+                                <div class="floating-metric-chip">
+                                    <span>🥈</span>
+                                    <span>Award: <strong>National Silver Medal</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>🩺</span>
+                                    <span>Sensors: <strong>SpO2, Pulse, Temp</strong></span>
+                                </div>
+                                <div class="floating-metric-chip">
+                                    <span>☁️</span>
+                                    <span>Telemetry: <strong>Cloud IoT</strong></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <span class="pub-tag-pill" data-i18n="p4-badge" style="color: #b45309; background: #fef3c7; font-weight: 800; margin-bottom: 12px; display: inline-block;">
@@ -221,10 +363,10 @@
                     <h3 data-i18n="p4-overview-title" style="font-size: 20px; font-weight: 800; color: #1746a2; margin-top: 25px; margin-bottom: 10px;">
                         Executive Summary & Applied Health Technology
                     </h3>
-                    <p data-i18n="p4-p1" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 15px;">
+                    <p data-i18n="p4-p1" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 15px;">
                         Awarded the Silver Medal at the Thailand Research Expo (มหกรรมงานวิจัยแห่งชาติ), this project applies microcontroller systems and optical photonic sensors to capture and process vital signs (heart rate, SpO2, body temperature) in real time.
                     </p>
-                    <p data-i18n="p4-p2" style="font-size: 15.5px; line-height: 1.7; color: #334155; margin-bottom: 25px;">
+                    <p data-i18n="p4-p2" style="font-size: 15.5px; line-height: 1.75; color: #334155; margin-bottom: 25px;">
                         Mentored by Assoc. Prof. Dr. Kidsanapong Puntsri, student engineers developed a complete hardware unit with cloud IoT telemetry, enabling healthcare staff to monitor patient telemetry remotely with high precision.
                     </p>
                 </article>
