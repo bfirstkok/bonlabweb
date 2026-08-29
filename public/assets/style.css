@@ -2095,11 +2095,12 @@ img.person-image {
 ========================================================= */
 .org-tree-container {
     position: relative;
-    max-width: 1100px;
-    margin: 30px auto 40px;
+    max-width: 1120px;
+    margin: 40px auto 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 48px; /* ระยะห่างระหว่างชั้นแต่ละระดับ (Level to Level) ให้โปร่งสบายตา */
 }
 
 /* Branch level */
@@ -2115,21 +2116,22 @@ img.person-image {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 24px;
+    gap: 32px 28px; /* ระยะห่างระหว่างการ์ดแถวเดียวกัน และแถวใหม่ */
     width: 100%;
 }
 
 .tree-level-members.two-cols > .team-member-card {
-    flex: 0 1 calc((100% - 24px) / 2);
+    flex: 0 1 calc((100% - 28px) / 2);
     max-width: 380px;
     min-width: 280px;
 }
 
 .tree-level-members.three-cols > .team-member-card {
-    flex: 0 1 calc((100% - 48px) / 3);
+    flex: 0 1 calc((100% - 56px) / 3);
     max-width: 350px;
     min-width: 280px;
 }
+
 
 /* Card highlight enhancements in tree */
 .tree-level .team-member-card {
