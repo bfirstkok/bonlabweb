@@ -1,9 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import researchList from "../data/research.json";
 
 const title = "Research — BONLAB | Broadband Optical Network Laboratory";
 const description = "Explore BONLAB research projects in 128-QAM SC-FDM optical wireless communications, underwater VLC monitoring, FPGA real-time DSP transceivers, and low phase noise PLL.";
 ---
+
 
 <Layout title={title} description={description}>
 <section class="page-hero">
@@ -161,88 +163,31 @@ const description = "Explore BONLAB research projects in 128-QAM SC-FDM optical 
 
 
         <div class="project-grid">
-
-            <article class="project-card">
-
-                <img class="project-image" src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication System">
-
-                <div class="project-content">
-
-                    <small>
-                        OPTICAL WIRELESS COMMUNICATIONS
-                    </small>
-
-                    <h3>
-                        128-QAM SC-FDM Optical Wireless System
-                    </h3>
-
-                    <p>
-                        Successful transmission and real-time demodulation of 128-QAM Single-Carrier Frequency Division Multiplexing over optical wireless links, achieving low PAPR and high data rate.
-                    </p>
-
-                    <a href="research-detail.html">
-                        Read project details →
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <article class="project-card">
-
-                <img class="project-image" src="assets/bonlab-lab-cover.jpg" alt="Underwater Environmental Monitoring using VLC">
-
-                <div class="project-content">
-
-                    <small>
-                        VISIBLE LIGHT COMMUNICATION (VLC)
-                    </small>
-
-                    <h3>
-                        Underwater Monitoring using VLC
-                    </h3>
-
-                    <p>
-                        Optical wireless sensor network designed for aquatic and underwater telemetry where traditional radio frequency signals suffer extreme attenuation.
-                    </p>
-
-                    <a href="research-detail.html">
-                        Read project details →
-                    </a>
-
-                </div>
-
-            </article>
-
-
-            <article class="project-card">
-
-                <img class="project-image" src="assets/news-16qam.jpg" alt="Real DSP for High-Speed Transceiver and Low Phase-Noise PLL">
-
-                <div class="project-content">
-
-                    <small>
-                        FPGA & HARDWARE PROTOTYPING
-                    </small>
-
-                    <h3>
-                        Real DSP for High Speed Transceivers
-                    </h3>
-
-                    <p>
-                        Hardware realization of real-time digital signal processing engines and low phase noise phase-locked loop (PLL) synchronization circuits on FPGA.
-                    </p>
-
-                    <a href="research-detail.html">
-                        Read project details →
-                    </a>
-
-                </div>
-
-            </article>
-
+            {researchList.map((item) => (
+                <article class="project-card">
+                    <img class="project-image" src={item.image} alt={item.title}>
+                    <div class="project-content">
+                        <small>{item.category}</small>
+                        <h3>{item.title}</h3>
+                        <p style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">
+                            <strong>ผู้วิจัย:</strong> {item.authors}
+                        </p>
+                        <p>{item.summary}</p>
+                        <div style="display: flex; gap: 12px; align-items: center; margin-top: 14px; flex-wrap: wrap;">
+                            <a class="button button-primary" style="padding: 6px 14px; font-size: 12.5px;" href={`research-detail.html?id=${item.id}`}>
+                                📖 อ่านสรุปงานวิจัย (Blog) →
+                            </a>
+                            {item.paperUrl && (
+                                <a class="text-link" style="font-size: 12px;" href={item.paperUrl} target="_blank" rel="noopener">
+                                    ฉบับเต็ม ({item.journal.split('/')[0].trim()}) ↗
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </article>
+            ))}
         </div>
+
 
     </div>
 
