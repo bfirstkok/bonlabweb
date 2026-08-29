@@ -72,6 +72,17 @@ const translations = {
         "partners-cta-desc": "Whether you represent a university research group, industrial firm, educational institution, or government agency, we invite you to discuss joint research, technology development, and educational initiatives.",
         "partners-cta-btn": "Start a conversation →",
         "news-page-title": "Latest from BONLAB", "news-page-copy": "Laboratory updates, learning activities and research stories.",
+        "news-eyebrow": "NEWS & ACTIVITIES",
+        "news-filter-all": "All",
+        "news-filter-research": "Research & Experiments",
+        "news-filter-awards": "Awards",
+        "news-filter-student": "Student Projects",
+        "news-filter-seminars": "Seminars & Learning",
+        "news-source-note": "Follow our official updates on Facebook:",
+        "news-fb-read-more": "Read on Facebook ↗",
+        "news-fb-live-title": "BONLAB Live Feed",
+        "news-fb-live-desc": "Live activities & updates from Facebook",
+        "news-fb-open-btn": "Open in Facebook App / Web ↗",
         "team-page-title": "The people behind BONLAB", "team-page-copy": "Researchers, students and collaborators learning through system building and hands-on experiments.",
         "contact-hero-eyebrow": "CONTACT BONLAB",
         "contact-page-title": "Let's Collaborate & Build Research",
@@ -176,6 +187,17 @@ const translations = {
         "partners-cta-desc": "ไม่ว่าท่านจะเป็นตัวแทนจากกลุ่มวิจัยมหาวิทยาลัย ภาคอุตสาหกรรม สถาบันการศึกษา หรือหน่วยงานภาครัฐ เรายินดีต้อนรับการพูดคุยเพื่อสร้างสรรค์งานวิจัย การพัฒนาเทคโนโลยี และการเรียนรู้ร่วมกัน",
         "partners-cta-btn": "เริ่มพูดคุยปรึกษา →",
         "news-page-title": "อัปเดตล่าสุดจาก BONLAB", "news-page-copy": "ข่าวห้องปฏิบัติการ กิจกรรมการเรียนรู้ และเรื่องราวงานวิจัย",
+        "news-eyebrow": "ข่าวสารและกิจกรรม",
+        "news-filter-all": "ทั้งหมด",
+        "news-filter-research": "วิจัยและการทดลอง",
+        "news-filter-awards": "รางวัลทางวิชาการ",
+        "news-filter-student": "ผลงานนักศึกษา",
+        "news-filter-seminars": "สัมมนาและการอบรม",
+        "news-source-note": "ติดตามข่าวสารและกิจกรรมล่าสุดได้ที่:",
+        "news-fb-read-more": "อ่านต่อบน Facebook ↗",
+        "news-fb-live-title": "BONLAB Live Feed",
+        "news-fb-live-desc": "อัปเดตกิจกรรมสดจาก Facebook",
+        "news-fb-open-btn": "เปิดดูบน Facebook App / Web ↗",
         "team-page-title": "ผู้ขับเคลื่อน BONLAB", "team-page-copy": "นักวิจัย นักศึกษา และเครือข่ายที่เรียนรู้ผ่านการสร้างระบบและการทดลองจริง",
         "contact-hero-eyebrow": "ติดต่อ BONLAB",
         "contact-page-title": "ร่วมสร้างสรรค์และพัฒนางานวิจัยไปด้วยกัน",
@@ -723,7 +745,28 @@ document.querySelector(".contact-form")?.addEventListener("submit", event => {
 document.querySelectorAll(".filter-button").forEach(button => button.addEventListener("click", () => {
     document.querySelectorAll(".filter-button").forEach(item => item.classList.remove("active"));
     button.classList.add("active");
+    
+    const filter = (button.dataset.filter || "all").toLowerCase();
+    const cards = document.querySelectorAll(".news-main-column .news-card");
+    
+    cards.forEach(card => {
+        const cat = (card.dataset.category || "").toLowerCase();
+        if (filter === "all") {
+            card.style.display = "";
+        } else if (filter === "research" && (cat.includes("research") || cat.includes("experiment"))) {
+            card.style.display = "";
+        } else if (filter === "awards" && (cat.includes("award") || cat.includes("eecon"))) {
+            card.style.display = "";
+        } else if (filter === "student" && (cat.includes("student") || cat.includes("mentoring") || cat.includes("nursing") || cat.includes("เยาวชน"))) {
+            card.style.display = "";
+        } else if (filter === "seminars" && (cat.includes("seminar") || cat.includes("training") || cat.includes("lecture") || cat.includes("guest") || cat.includes("workshop") || cat.includes("อบรม"))) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+    });
 }));
 
 applyTheme(safeStorage.get("bonlab-theme") || "light");
 applyLanguage(language);
+

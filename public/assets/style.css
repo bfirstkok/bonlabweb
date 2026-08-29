@@ -1676,58 +1676,81 @@ img.project-image {
 
 
 .news-card {
-
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-
     background: var(--surface);
-
-    border:
-        1px solid var(--border);
-
-    border-radius: 17px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    height: 100%;
 }
 
+.news-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    border-color: rgba(23, 70, 162, 0.25);
+}
 
-.news-card-image {
-
+.news-card-image-wrap {
     width: 100%;
     height: 220px;
-    display: block;
-    object-fit: cover;
+    overflow: hidden;
+    background: var(--surface-soft);
+    position: relative;
 }
 
+.news-card-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.news-card:hover .news-card-image {
+    transform: scale(1.03);
+}
 
 .news-card-content {
-
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     padding: 24px;
 }
 
+.news-card-content .date {
+    display: inline-block;
+    color: #1746a2;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+:root[data-theme="dark"] .news-card-content .date {
+    color: #79a7ff;
+}
 
 .news-card-content h2 {
-
-    margin:
-        8px 0;
-
-    font-size: 20px;
+    margin: 0 0 10px;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text);
 }
-
 
 .news-card-content p {
-
-    margin-bottom: 18px;
-
+    margin: 0 0 20px;
     font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+    flex: 1;
 }
 
-
 .news-card-content a {
-
-    color:
-        var(--primary);
-
-    font-size: 13px;
-
-    font-weight: 800;
+    margin-top: auto;
 }
 
 
@@ -2051,10 +2074,150 @@ img.person-image {
     margin-top: 4px;
 }
 
+/* =========================================================
+   MODERN HIERARCHICAL ORG TREE (แผนผังโครงสร้างสายงาน)
+========================================================= */
+.org-tree-container {
+    position: relative;
+    max-width: 1100px;
+    margin: 30px auto 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Branch level */
+.tree-level {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    z-index: 2;
+}
+
+/* Connector vertical line down from node */
+.tree-stem-down {
+    width: 3px;
+    height: 36px;
+    background: #3b82f6;
+    margin: 0 auto;
+    border-radius: 2px;
+    position: relative;
+    z-index: 1;
+}
+
+.tree-stem-down::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    background: #3b82f6;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+/* Connector fork horizontal bar */
+.tree-fork-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    height: 24px;
+}
+
+.tree-fork-line {
+    position: absolute;
+    top: 0;
+    left: 25%;
+    right: 25%;
+    height: 3px;
+    background: #3b82f6;
+    border-radius: 2px;
+}
+
+.tree-fork-line.three-ways {
+    left: 17%;
+    right: 17%;
+}
+
+.tree-drop-left, .tree-drop-right, .tree-drop-center {
+    position: absolute;
+    top: 0;
+    width: 3px;
+    height: 24px;
+    background: #3b82f6;
+    border-radius: 2px;
+}
+.tree-drop-left { left: 25%; }
+.tree-drop-right { right: 25%; }
+
+.three-ways .tree-drop-left { left: 17%; }
+.three-ways .tree-drop-center { left: 50%; transform: translateX(-50%); }
+.three-ways .tree-drop-right { right: 17%; }
+
+.tree-level-members {
+    display: grid;
+    gap: 24px;
+    width: 100%;
+}
+
+.tree-level-members.two-cols {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 760px;
+}
+
+.tree-level-members.three-cols {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1100px;
+}
+
+/* Card highlight enhancements in tree */
+.tree-level .team-member-card {
+    position: relative;
+    background: var(--surface);
+    border: 1.5px solid #d0d5dd;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+    transition: all 0.25s ease;
+}
+
+.tree-level .team-member-card:hover {
+    transform: translateY(-4px);
+    border-color: #3b82f6;
+    box-shadow: 0 16px 36px rgba(59, 130, 246, 0.14);
+}
+
+:root[data-theme="dark"] .tree-level .team-member-card {
+    border-color: #334155;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="dark"] .tree-stem-down,
+:root[data-theme="dark"] .tree-fork-line,
+:root[data-theme="dark"] .tree-drop-left,
+:root[data-theme="dark"] .tree-drop-right,
+:root[data-theme="dark"] .tree-drop-center {
+    background: #60a5fa;
+}
+
+@media (max-width: 768px) {
+    .tree-fork-wrap, .tree-stem-down {
+        display: none;
+    }
+    .tree-level-members.two-cols,
+    .tree-level-members.three-cols {
+        grid-template-columns: 1fr;
+        max-width: 380px;
+    }
+}
+
 /* Org Chart Container */
 .team-chart-card {
     background: var(--surface);
     border: 1px solid var(--border);
+
     border-radius: var(--radius);
     padding: 24px;
     box-shadow: 0 4px 20px rgba(16, 24, 40, 0.05);
@@ -2688,3 +2851,142 @@ img.person-image {
         padding-inline: 6px;
     }
 }
+
+/* =========================================================
+   FACEBOOK NEWS FEED LAYOUT & WIDGET
+========================================================= */
+
+.news-layout-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    align-items: start;
+    margin-top: 24px;
+}
+
+.news-main-column {
+    min-width: 0;
+}
+
+.news-main-column .news-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.news-sidebar {
+    position: sticky;
+    top: 90px;
+}
+
+.fb-feed-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.fb-feed-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.fb-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: #1877f2;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.fb-feed-header-text h3 {
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.fb-feed-header-text p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 2px 0 0;
+}
+
+.fb-iframe-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f0f2f5;
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.fb-direct-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: #1877f2;
+    color: #ffffff !important;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.fb-direct-link-btn:hover {
+    background: #1464cc;
+    transform: translateY(-1px);
+}
+
+.news-card-fb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #1877f2 !important;
+    font-weight: 700;
+    font-size: 13px;
+    transition: gap 0.2s ease;
+}
+
+.news-card-fb-link:hover {
+    gap: 9px;
+    text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+    .news-layout-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .news-main-column .news-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .news-sidebar {
+        position: static;
+        max-width: 500px;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .news-main-column .news-card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
