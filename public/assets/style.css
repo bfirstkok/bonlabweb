@@ -1493,35 +1493,51 @@ p {
 }
 
 
-.partner-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3,1fr);
-
-    gap: 20px;
-}
-
-.partner-grid-2 {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap: 20px;
-}
-
+.partner-grid,
+.partner-grid-2,
 .partner-grid-4 {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
-
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 }
+
+.partner-grid > .partner-card {
+    flex: 0 1 calc((100% - 40px) / 3);
+    min-width: 260px;
+    max-width: calc((100% - 40px) / 3);
+}
+
+.partner-grid-2 > .partner-card {
+    flex: 0 1 calc((100% - 20px) / 2);
+    min-width: 280px;
+    max-width: calc((100% - 20px) / 2);
+}
+
+.partner-grid-4 > .partner-card {
+    flex: 0 1 calc((100% - 60px) / 4);
+    min-width: 230px;
+    max-width: calc((100% - 60px) / 4);
+}
+
+@media (max-width: 950px) {
+    .partner-grid > .partner-card,
+    .partner-grid-2 > .partner-card,
+    .partner-grid-4 > .partner-card {
+        flex: 0 1 calc((100% - 20px) / 2);
+        max-width: calc((100% - 20px) / 2);
+    }
+}
+
+@media (max-width: 600px) {
+    .partner-grid > .partner-card,
+    .partner-grid-2 > .partner-card,
+    .partner-grid-4 > .partner-card {
+        flex: 0 1 100%;
+        max-width: 100%;
+    }
+}
+
 
 
 .partner-card {
@@ -2095,83 +2111,24 @@ img.person-image {
     z-index: 2;
 }
 
-/* Connector vertical line down from node */
-.tree-stem-down {
-    width: 3px;
-    height: 36px;
-    background: #3b82f6;
-    margin: 0 auto;
-    border-radius: 2px;
-    position: relative;
-    z-index: 1;
-}
-
-.tree-stem-down::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 9px;
-    height: 9px;
-    background: #3b82f6;
-    border-radius: 50%;
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
-}
-
-/* Connector fork horizontal bar */
-.tree-fork-wrap {
-    position: relative;
-    width: 100%;
-    max-width: 760px;
-    margin: 0 auto;
-    height: 24px;
-}
-
-.tree-fork-line {
-    position: absolute;
-    top: 0;
-    left: 25%;
-    right: 25%;
-    height: 3px;
-    background: #3b82f6;
-    border-radius: 2px;
-}
-
-.tree-fork-line.three-ways {
-    left: 17%;
-    right: 17%;
-}
-
-.tree-drop-left, .tree-drop-right, .tree-drop-center {
-    position: absolute;
-    top: 0;
-    width: 3px;
-    height: 24px;
-    background: #3b82f6;
-    border-radius: 2px;
-}
-.tree-drop-left { left: 25%; }
-.tree-drop-right { right: 25%; }
-
-.three-ways .tree-drop-left { left: 17%; }
-.three-ways .tree-drop-center { left: 50%; transform: translateX(-50%); }
-.three-ways .tree-drop-right { right: 17%; }
-
 .tree-level-members {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 24px;
     width: 100%;
 }
 
-.tree-level-members.two-cols {
-    grid-template-columns: repeat(2, 1fr);
-    max-width: 760px;
+.tree-level-members.two-cols > .team-member-card {
+    flex: 0 1 calc((100% - 24px) / 2);
+    max-width: 380px;
+    min-width: 280px;
 }
 
-.tree-level-members.three-cols {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 1100px;
+.tree-level-members.three-cols > .team-member-card {
+    flex: 0 1 calc((100% - 48px) / 3);
+    max-width: 350px;
+    min-width: 280px;
 }
 
 /* Card highlight enhancements in tree */
@@ -2194,24 +2151,14 @@ img.person-image {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-:root[data-theme="dark"] .tree-stem-down,
-:root[data-theme="dark"] .tree-fork-line,
-:root[data-theme="dark"] .tree-drop-left,
-:root[data-theme="dark"] .tree-drop-right,
-:root[data-theme="dark"] .tree-drop-center {
-    background: #60a5fa;
-}
-
 @media (max-width: 768px) {
-    .tree-fork-wrap, .tree-stem-down {
-        display: none;
-    }
-    .tree-level-members.two-cols,
-    .tree-level-members.three-cols {
-        grid-template-columns: 1fr;
+    .tree-level-members.two-cols > .team-member-card,
+    .tree-level-members.three-cols > .team-member-card {
+        flex: 0 1 100%;
         max-width: 380px;
     }
 }
+
 
 /* Org Chart Container */
 .team-chart-card {
@@ -2672,13 +2619,6 @@ img.person-image {
     }
 
 
-    .partner-grid,
-    .partner-grid-2,
-    .partner-grid-4 {
-
-        grid-template-columns:
-            repeat(2,1fr);
-    }
 
 
     .stats-grid {
@@ -2747,12 +2687,10 @@ img.person-image {
     .news-card-grid,
     .team-grid,
     .team-members-grid,
-    .partner-grid,
-    .partner-grid-2,
-    .partner-grid-4,
     .contact-form .form-row {
         grid-template-columns: 1fr;
     }
+
 
 
     .stats-grid {
