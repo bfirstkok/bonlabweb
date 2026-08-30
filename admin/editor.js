@@ -9,6 +9,18 @@ const loadingState = document.querySelector("#loading-state");
 const toast = document.querySelector("#toast");
 const imageInput = document.querySelector("#image-input");
 const replaceImageButton = document.querySelector("#replace-image-button");
+const selectionEmpty = document.querySelector("#selection-empty");
+const quickStyleControls = document.querySelector("#quick-style-controls");
+const selectionToolbar = document.querySelector("#selection-toolbar");
+const selectedComponentName = document.querySelector("#selected-component-name");
+const toolbarSelectionName = document.querySelector("#toolbar-selection-name");
+const brandPalette = document.querySelector("#brand-palette");
+
+const bonlabPalette = [
+    "#1746A2", "#0EA5A8", "#7C3AED", "#E5484D", "#F59E0B",
+    "#172033", "#667085", "#FFFFFF", "#F7F9FC", "#101828"
+];
+const colorFallbacks = { color: "#172033", "background-color": "#FFFFFF", "border-color": "#E5E9F2" };
 
 let editor;
 let currentFile = "";
@@ -16,8 +28,10 @@ let documentState = null;
 let isDirty = false;
 let isLoading = false;
 let changesArmed = false;
+let activeColorProperty = "background-color";
 let toastTimer;
 
+initializeQuickDesignControls();
 lucide.createIcons();
 checkSession();
 
@@ -144,6 +158,7 @@ function initializeEditor() {
     });
     editor.on("component:selected", updateSelectionTools);
     editor.on("component:deselected", updateSelectionTools);
+    editor.on("component:styleUpdate", () => requestAnimationFrame(syncQuickStyleControls));
     editor.on("update", () => {
         if (!isLoading && changesArmed) setDirty(true);
     });
@@ -266,6 +281,250 @@ function updateSelectionTools() {
     const selected = editor.getSelected();
     const isImage = selected && String(selected.get("tagName") || "").toLowerCase() === "img";
     replaceImageButton.hidden = !isImage;
+    selectionEmpty.hidden = Boolean(selected);
+    quickStyleControls.hidden = !selected;
+    selectionToolbar.hidden = !selected;
+
+    if (!selected) return;
+
+    const label = componentLabel(selected);
+    selectedComponentName.textContent = label;
+    toolbarSelectionName.textContent = label;
+    syncQuickStyleControls();
+}
+
+function initializeQuickDesignControls() {
+    brandPalette.innerHTML = bonlabPalette.map((color) => `
+        <button type="button" class="palette-swatch" data-palette-color="${color}" style="--swatch:${color}" aria-label="ใช้สี ${color}" title="${color}"></button>
+    `).join("");
+
+    document.querySelectorAll("[data-color-control]").forEach((control) => {
+        control.addEventListener("pointerdown", () => activateColorProperty(control.dataset.colorControl));
+    });
+
+    document.querySelectorAll("[data-palette-color]").forEach((button) => {
+        button.addEventListener("click", () => applyColor(activeColorProperty, button.dataset.paletteColor));
+    });
+
+    document.querySelectorAll("[data-color-input]").forEach((input) => {
+        input.addEventListener("input", () => applyColor(input.dataset.colorInput, input.value));
+    });
+
+    document.querySelectorAll("[data-hex-input]").forEach((input) => {
+        const commit = () => {
+            const color = normalizeHexColor(input.value);
+            if (!color) {
+                syncQuickStyleControls();
+                showToast("กรุณาใส่รหัสสี เช่น #1746A2", true);
+                return;
+            }
+            applyColor(input.dataset.hexInput, color);
+        };
+        input.addEventListener("change", commit);
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                commit();
+                input.blur();
+            }
+        });
+    });
+
+    document.querySelectorAll("[data-reset-style]").forEach((button) => {
+        button.addEventListener("click", () => resetStyle(button.dataset.resetStyle));
+    });
+
+    document.querySelectorAll("[data-eyedropper]").forEach((button) => {
+        button.hidden = !("EyeDropper" in window);
+        button.addEventListener("click", () => pickColorFromScreen(button.dataset.eyedropper));
+    });
+
+    document.querySelectorAll("[data-style-range]").forEach((input) => {
+        input.addEventListener("input", () => applyRangeStyle(input.dataset.styleRange, Number(input.value)));
+    });
+
+    document.querySelectorAll("[data-component-action]").forEach((button) => {
+        button.addEventListener("click", () => runComponentAction(button.dataset.componentAction));
+    });
+
+    document.querySelectorAll("[data-open-color]").forEach((button) => {
+        button.addEventListener("click", () => {
+            openStylePanel();
+            const property = button.dataset.openColor;
+            activateColorProperty(property);
+            const control = document.querySelector(`[data-color-control="${property}"]`);
+            control?.scrollIntoView({ behavior: "smooth", block: "center" });
+            setTimeout(() => control?.querySelector("input[type=color]")?.click(), 180);
+        });
+    });
+}
+
+function activateColorProperty(property) {
+    activeColorProperty = property;
+    document.querySelectorAll("[data-color-control]").forEach((control) => {
+        control.classList.toggle("active", control.dataset.colorControl === property);
+    });
+}
+
+function applyColor(property, value) {
+    const selected = editor?.getSelected();
+    const color = normalizeHexColor(value);
+    if (!selected || !color) return;
+
+    changesArmed = true;
+    const styles = { [property]: color };
+    if (property === "border-color") {
+        const computed = selected.getEl()?.ownerDocument?.defaultView?.getComputedStyle(selected.getEl());
+        if (!computed || computed.borderStyle === "none") {
+            styles["border-style"] = "solid";
+            styles["border-width"] = "1px";
+        }
+    }
+    selected.addStyle(styles);
+    setDirty(true);
+    syncQuickStyleControls();
+}
+
+function resetStyle(property) {
+    const selected = editor?.getSelected();
+    if (!selected) return;
+    changesArmed = true;
+    selected.removeStyle(property);
+    if (property === "border-color") {
+        selected.removeStyle("border-style");
+        selected.removeStyle("border-width");
+    }
+    setDirty(true);
+    syncQuickStyleControls();
+}
+
+async function pickColorFromScreen(property) {
+    if (!("EyeDropper" in window)) return;
+    try {
+        const result = await new EyeDropper().open();
+        applyColor(property, result.sRGBHex);
+    } catch (error) {
+        if (error.name !== "AbortError") showToast("ไม่สามารถดูดสีจากหน้าจอได้", true);
+    }
+}
+
+function applyRangeStyle(property, value) {
+    const selected = editor?.getSelected();
+    if (!selected) return;
+    changesArmed = true;
+
+    const styleValue = property === "opacity" ? String(value / 100) : `${value}px`;
+    selected.addStyle({ [property]: styleValue });
+    setDirty(true);
+    updateRangeOutput(property, value);
+}
+
+function syncQuickStyleControls() {
+    const selected = editor?.getSelected();
+    const element = selected?.getEl();
+    if (!selected || !element) return;
+
+    const computed = element.ownerDocument.defaultView.getComputedStyle(element);
+    ["color", "background-color", "border-color"].forEach((property) => {
+        const color = cssColorToHex(computed.getPropertyValue(property), colorFallbacks[property]);
+        const picker = document.querySelector(`[data-color-input="${property}"]`);
+        const hex = document.querySelector(`[data-hex-input="${property}"]`);
+        const preview = document.querySelector(`[data-color-preview="${property}"]`);
+        const toolbarColor = document.querySelector(`[data-toolbar-color="${property}"]`);
+        if (picker) picker.value = color;
+        if (hex) hex.value = color.toUpperCase();
+        if (preview) preview.style.backgroundColor = color;
+        if (toolbarColor) toolbarColor.style.backgroundColor = color;
+    });
+
+    const opacity = Math.round((Number.parseFloat(computed.opacity) || 1) * 100);
+    const radius = Math.min(80, Math.round(Number.parseFloat(computed.borderRadius) || 0));
+    const fontSize = Math.min(120, Math.max(8, Math.round(Number.parseFloat(computed.fontSize) || 16)));
+    setRangeValue("opacity", opacity);
+    setRangeValue("border-radius", radius);
+    setRangeValue("font-size", fontSize);
+
+    const tagName = String(selected.get("tagName") || "div").toLowerCase();
+    const textTags = ["a", "button", "p", "span", "strong", "small", "label", "li", "h1", "h2", "h3", "h4", "h5", "h6"];
+    const textControl = document.querySelector(".text-only-control");
+    const fontInput = textControl.querySelector("input");
+    const supportsText = textTags.includes(tagName);
+    textControl.classList.toggle("disabled", !supportsText);
+    fontInput.disabled = !supportsText;
+}
+
+function setRangeValue(property, value) {
+    const input = document.querySelector(`[data-style-range="${property}"]`);
+    if (input) input.value = value;
+    updateRangeOutput(property, value);
+}
+
+function updateRangeOutput(property, value) {
+    const output = document.querySelector(`[data-range-output="${property}"]`);
+    if (!output) return;
+    output.textContent = property === "opacity" ? `${value}%` : `${value} px`;
+}
+
+function runComponentAction(action) {
+    const selected = editor?.getSelected();
+    const parent = selected?.parent();
+    if (!selected || !parent) return;
+
+    changesArmed = true;
+    const index = selected.index();
+    const lastIndex = parent.components().length - 1;
+
+    if (action === "duplicate") {
+        const copy = selected.clone();
+        parent.components().add(copy, { at: index + 1 });
+        editor.select(copy);
+    } else if (action === "delete") {
+        selected.remove();
+        editor.select(null);
+    } else if (action === "move-up" && index > 0) {
+        selected.move(parent, { at: index - 1 });
+        editor.select(selected);
+    } else if (action === "move-down" && index < lastIndex) {
+        selected.move(parent, { at: index + 2 });
+        editor.select(selected);
+    } else {
+        showToast(action === "move-up" ? "ชิ้นงานอยู่บนสุดแล้ว" : "ชิ้นงานอยู่ล่างสุดแล้ว");
+        return;
+    }
+    setDirty(true);
+}
+
+function openStylePanel() {
+    const button = document.querySelector('[data-panel="styles-panel"]');
+    if (!button) return;
+    document.querySelectorAll(".tab-button").forEach((item) => item.classList.toggle("active", item === button));
+    document.querySelectorAll(".tool-panel").forEach((panel) => panel.classList.toggle("active", panel.id === "styles-panel"));
+}
+
+function componentLabel(component) {
+    const tagName = String(component.get("tagName") || "div").toLowerCase();
+    const classes = component.getClasses?.() || [];
+    const friendlyNames = {
+        section: "Section", img: "รูปภาพ", a: "ลิงก์ / ปุ่ม", p: "ข้อความ", span: "ข้อความ",
+        h1: "หัวข้อใหญ่", h2: "หัวข้อ", h3: "หัวข้อย่อย", button: "ปุ่ม", article: "การ์ด", div: "กล่อง"
+    };
+    const className = classes[0] ? ` · .${classes[0]}` : "";
+    return `${friendlyNames[tagName] || tagName.toUpperCase()}${className}`;
+}
+
+function normalizeHexColor(value) {
+    const raw = String(value || "").trim().replace(/^#/, "");
+    if (/^[0-9a-f]{3}$/i.test(raw)) return `#${raw.split("").map((character) => character + character).join("")}`.toUpperCase();
+    if (/^[0-9a-f]{6}$/i.test(raw)) return `#${raw}`.toUpperCase();
+    return null;
+}
+
+function cssColorToHex(value, fallback) {
+    const normalized = normalizeHexColor(value);
+    if (normalized) return normalized;
+    const match = String(value || "").match(/rgba?\(\s*(\d+(?:\.\d+)?)\s*,?\s*(\d+(?:\.\d+)?)\s*,?\s*(\d+(?:\.\d+)?)(?:\s*[,/]\s*([\d.]+))?\s*\)/i);
+    if (!match || Number(match[4]) === 0) return fallback;
+    return `#${[match[1], match[2], match[3]].map((part) => Math.max(0, Math.min(255, Math.round(Number(part)))).toString(16).padStart(2, "0")).join("")}`.toUpperCase();
 }
 
 function ensureCanvasBase() {
