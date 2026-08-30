@@ -46,6 +46,10 @@
                 <select id="page-select" aria-label="เลือกหน้าเว็บ"></select>
             </div>
             <div class="header-actions">
+                <div class="layout-mode-control" aria-label="โหมดจัดวาง">
+                    <button type="button" data-layout-mode="flow" class="layout-mode-button active" aria-pressed="true" title="จัดวางตามโครงสร้างเว็บ"><i data-lucide="rows-3"></i><span>Flow</span></button>
+                    <button type="button" data-layout-mode="free" class="layout-mode-button" aria-pressed="false" title="ลากและวางตำแหน่งอย่างอิสระ"><i data-lucide="move"></i><span>Free</span></button>
+                </div>
                 <div class="segmented" aria-label="ขนาดหน้าจอ">
                     <button type="button" data-device="Desktop" class="icon-button active" title="เดสก์ท็อป"><i data-lucide="monitor"></i></button>
                     <button type="button" data-device="Tablet" class="icon-button" title="แท็บเล็ต"><i data-lucide="tablet"></i></button>
@@ -121,11 +125,28 @@
                                 <label class="range-control text-only-control"><span><span>ขนาดตัวอักษร</span><output data-range-output="font-size">16 px</output></span><input type="range" min="8" max="120" value="16" data-style-range="font-size"></label>
                             </section>
 
+                            <section class="quick-section position-section" aria-labelledby="quick-position-title">
+                                <div class="quick-section-title"><strong id="quick-position-title">ตำแหน่งและขนาด</strong><span id="position-mode-label">โหมด Flow</span></div>
+                                <div id="free-mode-hint" class="free-mode-hint">
+                                    <i data-lucide="move"></i><span>เปิดโหมด Free ด้านบน แล้วลากชิ้นงานไปวางได้ทุกตำแหน่ง</span>
+                                </div>
+                                <div class="position-grid">
+                                    <label><span>X</span><span class="number-input"><input type="number" data-position-input="left" step="1"><small>px</small></span></label>
+                                    <label><span>Y</span><span class="number-input"><input type="number" data-position-input="top" step="1"><small>px</small></span></label>
+                                    <label><span>กว้าง</span><span class="number-input"><input type="number" data-position-input="width" min="1" step="1"><small>px</small></span></label>
+                                    <label><span>สูง</span><span class="number-input"><input type="number" data-position-input="height" min="1" step="1"><small>px</small></span></label>
+                                </div>
+                                <label class="range-control"><span><span>หมุน</span><output data-range-output="rotate">0°</output></span><input type="range" min="-180" max="180" value="0" data-style-range="rotate"></label>
+                                <button type="button" class="reset-position-button" data-component-action="reset-position"><i data-lucide="rotate-ccw"></i><span>คืนชิ้นงานเข้าสู่ Flow</span></button>
+                            </section>
+
                             <section class="quick-section" aria-labelledby="quick-actions-title">
                                 <div class="quick-section-title"><strong id="quick-actions-title">จัดชิ้นงาน</strong></div>
                                 <div class="quick-action-grid">
-                                    <button type="button" data-component-action="move-up"><i data-lucide="arrow-up"></i><span>ขึ้น</span></button>
-                                    <button type="button" data-component-action="move-down"><i data-lucide="arrow-down"></i><span>ลง</span></button>
+                                    <button type="button" data-component-action="move-up" class="flow-layout-action"><i data-lucide="arrow-up"></i><span>ขึ้น</span></button>
+                                    <button type="button" data-component-action="move-down" class="flow-layout-action"><i data-lucide="arrow-down"></i><span>ลง</span></button>
+                                    <button type="button" data-component-action="bring-forward" class="free-layout-action"><i data-lucide="bring-to-front"></i><span>ชั้นหน้า</span></button>
+                                    <button type="button" data-component-action="send-backward" class="free-layout-action"><i data-lucide="send-to-back"></i><span>ชั้นหลัง</span></button>
                                     <button type="button" data-component-action="duplicate"><i data-lucide="copy-plus"></i><span>ทำสำเนา</span></button>
                                     <button type="button" data-component-action="delete" class="danger-action"><i data-lucide="trash-2"></i><span>ลบ</span></button>
                                 </div>
@@ -149,13 +170,15 @@
                     <button type="button" class="toolbar-color-button" data-open-color="background-color" title="สีพื้นหลัง"><i data-lucide="paint-bucket"></i><span class="toolbar-color-line" data-toolbar-color="background-color"></span></button>
                     <span class="toolbar-divider"></span>
                     <button type="button" data-component-action="duplicate" title="ทำสำเนา"><i data-lucide="copy-plus"></i></button>
-                    <button type="button" data-component-action="move-up" title="เลื่อนขึ้น"><i data-lucide="arrow-up"></i></button>
-                    <button type="button" data-component-action="move-down" title="เลื่อนลง"><i data-lucide="arrow-down"></i></button>
+                    <button type="button" data-component-action="move-up" class="flow-layout-action" title="เลื่อนขึ้น"><i data-lucide="arrow-up"></i></button>
+                    <button type="button" data-component-action="move-down" class="flow-layout-action" title="เลื่อนลง"><i data-lucide="arrow-down"></i></button>
+                    <button type="button" data-component-action="bring-forward" class="free-layout-action" title="นำมาด้านหน้า"><i data-lucide="bring-to-front"></i></button>
+                    <button type="button" data-component-action="send-backward" class="free-layout-action" title="ส่งไปด้านหลัง"><i data-lucide="send-to-back"></i></button>
                     <button type="button" data-component-action="delete" class="toolbar-danger" title="ลบ"><i data-lucide="trash-2"></i></button>
                 </div>
                 <div id="loading-state" class="loading-state"><span class="spinner"></span><span>กำลังเปิดหน้าเว็บ...</span></div>
                 <div id="gjs"></div>
-                <div class="editor-statusbar"><span id="save-status"><span class="status-dot"></span>พร้อมแก้ไข</span><span>ดับเบิลคลิกข้อความเพื่อแก้ไข · ลาก section เพื่อจัดลำดับ</span></div>
+                <div class="editor-statusbar"><span id="save-status"><span class="status-dot"></span>พร้อมแก้ไข</span><span id="layout-mode-help">ดับเบิลคลิกข้อความเพื่อแก้ไข · ลาก section เพื่อจัดลำดับ</span></div>
             </div>
         </section>
         <div id="toast" class="toast" role="status" aria-live="polite"></div>

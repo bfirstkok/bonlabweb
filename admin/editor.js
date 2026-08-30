@@ -15,6 +15,9 @@ const selectionToolbar = document.querySelector("#selection-toolbar");
 const selectedComponentName = document.querySelector("#selected-component-name");
 const toolbarSelectionName = document.querySelector("#toolbar-selection-name");
 const brandPalette = document.querySelector("#brand-palette");
+const positionModeLabel = document.querySelector("#position-mode-label");
+const freeModeHint = document.querySelector("#free-mode-hint");
+const layoutModeHelp = document.querySelector("#layout-mode-help");
 
 const bonlabPalette = [
     "#1746A2", "#0EA5A8", "#7C3AED", "#E5484D", "#F59E0B",
@@ -29,6 +32,7 @@ let isDirty = false;
 let isLoading = false;
 let changesArmed = false;
 let activeColorProperty = "background-color";
+let freePositionMode = false;
 let toastTimer;
 
 initializeQuickDesignControls();
@@ -154,7 +158,8 @@ function initializeEditor() {
         ensureCanvasBase();
         const canvasDocument = editor.Canvas.getDocument();
         canvasDocument.addEventListener("pointerdown", () => { changesArmed = true; }, true);
-        canvasDocument.addEventListener("keydown", () => { changesArmed = true; }, true);
+        canvasDocument.addEventListener("keydown", handleCanvasKeydown, true);
+        syncCanvasLayoutMode();
     });
     editor.on("component:selected", updateSelectionTools);
     editor.on("component:deselected", updateSelectionTools);
@@ -205,6 +210,7 @@ async function loadPage(file) {
         editor.UndoManager.clear();
         editor.select(null);
         ensureCanvasBase();
+        setLayoutMode("flow", { silent: true });
         setDirty(false);
     } catch (error) {
         showToast(error.message, true);
@@ -290,6 +296,7 @@ function updateSelectionTools() {
     const label = componentLabel(selected);
     selectedComponentName.textContent = label;
     toolbarSelectionName.textContent = label;
+    configureSelectedForLayoutMode(selected);
     syncQuickStyleControls();
 }
 
@@ -341,6 +348,22 @@ function initializeQuickDesignControls() {
 
     document.querySelectorAll("[data-style-range]").forEach((input) => {
         input.addEventListener("input", () => applyRangeStyle(input.dataset.styleRange, Number(input.value)));
+    });
+
+    document.querySelectorAll("[data-layout-mode]").forEach((button) => {
+        button.addEventListener("click", () => setLayoutMode(button.dataset.layoutMode));
+    });
+
+    document.querySelectorAll("[data-position-input]").forEach((input) => {
+        const commit = () => applyPositionValue(input.dataset.positionInput, Number(input.value));
+        input.addEventListener("change", commit);
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                commit();
+                input.blur();
+            }
+        });
     });
 
     document.querySelectorAll("[data-component-action]").forEach((button) => {
@@ -413,10 +436,109 @@ function applyRangeStyle(property, value) {
     if (!selected) return;
     changesArmed = true;
 
-    const styleValue = property === "opacity" ? String(value / 100) : `${value}px`;
+    if (property === "rotate" && !freePositionMode) setLayoutMode("free", { silent: true });
+    const styleValue = property === "opacity"
+        ? String(value / 100)
+        : property === "rotate" ? `${value}deg` : `${value}px`;
     selected.addStyle({ [property]: styleValue });
     setDirty(true);
     updateRangeOutput(property, value);
+}
+
+function setLayoutMode(mode, options = {}) {
+    freePositionMode = mode === "free";
+    editor?.setDragMode(freePositionMode ? "absolute" : "");
+    document.body.classList.toggle("free-position-mode", freePositionMode);
+    document.querySelectorAll("[data-layout-mode]").forEach((button) => {
+        const active = button.dataset.layoutMode === mode;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+    });
+
+    positionModeLabel.textContent = freePositionMode ? "โหมด Free" : "โหมด Flow";
+    freeModeHint.classList.toggle("active", freePositionMode);
+    freeModeHint.querySelector("span").textContent = freePositionMode
+        ? "ลากชิ้นงานบนหน้าได้อิสระ ใช้ลูกศรเพื่อขยับทีละ 1 px หรือ Shift + ลูกศรทีละ 10 px"
+        : "เปิดโหมด Free ด้านบน แล้วลากชิ้นงานไปวางได้ทุกตำแหน่ง";
+    layoutModeHelp.textContent = freePositionMode
+        ? "Free mode · ลากได้อิสระ · ลูกศร 1 px · Shift + ลูกศร 10 px"
+        : "ดับเบิลคลิกข้อความเพื่อแก้ไข · ลาก section เพื่อจัดลำดับ";
+
+    syncCanvasLayoutMode();
+    const selected = editor?.getSelected();
+    if (selected) {
+        configureSelectedForLayoutMode(selected);
+        syncQuickStyleControls();
+    }
+    if (!options.silent) showToast(freePositionMode ? "เปิด Free mode แล้ว ลากชิ้นงานได้อิสระ" : "กลับสู่ Flow mode แล้ว");
+}
+
+function configureSelectedForLayoutMode(selected) {
+    if (!selected) return;
+    if (selected.get("bonlabOriginalResizable") === undefined) {
+        selected.set("bonlabOriginalResizable", selected.get("resizable"), { silent: true });
+    }
+    selected.set("resizable", freePositionMode ? true : selected.get("bonlabOriginalResizable"), { silent: true });
+}
+
+function syncCanvasLayoutMode() {
+    const canvasDocument = editor?.Canvas.getDocument();
+    if (!canvasDocument?.body) return;
+    let style = canvasDocument.querySelector("#bonlab-free-mode-style");
+    if (!style) {
+        style = canvasDocument.createElement("style");
+        style.id = "bonlab-free-mode-style";
+        style.textContent = `body.bonlab-free-positioning {
+            background-image: linear-gradient(rgba(23,70,162,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(23,70,162,.07) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }`;
+        canvasDocument.head.appendChild(style);
+    }
+    canvasDocument.body.classList.toggle("bonlab-free-positioning", freePositionMode);
+}
+
+function applyPositionValue(property, value) {
+    const selected = editor?.getSelected();
+    if (!selected || !Number.isFinite(value)) return;
+    if ((property === "left" || property === "top") && !freePositionMode) setLayoutMode("free", { silent: true });
+
+    changesArmed = true;
+    const styles = { [property]: `${Math.round(value)}px` };
+    if (property === "left" || property === "top") styles.position = "absolute";
+    selected.addStyle(styles);
+    setDirty(true);
+    syncQuickStyleControls();
+}
+
+function handleCanvasKeydown(event) {
+    changesArmed = true;
+    if (!freePositionMode || !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+    if (event.target.closest?.("input, textarea, select") || event.target.isContentEditable) return;
+
+    const distance = event.shiftKey ? 10 : 1;
+    const delta = {
+        ArrowLeft: [-distance, 0], ArrowRight: [distance, 0],
+        ArrowUp: [0, -distance], ArrowDown: [0, distance]
+    }[event.key];
+    event.preventDefault();
+    nudgeSelected(delta[0], delta[1]);
+}
+
+function nudgeSelected(deltaX, deltaY) {
+    const selected = editor?.getSelected();
+    const element = selected?.getEl();
+    if (!selected || !element) return;
+
+    const computed = element.ownerDocument.defaultView.getComputedStyle(element);
+    const left = Number.parseFloat(computed.left);
+    const top = Number.parseFloat(computed.top);
+    selected.addStyle({
+        position: "absolute",
+        left: `${Math.round((Number.isFinite(left) ? left : element.offsetLeft) + deltaX)}px`,
+        top: `${Math.round((Number.isFinite(top) ? top : element.offsetTop) + deltaY)}px`
+    });
+    setDirty(true);
+    syncQuickStyleControls();
 }
 
 function syncQuickStyleControls() {
@@ -440,9 +562,24 @@ function syncQuickStyleControls() {
     const opacity = Math.round((Number.parseFloat(computed.opacity) || 1) * 100);
     const radius = Math.min(80, Math.round(Number.parseFloat(computed.borderRadius) || 0));
     const fontSize = Math.min(120, Math.max(8, Math.round(Number.parseFloat(computed.fontSize) || 16)));
+    const rotate = Math.max(-180, Math.min(180, Math.round(Number.parseFloat(computed.rotate) || 0)));
     setRangeValue("opacity", opacity);
     setRangeValue("border-radius", radius);
     setRangeValue("font-size", fontSize);
+    setRangeValue("rotate", rotate);
+
+    const rect = element.getBoundingClientRect();
+    const positionValues = {
+        left: Number.parseFloat(computed.left),
+        top: Number.parseFloat(computed.top),
+        width: rect.width,
+        height: rect.height
+    };
+    document.querySelectorAll("[data-position-input]").forEach((input) => {
+        const value = positionValues[input.dataset.positionInput];
+        input.value = Number.isFinite(value) ? Math.round(value) : 0;
+        input.disabled = !freePositionMode && (input.dataset.positionInput === "left" || input.dataset.positionInput === "top");
+    });
 
     const tagName = String(selected.get("tagName") || "div").toLowerCase();
     const textTags = ["a", "button", "p", "span", "strong", "small", "label", "li", "h1", "h2", "h3", "h4", "h5", "h6"];
@@ -462,7 +599,7 @@ function setRangeValue(property, value) {
 function updateRangeOutput(property, value) {
     const output = document.querySelector(`[data-range-output="${property}"]`);
     if (!output) return;
-    output.textContent = property === "opacity" ? `${value}%` : `${value} px`;
+    output.textContent = property === "opacity" ? `${value}%` : property === "rotate" ? `${value}°` : `${value} px`;
 }
 
 function runComponentAction(action) {
@@ -487,11 +624,23 @@ function runComponentAction(action) {
     } else if (action === "move-down" && index < lastIndex) {
         selected.move(parent, { at: index + 2 });
         editor.select(selected);
+    } else if (action === "bring-forward" || action === "send-backward") {
+        const element = selected.getEl();
+        const computed = element?.ownerDocument?.defaultView?.getComputedStyle(element);
+        const currentZIndex = Number.parseInt(computed?.zIndex, 10) || 0;
+        const nextZIndex = action === "bring-forward" ? currentZIndex + 1 : Math.max(0, currentZIndex - 1);
+        selected.addStyle({ position: computed?.position === "static" ? "relative" : computed?.position, "z-index": String(nextZIndex) });
+    } else if (action === "reset-position") {
+        ["position", "left", "top", "right", "bottom", "width", "height", "rotate", "z-index"].forEach((property) => selected.removeStyle(property));
+        setLayoutMode("flow", { silent: true });
+        editor.select(selected);
+        showToast("คืนชิ้นงานเข้าสู่ Flow แล้ว");
     } else {
-        showToast(action === "move-up" ? "ชิ้นงานอยู่บนสุดแล้ว" : "ชิ้นงานอยู่ล่างสุดแล้ว");
+        showToast(action === "move-up" ? "ชิ้นงานอยู่บนสุดแล้ว" : action === "move-down" ? "ชิ้นงานอยู่ล่างสุดแล้ว" : "ไม่สามารถจัดชิ้นงานนี้ได้");
         return;
     }
     setDirty(true);
+    syncQuickStyleControls();
 }
 
 function openStylePanel() {
