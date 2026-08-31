@@ -4491,13 +4491,23 @@ img.person-image {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
+}
+
+.news-controls-row .news-filter {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .search-box-wrapper {
     position: relative;
     flex: 1 1 280px;
-    max-width: 380px;
+    max-width: 340px;
+    display: flex;
+    align-items: center;
 }
 
 .search-icon {
@@ -4505,20 +4515,23 @@ img.person-image {
     left: 14px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 14px;
-    opacity: 0.6;
+    font-size: 13.5px;
+    opacity: 0.55;
     pointer-events: none;
 }
 
 .news-search-input {
     width: 100%;
-    padding: 10px 16px 10px 40px;
+    height: 38px;
+    box-sizing: border-box;
+    padding: 0 16px 0 38px;
     border-radius: 999px;
     border: 1px solid var(--border, #cbd5e1);
-    background: var(--card-bg, #ffffff);
+    background: var(--surface, #ffffff);
     color: var(--text, #1e293b);
-    font-size: 14px;
+    font-size: 13.5px;
     font-family: inherit;
+    line-height: 36px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -4537,6 +4550,22 @@ img.person-image {
 :root[data-theme="dark"] .news-search-input:focus {
     border-color: #38bdf8;
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+.filter-button {
+    height: 38px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    transition: all 0.2s ease;
 }
 
 .no-results {
