@@ -3,7 +3,10 @@ const translations = {
         "nav-about": "About", "nav-research": "Research", "nav-partners": "Partners", "nav-news": "News", "nav-team": "Team", "nav-contact": "Contact",
         "language-label": "Language", "theme-light": "Use light mode", "theme-dark": "Use dark mode", "menu-open": "Open menu", "menu-close": "Close menu", "researcher-name": "Assoc. Prof. Dr. Kidsanapong Puntsri",
         "hero-title": "Research built in hardware.", "hero-copy": "We turn communication theory into testable digital hardware through FPGA prototyping, laboratory experiments and academic collaboration.",
-        "latest-news": "Latest news →", "about-lab": "About BONLAB", "lab-flow": "Design → Prototype → Validate", "lab-caption": "A hands-on laboratory for communication systems and digital hardware.",
+        "hero-explore": "Explore Research →", "latest-news": "Latest news →", "about-lab": "About BONLAB", "lab-flow": "Design → Prototype → Validate", "lab-caption": "A hands-on laboratory for communication systems and digital hardware.",
+        "stat-fb": "Facebook Followers", "stat-ieee": "Senior Member Lab", "stat-qam": "SC-FDM Hardware Success", "stat-campus": "Khon Kaen Campus",
+        "news-filter-all": "All", "news-filter-research": "Research & Experiments", "news-filter-awards": "Awards & Recognition", "news-filter-students": "Student Projects", "news-filter-seminars": "Seminars & Learning",
+        "news-search-placeholder": "Search news, topics, keywords...", "no-news-found": "No news articles found matching your search.", "share-article": "Share this story:", "copied-link": "Article link copied to clipboard!", "read-time": "2 min read",
         "research-title": "Communication systems from algorithms to hardware", "research-copy": "Our work covers signal design, digital processing, FPGA implementation and laboratory validation on real hardware.",
         "modulation-copy": "Design and evaluate advanced modulation for wireless and optical communication systems.", "fpga-copy": "Implement communication algorithms on FPGA and validate them with real laboratory instruments.",
         "hardware-copy": "Design digital circuits, interfaces and processing pipelines for reliable communication prototypes.", "featured-title": "From theory to working digital hardware",
@@ -292,10 +295,13 @@ const translations = {
         "detail-side-contact-btn": "Contact BONLAB →"
     },
     th: {
-        "nav-about": "เกี่ยวกับเรา", "nav-research": "งานวิจัย", "nav-partners": "เครือข่าย", "nav-news": "ข่าวสาร", "nav-team": "ทีมงาน", "nav-contact": "ติดต่อ",
+        "nav-about": "เกี่ยวกับเรา", "nav-research": "งานวิจัย", "nav-partners": "ความร่วมมือ", "nav-news": "ข่าวสาร", "nav-team": "ทีมงาน", "nav-contact": "ติดต่อ",
         "language-label": "ภาษา", "theme-light": "ใช้โหมดสว่าง", "theme-dark": "ใช้โหมดมืด", "menu-open": "เปิดเมนู", "menu-close": "ปิดเมนู", "researcher-name": "รศ.ดร.กฤษณะพงศ์ พันธ์ศรี",
         "hero-title": "งานวิจัยที่สร้างเป็นฮาร์ดแวร์จริง", "hero-copy": "เราเปลี่ยนทฤษฎีการสื่อสารให้เป็น digital hardware ที่ทดสอบได้ ผ่าน FPGA งานทดลอง และความร่วมมือทางวิชาการ",
-        "latest-news": "ข่าวล่าสุด →", "about-lab": "รู้จัก BONLAB", "lab-flow": "ออกแบบ → สร้างต้นแบบ → ทดสอบ", "lab-caption": "ห้องปฏิบัติการสำหรับระบบสื่อสารและ digital hardware ที่เน้นการลงมือทำจริง",
+        "hero-explore": "สำรวจงานวิจัย →", "latest-news": "ข่าวล่าสุด →", "about-lab": "รู้จัก BONLAB", "lab-flow": "ออกแบบ → สร้างต้นแบบ → ทดสอบ", "lab-caption": "ห้องปฏิบัติการสำหรับระบบสื่อสารและ digital hardware ที่เน้นการลงมือทำจริง",
+        "stat-fb": "ผู้ติดตามบน Facebook", "stat-ieee": "ห้องวิจัยสมาชิกอาวุโส IEEE", "stat-qam": "ความสำเร็จฮาร์ดแวร์ SC-FDM", "stat-campus": "มทร.อีสาน วิทยาเขตขอนแก่น",
+        "news-filter-all": "ทั้งหมด", "news-filter-research": "งานวิจัยและการทดลอง", "news-filter-awards": "รางวัลผลงานวิจัย", "news-filter-students": "โครงงานนักศึกษา", "news-filter-seminars": "งานสัมมนาและอบรม",
+        "news-search-placeholder": "ค้นหาข่าวสาร, หัวข้อ, หรือคำสำคัญ...", "no-news-found": "ไม่พบข่าวสารที่ตรงกับคำค้นหา", "share-article": "แชร์บทความนี้:", "copied-link": "คัดลอกลิงก์บทความเรียบร้อยแล้ว!", "read-time": "อ่าน 2 นาที",
         "research-title": "ระบบสื่อสารจากอัลกอริทึมสู่ฮาร์ดแวร์", "research-copy": "ครอบคลุมการออกแบบสัญญาณ การประมวลผลดิจิทัล การพัฒนาบน FPGA และการทดสอบด้วยฮาร์ดแวร์จริง",
         "modulation-copy": "ออกแบบและประเมินมอดูเลชันขั้นสูงสำหรับระบบสื่อสารไร้สายและเชิงแสง", "fpga-copy": "พัฒนาอัลกอริทึมการสื่อสารบน FPGA และทดสอบด้วยเครื่องมือในห้องปฏิบัติการ",
         "hardware-copy": "ออกแบบวงจรดิจิทัล อินเทอร์เฟซ และ processing pipeline สำหรับระบบสื่อสารต้นแบบ", "featured-title": "จากทฤษฎีสู่ digital hardware ที่ใช้งานได้",
@@ -1567,11 +1573,20 @@ const safeStorage = {
 const menuButton = document.querySelector(".mobile-menu-button");
 const navigation = document.querySelector(".main-nav");
 const navContainer = document.querySelector(".nav-container");
-const navKeys = { "about.html": "nav-about", "research.html": "nav-research", "partners.html": "nav-partners", "news.html": "nav-news", "team.html": "nav-team", "contact.html": "nav-contact" };
+const navKeys = {
+    "about.html": "nav-about", "about": "nav-about",
+    "research.html": "nav-research", "research": "nav-research",
+    "partners.html": "nav-partners", "partners": "nav-partners",
+    "news.html": "nav-news", "news": "nav-news",
+    "team.html": "nav-team", "team": "nav-team",
+    "contact.html": "nav-contact", "contact": "nav-contact"
+};
 
-document.querySelectorAll(".main-nav a").forEach(link => {
-    const page = link.getAttribute("href");
-    if (navKeys[page]) link.dataset.i18n = navKeys[page];
+document.querySelectorAll(".main-nav a, .site-footer a").forEach(link => {
+    if (!link.dataset.i18n) {
+        const href = (link.getAttribute("href") || "").replace(/^\//, "").split("#")[0].split("?")[0];
+        if (navKeys[href]) link.dataset.i18n = navKeys[href];
+    }
 });
 
 const pageKeys = {
@@ -1665,24 +1680,147 @@ document.querySelectorAll(".filter-button").forEach(button => button.addEventLis
     parentSection.querySelectorAll(".filter-button").forEach(item => item.classList.remove("active"));
     button.classList.add("active");
 
-    const filterVal = button.dataset.filter || "all";
-    const targets = parentSection.querySelectorAll("[data-category]");
-    targets.forEach(el => {
-        if (filterVal === "all" || el.dataset.category === filterVal || (el.dataset.category && el.dataset.category.includes(filterVal))) {
-            el.style.display = "";
-            el.style.opacity = "0";
-            el.style.transform = "translateY(8px)";
-            setTimeout(() => {
-                el.style.transition = "opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)";
-                el.style.opacity = "1";
-                el.style.transform = "translateY(0)";
-            }, 15);
-        } else {
-            el.style.display = "none";
-        }
-    });
+    if (document.getElementById("news-search")) {
+        updateNewsFilterAndSearch();
+    } else {
+        const filterVal = button.dataset.filter || "all";
+        const targets = parentSection.querySelectorAll("[data-category]");
+        targets.forEach(el => {
+            if (filterVal === "all" || el.dataset.category === filterVal || (el.dataset.category && el.dataset.category.includes(filterVal))) {
+                el.style.display = "";
+                el.style.opacity = "0";
+                el.style.transform = "translateY(8px)";
+                setTimeout(() => {
+                    el.style.transition = "opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)";
+                    el.style.opacity = "1";
+                    el.style.transform = "translateY(0)";
+                }, 15);
+            } else {
+                el.style.display = "none";
+            }
+        });
+    }
 }));
 
+// Real-time news search & filter synchronization
+const newsSearchInput = document.getElementById("news-search");
+const noNewsContainer = document.getElementById("no-news-found");
+
+function updateNewsFilterAndSearch() {
+    const parentSection = document.querySelector(".news-card-grid")?.closest(".section") || document;
+    const activeFilterBtn = parentSection.querySelector(".filter-button.active");
+    const filterVal = activeFilterBtn?.dataset.filter || "all";
+    const query = (newsSearchInput?.value || "").trim().toLowerCase();
+    
+    const cards = parentSection.querySelectorAll(".news-card");
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const category = card.dataset.category || "";
+        const matchesCategory = (filterVal === "all" || category === filterVal || category.includes(filterVal));
+        const textContent = card.innerText.toLowerCase();
+        const matchesSearch = !query || textContent.includes(query);
+
+        if (matchesCategory && matchesSearch) {
+            card.style.display = "";
+            visibleCount++;
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+    if (noNewsContainer) {
+        noNewsContainer.style.display = visibleCount === 0 ? "block" : "none";
+    }
+}
+
+if (newsSearchInput) {
+    newsSearchInput.addEventListener("input", updateNewsFilterAndSearch);
+}
+
+// Floating Back to Top Button
+const backToTopBtn = document.getElementById("back-to-top");
+if (backToTopBtn) {
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 280) {
+            backToTopBtn.classList.add("visible");
+        } else {
+            backToTopBtn.classList.remove("visible");
+        }
+    }, { passive: true });
+
+    backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+}
+
+// Share & Copy Link with Toast alert
+function showToast(msg) {
+    let toast = document.querySelector(".toast-notice");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.className = "toast-notice";
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+document.querySelectorAll(".btn-copy-link, #btn-copy-link").forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(location.href).then(() => {
+                showToast(translations[language]["copied-link"] || "Article link copied to clipboard!");
+            }).catch(() => {
+                showToast(translations[language]["copied-link"] || "Article link copied to clipboard!");
+            });
+        } else {
+            showToast(translations[language]["copied-link"] || "Article link copied to clipboard!");
+        }
+    });
+});
+
+document.querySelectorAll(".btn-facebook, #btn-share-fb").forEach(btn => {
+    btn.addEventListener("click", () => {
+        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(location.href), "_blank", "width=600,height=400");
+    });
+});
+
+// Interactive Animated Number Counter for stats
+const statNumbers = document.querySelectorAll(".stat strong, .hero-stat-item strong");
+if ("IntersectionObserver" in window && statNumbers.length > 0) {
+    const statObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const text = el.innerText.trim();
+                const match = text.match(/^(\d+)(\+?.*)$/);
+                if (match) {
+                    const targetNum = parseInt(match[1], 10);
+                    const suffix = match[2] || "";
+                    let current = 0;
+                    const duration = 1000;
+                    const stepTime = 20;
+                    const increment = targetNum / (duration / stepTime);
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= targetNum) {
+                            el.innerText = targetNum + suffix;
+                            clearInterval(timer);
+                        } else {
+                            el.innerText = Math.floor(current) + suffix;
+                        }
+                    }, stepTime);
+                }
+                obs.unobserve(el);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    statNumbers.forEach(el => statObserver.observe(el));
+}
 
 applyTheme(safeStorage.get("bonlab-theme") || "light");
 applyLanguage(language);

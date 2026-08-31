@@ -5,7 +5,7 @@ const title = "Successful Transmission of 128-QAM SC-FDM — BONLAB";
 const description = "BONLAB researchers successfully demonstrate 128-QAM SC-FDM transmission over optical wireless communications using real-time FPGA digital signal processing.";
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} activeNav="news">
 <section class="detail-hero">
 
     <div class="container">
@@ -26,6 +26,12 @@ const description = "BONLAB researchers successfully demonstrate 128-QAM SC-FDM 
             Demonstrating high spectral efficiency and low peak-to-average power ratio through FPGA real-time DSP pipelines.
         </p>
 
+        <div class="meta-chips-row">
+            <span class="meta-chip">📅 Published: 2024</span>
+            <span class="meta-chip">⏱️ <span data-i18n="read-time">2 min read</span></span>
+            <span class="meta-chip">📍 BONLAB Testbed · RMUTI</span>
+        </div>
+
     </div>
 
 </section>
@@ -36,6 +42,16 @@ const description = "BONLAB researchers successfully demonstrate 128-QAM SC-FDM 
     <div class="container article-layout">
 
         <article class="article-content">
+
+            <div class="article-share-bar">
+                <span class="share-label" data-i18n="share-article">Share this story:</span>
+                <button type="button" class="btn-share btn-facebook" id="btn-share-fb" title="Share on Facebook">
+                    <span>📘 Facebook</span>
+                </button>
+                <button type="button" class="btn-share btn-copy-link" id="btn-copy-link" title="Copy article link">
+                    <span id="copy-text">🔗 Copy Link</span>
+                </button>
+            </div>
 
             <img class="project-image" src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Constellation Display in BONLAB">
 
@@ -61,6 +77,34 @@ const description = "BONLAB researchers successfully demonstrate 128-QAM SC-FDM 
                 To explore further research and collaboration opportunities on optical communications and FPGA prototyping, visit our <a href="contact.html">Contact page</a> or our <a href="https://sites.google.com/site/adcsbonlab/home" target="_blank" rel="noopener">Official Google Site</a>.
             </p>
 
+            <div class="article-share-bar" style="margin-top: 30px;">
+                <span class="share-label" data-i18n="share-article">Share this story:</span>
+                <button type="button" class="btn-share btn-facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank')">
+                    <span>📘 Facebook</span>
+                </button>
+                <button type="button" class="btn-share btn-copy-link" onclick="navigator.clipboard?.writeText(location.href); alert('Link copied to clipboard!');">
+                    <span>🔗 Copy Link</span>
+                </button>
+            </div>
+
+            <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color, #e5e7eb);" />
+
+            <div class="related-section">
+                <h3>Related Research & Stories</h3>
+                <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <a href="research-detail.html#p1" class="feature-card" style="padding: 16px;">
+                        <div class="card-icon" style="font-size: 24px; margin-bottom: 8px;">📡</div>
+                        <h4 style="margin: 0 0 6px 0; font-size: 16px;">128-QAM System Architecture</h4>
+                        <p style="font-size: 13px; margin: 0; color: var(--text-muted, #6b7280);">Explore technical specs & hardware testbed.</p>
+                    </a>
+                    <a href="research-detail.html#p2" class="feature-card" style="padding: 16px;">
+                        <div class="card-icon" style="font-size: 24px; margin-bottom: 8px;">🧩</div>
+                        <h4 style="margin: 0 0 6px 0; font-size: 16px;">FPGA Real-Time DSP</h4>
+                        <p style="font-size: 13px; margin: 0; color: var(--text-muted, #6b7280);">Box-Muller CORDIC & hardware BER counters.</p>
+                    </a>
+                </div>
+            </div>
+
         </article>
 
 
@@ -83,6 +127,11 @@ const description = "BONLAB researchers successfully demonstrate 128-QAM SC-FDM 
                 <div class="info-row">
                     <span>Lead Investigator</span>
                     <strong>รศ.ดร.กฤษณะพงศ์ พันธ์ศรี</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Technology</span>
+                    <strong>FPGA · 128-QAM · SC-FDM</strong>
                 </div>
 
             </div>
