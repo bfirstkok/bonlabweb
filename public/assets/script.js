@@ -672,7 +672,7 @@ const translations = {
         "detail-side-contact-btn": "ติดต่อทีมงาน BONLAB →"
     },
     de: {
-        "nav-about": "Über uns", "nav-research": "Forschung", "nav-partners": "Partner", "nav-news": "Neuigkeiten", "nav-team": "Teams", "nav-contact": "Kontakt",
+        "nav-about": "Über uns", "nav-research": "Forschung", "nav-partners": "Partner", "nav-news": "Neuigkeiten", "nav-team": "Teams", "nav-contact": "Kontakt", "footer-explore": "Erkunden", "footer-information": "Informationen",
         "language-label": "Sprache", "theme-light": "Hellen Modus verwenden", "theme-dark": "Dunklen Modus verwenden", "menu-open": "Menü öffnen", "menu-close": "Menü schließen", "researcher-name": "Assoc. Prof. Dr. Kidsanapong Puntsri",
         "hero-title": "Forschung als echte Hardware.", "hero-copy": "Wir übertragen Kommunikationstheorie durch FPGA-Prototypen, Laborversuche und akademische Zusammenarbeit in prüfbare digitale Hardware.",
         "latest-news": "Neuigkeiten →", "about-lab": "Über BONLAB", "lab-flow": "Entwurf → Prototyp → Prüfung", "lab-caption": "Ein praxisnahes Labor für Kommunikationssysteme und digitale Hardware.",
@@ -1707,7 +1707,13 @@ function applyLanguage(nextLanguage) {
     document.querySelectorAll("[data-en]").forEach(element => {
         if (language === "th" && element.dataset.th) {
             element.textContent = element.dataset.th;
+        } else if (language === "de" && element.dataset.de) {
+            element.textContent = element.dataset.de;
         } else if (language === "en" && element.dataset.en) {
+            element.textContent = element.dataset.en;
+        } else if (element.dataset[language]) {
+            element.textContent = element.dataset[language];
+        } else if (element.dataset.en) {
             element.textContent = element.dataset.en;
         }
     });
