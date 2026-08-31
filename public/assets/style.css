@@ -4577,6 +4577,72 @@ img.person-image {
 }
 
 /* =========================================================
+   NEWS CARD BADGES & SOURCE TAGS
+========================================================= */
+.news-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    width: fit-content;
+    line-height: 1.2;
+}
+
+.news-badge-article {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.news-badge-facebook {
+    background: #eef2ff;
+    color: #1877f2;
+    border: 1px solid #c7d2fe;
+}
+
+.news-badge-award {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+:root[data-theme="dark"] .news-badge-article {
+    background: #172554;
+    color: #93c5fd;
+    border-color: #1e40af;
+}
+
+:root[data-theme="dark"] .news-badge-facebook {
+    background: #1e1b4b;
+    color: #818cf8;
+    border-color: #3730a3;
+}
+
+:root[data-theme="dark"] .news-badge-award {
+    background: #451a03;
+    color: #fcd34d;
+    border-color: #78350f;
+}
+
+.news-card-content a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+}
+
+.news-card-content a:hover {
+    transform: translateX(3px);
+}
+
+/* =========================================================
    ARTICLE META CHIPS & SHARE BUTTONS
 ========================================================= */
 .meta-chips-row {
