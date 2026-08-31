@@ -174,8 +174,8 @@ const description = "Explore BONLAB research projects in 128-QAM SC-FDM optical 
                         </p>
                         <p>{item.summary}</p>
                         <div style="display: flex; gap: 12px; align-items: center; margin-top: 14px; flex-wrap: wrap;">
-                            <a class="button button-primary" style="padding: 6px 14px; font-size: 12.5px;" href={`research-detail.html?id=${item.id}`}>
-                                📖 อ่านสรุปงานวิจัย (Blog) →
+                            <a class="button button-primary" style="padding: 6px 14px; font-size: 12.5px; color: #ffffff !important; display: inline-flex; align-items: center; gap: 6px;" href={`research-detail.html?id=${item.id}`}>
+                                <span>📖</span> <span style="color: #ffffff !important;">อ่านสรุปงานวิจัย (Blog) →</span>
                             </a>
                             {item.paperUrl && (
                                 <a class="text-link" style="font-size: 12px;" href={item.paperUrl} target="_blank" rel="noopener">

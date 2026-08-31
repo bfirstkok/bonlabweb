@@ -18,6 +18,14 @@ const {
     <title>{title}</title>
     <meta name="description" content={description}>
     <link rel="stylesheet" href="/assets/style.css">
+    <script is:inline>
+        try {
+            const savedTheme = localStorage.getItem("bonlab-theme") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.dataset.theme = savedTheme;
+            const savedLang = localStorage.getItem("bonlab-language");
+            if (savedLang) document.documentElement.lang = savedLang;
+        } catch (e) {}
+    </script>
 </head>
 <body>
     <header class="site-header">
@@ -27,13 +35,23 @@ const {
                 <span>BONLAB</span>
             </a>
             <nav class="main-nav">
-                <a href="/about.html">About</a>
-                <a href="/research.html">Research</a>
-                <a href="/partners.html">Partners</a>
-                <a href="/news.html">News</a>
-                <a href="/team.html">Team</a>
-                <a href="/contact.html" class="nav-button">Contact</a>
+                <a href="/about.html" data-i18n="nav-about">About</a>
+                <a href="/research.html" data-i18n="nav-research">Research</a>
+                <a href="/partners.html" data-i18n="nav-partners">Partners</a>
+                <a href="/news.html" data-i18n="nav-news">News</a>
+                <a href="/team.html" data-i18n="nav-team">Team</a>
+                <a href="/contact.html" class="nav-button" data-i18n="nav-contact">Contact</a>
             </nav>
+            <div class="site-tools">
+                <label class="language-control">
+                    <span class="sr-only" data-i18n="language-label">Language</span>
+                    <select class="language-select" aria-label="Language">
+                        <option value="en">EN</option>
+                        <option value="th">TH</option>
+                    </select>
+                </label>
+                <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+            </div>
             <button class="mobile-menu-button" aria-label="Open menu">
                 ☰
             </button>
@@ -56,16 +74,16 @@ const {
                 </p>
             </div>
             <div>
-                <h4>Explore</h4>
-                <a href="/about.html">About</a>
-                <a href="/research.html">Research</a>
-                <a href="/partners.html">Partners</a>
+                <h4 data-i18n="footer-explore">Explore</h4>
+                <a href="/about.html" data-i18n="nav-about">About</a>
+                <a href="/research.html" data-i18n="nav-research">Research</a>
+                <a href="/partners.html" data-i18n="nav-partners">Partners</a>
             </div>
             <div>
-                <h4>Information</h4>
-                <a href="/news.html">News</a>
-                <a href="/team.html">Team</a>
-                <a href="/contact.html">Contact</a>
+                <h4 data-i18n="footer-information">Information</h4>
+                <a href="/news.html" data-i18n="nav-news">News</a>
+                <a href="/team.html" data-i18n="nav-team">Team</a>
+                <a href="/contact.html" data-i18n="nav-contact">Contact</a>
             </div>
             <div>
                 <h4>Connect</h4>

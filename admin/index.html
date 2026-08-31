@@ -46,6 +46,10 @@
                 <select id="page-select" aria-label="เลือกหน้าเว็บ"></select>
             </div>
             <div class="header-actions">
+                <div class="layout-mode-control" aria-label="โหมดจัดวาง">
+                    <button type="button" data-layout-mode="flow" class="layout-mode-button active" aria-pressed="true" title="จัดวางตามโครงสร้างเว็บ"><i data-lucide="rows-3"></i><span>Flow</span></button>
+                    <button type="button" data-layout-mode="free" class="layout-mode-button" aria-pressed="false" title="ลากและวางตำแหน่งอย่างอิสระ"><i data-lucide="move"></i><span>Free</span></button>
+                </div>
                 <div class="segmented" aria-label="ขนาดหน้าจอ">
                     <button type="button" data-device="Desktop" class="icon-button active" title="เดสก์ท็อป"><i data-lucide="monitor"></i></button>
                     <button type="button" data-device="Tablet" class="icon-button" title="แท็บเล็ต"><i data-lucide="tablet"></i></button>
@@ -77,16 +81,112 @@
                 </nav>
                 <div class="sidebar-content">
                     <div id="blocks-panel" class="tool-panel active"><div class="panel-heading"><strong>องค์ประกอบ</strong><span>ลากไปวางบนหน้าเว็บ</span></div><div id="blocks"></div></div>
-                    <div id="styles-panel" class="tool-panel"><div class="panel-heading"><strong>รูปแบบ</strong><span>เลือกชิ้นงานก่อนปรับแต่ง</span></div><div id="styles"></div></div>
+                    <div id="styles-panel" class="tool-panel">
+                        <div class="panel-heading"><strong>ออกแบบ</strong><span>เลือกชิ้นงาน แล้วปรับหน้าตาได้ทันที</span></div>
+                        <div id="selection-empty" class="selection-empty">
+                            <span class="selection-empty-icon"><i data-lucide="mouse-pointer-2"></i></span>
+                            <strong>เลือกชิ้นงานบนหน้าเว็บ</strong>
+                            <span>คลิกข้อความ รูปภาพ ปุ่ม หรือ section ที่ต้องการแก้ไข</span>
+                        </div>
+                        <div id="quick-style-controls" class="quick-style-controls" hidden>
+                            <div class="selected-component-card">
+                                <span id="selected-component-icon" class="selected-component-icon"><i data-lucide="box"></i></span>
+                                <span><small>กำลังเลือก</small><strong id="selected-component-name">Element</strong></span>
+                            </div>
+
+                            <section class="quick-section" aria-labelledby="quick-colors-title">
+                                <div class="quick-section-title"><strong id="quick-colors-title">สี</strong><span>คลิกสีเพื่อใช้ทันที</span></div>
+                                <div id="brand-palette" class="brand-palette" aria-label="ชุดสี BONLAB"></div>
+
+                                <div class="color-control" data-color-control="color">
+                                    <div class="control-label"><span>ตัวอักษร</span><button type="button" class="reset-style-button" data-reset-style="color">คืนค่า</button></div>
+                                    <div class="color-input-row">
+                                        <label class="color-well" title="เลือกสีตัวอักษร"><input type="color" data-color-input="color" value="#18202b"><span data-color-preview="color"></span></label>
+                                        <input class="hex-input" data-hex-input="color" value="#18202B" aria-label="รหัสสีตัวอักษร" maxlength="9">
+                                        <button type="button" class="mini-icon-button" data-eyedropper="color" title="ดูดสีจากหน้าจอ"><i data-lucide="pipette"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="color-control" data-color-control="background-color">
+                                    <div class="control-label"><span>พื้นหลัง</span><button type="button" class="reset-style-button" data-reset-style="background-color">โปร่งใส</button></div>
+                                    <div class="color-input-row">
+                                        <label class="color-well" title="เลือกสีพื้นหลัง"><input type="color" data-color-input="background-color" value="#ffffff"><span data-color-preview="background-color"></span></label>
+                                        <input class="hex-input" data-hex-input="background-color" value="#FFFFFF" aria-label="รหัสสีพื้นหลัง" maxlength="9">
+                                        <button type="button" class="mini-icon-button" data-eyedropper="background-color" title="ดูดสีจากหน้าจอ"><i data-lucide="pipette"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="color-control" data-color-control="border-color">
+                                    <div class="control-label"><span>เส้นกรอบ</span><button type="button" class="reset-style-button" data-reset-style="border-color">ไม่ใช้</button></div>
+                                    <div class="color-input-row">
+                                        <label class="color-well" title="เลือกสีเส้นกรอบ"><input type="color" data-color-input="border-color" value="#d8dee8"><span data-color-preview="border-color"></span></label>
+                                        <input class="hex-input" data-hex-input="border-color" value="#D8DEE8" aria-label="รหัสสีเส้นกรอบ" maxlength="9">
+                                        <button type="button" class="mini-icon-button" data-eyedropper="border-color" title="ดูดสีจากหน้าจอ"><i data-lucide="pipette"></i></button>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="quick-section" aria-labelledby="quick-shape-title">
+                                <div class="quick-section-title"><strong id="quick-shape-title">รูปร่างและตัวอักษร</strong></div>
+                                <label class="range-control"><span><span>ความโปร่งใส</span><output data-range-output="opacity">100%</output></span><input type="range" min="0" max="100" value="100" data-style-range="opacity"></label>
+                                <label class="range-control"><span><span>มุมโค้ง</span><output data-range-output="border-radius">0 px</output></span><input type="range" min="0" max="80" value="0" data-style-range="border-radius"></label>
+                                <label class="range-control text-only-control"><span><span>ขนาดตัวอักษร</span><output data-range-output="font-size">16 px</output></span><input type="range" min="8" max="120" value="16" data-style-range="font-size"></label>
+                            </section>
+
+                            <section class="quick-section position-section" aria-labelledby="quick-position-title">
+                                <div class="quick-section-title"><strong id="quick-position-title">ตำแหน่งและขนาด</strong><span id="position-mode-label">โหมด Flow</span></div>
+                                <div id="free-mode-hint" class="free-mode-hint">
+                                    <i data-lucide="move"></i><span>เปิดโหมด Free ด้านบน แล้วลากชิ้นงานไปวางได้ทุกตำแหน่ง</span>
+                                </div>
+                                <div class="position-grid">
+                                    <label><span>X</span><span class="number-input"><input type="number" data-position-input="left" step="1"><small>px</small></span></label>
+                                    <label><span>Y</span><span class="number-input"><input type="number" data-position-input="top" step="1"><small>px</small></span></label>
+                                    <label><span>กว้าง</span><span class="number-input"><input type="number" data-position-input="width" min="1" step="1"><small>px</small></span></label>
+                                    <label><span>สูง</span><span class="number-input"><input type="number" data-position-input="height" min="1" step="1"><small>px</small></span></label>
+                                </div>
+                                <label class="range-control"><span><span>หมุน</span><output data-range-output="rotate">0°</output></span><input type="range" min="-180" max="180" value="0" data-style-range="rotate"></label>
+                                <button type="button" class="reset-position-button" data-component-action="reset-position"><i data-lucide="rotate-ccw"></i><span>คืนชิ้นงานเข้าสู่ Flow</span></button>
+                            </section>
+
+                            <section class="quick-section" aria-labelledby="quick-actions-title">
+                                <div class="quick-section-title"><strong id="quick-actions-title">จัดชิ้นงาน</strong></div>
+                                <div class="quick-action-grid">
+                                    <button type="button" data-component-action="move-up" class="flow-layout-action"><i data-lucide="arrow-up"></i><span>ขึ้น</span></button>
+                                    <button type="button" data-component-action="move-down" class="flow-layout-action"><i data-lucide="arrow-down"></i><span>ลง</span></button>
+                                    <button type="button" data-component-action="bring-forward" class="free-layout-action"><i data-lucide="bring-to-front"></i><span>ชั้นหน้า</span></button>
+                                    <button type="button" data-component-action="send-backward" class="free-layout-action"><i data-lucide="send-to-back"></i><span>ชั้นหลัง</span></button>
+                                    <button type="button" data-component-action="duplicate"><i data-lucide="copy-plus"></i><span>ทำสำเนา</span></button>
+                                    <button type="button" data-component-action="delete" class="danger-action"><i data-lucide="trash-2"></i><span>ลบ</span></button>
+                                </div>
+                            </section>
+                        </div>
+                        <details class="advanced-style-panel">
+                            <summary><span><i data-lucide="sliders-horizontal"></i>ปรับแต่งขั้นสูง</span><i data-lucide="chevron-down" class="summary-chevron"></i></summary>
+                            <div id="styles"></div>
+                        </details>
+                    </div>
                     <div id="traits-panel" class="tool-panel"><div class="panel-heading"><strong>ตั้งค่า</strong><span>แก้ลิงก์ ข้อความกำกับ และข้อมูลชิ้นงาน</span></div><button id="replace-image-button" type="button" class="upload-button" hidden><i data-lucide="image-up"></i><span>เปลี่ยนรูปภาพ</span></button><input id="image-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden><div id="traits"></div></div>
                     <div id="layers-panel" class="tool-panel"><div class="panel-heading"><strong>โครงสร้างหน้า</strong><span>ลากเพื่อจัดลำดับองค์ประกอบ</span></div><div id="layers"></div></div>
                 </div>
             </aside>
 
             <div class="canvas-area">
+                <div id="selection-toolbar" class="selection-toolbar" hidden>
+                    <span id="toolbar-selection-name" class="toolbar-selection-name">Element</span>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" class="toolbar-color-button" data-open-color="color" title="สีตัวอักษร"><span class="toolbar-letter">A</span><span class="toolbar-color-line" data-toolbar-color="color"></span></button>
+                    <button type="button" class="toolbar-color-button" data-open-color="background-color" title="สีพื้นหลัง"><i data-lucide="paint-bucket"></i><span class="toolbar-color-line" data-toolbar-color="background-color"></span></button>
+                    <span class="toolbar-divider"></span>
+                    <button type="button" data-component-action="duplicate" title="ทำสำเนา"><i data-lucide="copy-plus"></i></button>
+                    <button type="button" data-component-action="move-up" class="flow-layout-action" title="เลื่อนขึ้น"><i data-lucide="arrow-up"></i></button>
+                    <button type="button" data-component-action="move-down" class="flow-layout-action" title="เลื่อนลง"><i data-lucide="arrow-down"></i></button>
+                    <button type="button" data-component-action="bring-forward" class="free-layout-action" title="นำมาด้านหน้า"><i data-lucide="bring-to-front"></i></button>
+                    <button type="button" data-component-action="send-backward" class="free-layout-action" title="ส่งไปด้านหลัง"><i data-lucide="send-to-back"></i></button>
+                    <button type="button" data-component-action="delete" class="toolbar-danger" title="ลบ"><i data-lucide="trash-2"></i></button>
+                </div>
                 <div id="loading-state" class="loading-state"><span class="spinner"></span><span>กำลังเปิดหน้าเว็บ...</span></div>
                 <div id="gjs"></div>
-                <div class="editor-statusbar"><span id="save-status"><span class="status-dot"></span>พร้อมแก้ไข</span><span>ดับเบิลคลิกข้อความเพื่อแก้ไข · ลาก section เพื่อจัดลำดับ</span></div>
+                <div class="editor-statusbar"><span id="save-status"><span class="status-dot"></span>พร้อมแก้ไข</span><span id="layout-mode-help">ดับเบิลคลิกข้อความเพื่อแก้ไข · ลาก section เพื่อจัดลำดับ</span></div>
             </div>
         </section>
         <div id="toast" class="toast" role="status" aria-live="polite"></div>

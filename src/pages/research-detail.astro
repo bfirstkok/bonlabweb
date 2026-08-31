@@ -8,16 +8,19 @@ const description = defaultProject.summary;
 ---
 
 <Layout title={title} description={description}>
-<section class="detail-hero">
+<!-- DETAIL HERO -->
+<section class="page-hero">
     <div class="container">
         <a href="research.html" class="back-link">← กลับไปหน้ารวมงานวิจัย (Back to Research)</a>
         <span class="eyebrow" id="detail-category">{defaultProject.category}</span>
         <h1 id="detail-title">{defaultProject.title}</h1>
         <p id="detail-th-title" style="font-size: 17px; color: #cbd8f5; margin-top: 8px;">{defaultProject.titleTh}</p>
         <p id="detail-summary" style="font-size: 15px; max-width: 800px; margin-top: 10px;">{defaultProject.summary}</p>
+
     </div>
 </section>
 
+<!-- MAIN DETAIL CONTENT WITH INTERACTIVE PROJECT TABS -->
 <section class="section">
     <div class="container detail-layout">
         <article class="detail-content">
@@ -89,6 +92,7 @@ const description = defaultProject.summary;
                 </div>
             </div>
         </aside>
+
     </div>
 </section>
 
