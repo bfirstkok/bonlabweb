@@ -1604,7 +1604,7 @@ if (pageHero && pageKeys[currentPage]) {
     pageHero.querySelector("p")?.setAttribute("data-i18n", pageKeys[currentPage][1]);
 }
 
-if (navContainer && menuButton) {
+if (navContainer && menuButton && !document.querySelector(".site-tools")) {
     const tools = document.createElement("div");
     tools.className = "site-tools";
     tools.innerHTML = `<label class="language-control"><span class="sr-only" data-i18n="language-label">Language</span><select class="language-select" aria-label="Language"><option value="en">EN</option><option value="th">TH</option><option value="de">DE</option><option value="ja">JA</option><option value="zh">中文</option></select></label><button class="theme-toggle" type="button" aria-label="Use dark mode" title="Use dark mode">☾</button>`;
@@ -1626,23 +1626,24 @@ function applyLanguage(nextLanguage) {
         const value = translations[language][element.dataset.i18nPlaceholder] || translations.en[element.dataset.i18nPlaceholder];
         if (value !== undefined) element.setAttribute("placeholder", value);
     });
-    if (languageSelect) {
-        languageSelect.value = language;
-        languageSelect.setAttribute("aria-label", translations[language]["language-label"]);
-    }
+    document.querySelectorAll(".language-select").forEach(select => {
+        select.value = language;
+        select.setAttribute("aria-label", (translations[language] && translations[language]["language-label"]) || "Language");
+    });
     updateThemeButton(document.documentElement.dataset.theme || "light");
     updateMenuLabel();
     safeStorage.set("bonlab-language", language);
 }
 
 function updateThemeButton(theme) {
-    if (!themeButton) return;
     const dark = theme === "dark";
     const labelKey = dark ? "theme-light" : "theme-dark";
-    const label = translations[language][labelKey];
-    themeButton.textContent = dark ? "☀" : "☾";
-    themeButton.setAttribute("aria-label", label);
-    themeButton.title = label;
+    const label = (translations[language] && translations[language][labelKey]) || "Toggle theme";
+    document.querySelectorAll(".theme-toggle").forEach(btn => {
+        btn.textContent = dark ? "☀" : "☾";
+        btn.setAttribute("aria-label", label);
+        btn.title = label;
+    });
 }
 
 function applyTheme(theme) {
@@ -1656,11 +1657,16 @@ function updateMenuLabel() {
     if (!menuButton || !navigation) return;
     const open = navigation.classList.contains("mobile-open");
     menuButton.setAttribute("aria-expanded", String(open));
-    menuButton.setAttribute("aria-label", translations[language][open ? "menu-close" : "menu-open"]);
+    menuButton.setAttribute("aria-label", (translations[language] && translations[language][open ? "menu-close" : "menu-open"]) || "Menu");
 }
 
-languageSelect?.addEventListener("change", event => applyLanguage(event.target.value));
-themeButton?.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+document.querySelectorAll(".language-select").forEach(select => {
+    select.addEventListener("change", event => applyLanguage(event.target.value));
+});
+
+document.querySelectorAll(".theme-toggle").forEach(btn => {
+    btn.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+});
 
 menuButton?.addEventListener("click", () => {
     navigation?.classList.toggle("mobile-open");
