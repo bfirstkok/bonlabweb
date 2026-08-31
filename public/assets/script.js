@@ -1,5 +1,49 @@
 const translations = {
     en: {
+        "research-hero-eyebrow": "RESEARCH & INNOVATION",
+        "research-hero-title": "Turning Communication Theory into Hardware",
+        "research-hero-desc": "Developing wireless, optical, and high-speed digital communication systems from theoretical mathematical models and simulations to validated physical prototypes on FPGA and laboratory testbeds at RMUTI Khon Kaen Campus.",
+        "research-sec1-eyebrow": "CORE RESEARCH INTERESTS",
+        "research-sec1-title": "Key Research Areas",
+        "research-sec-featured-eyebrow": "ACTIVE & COMPLETED PROJECTS",
+        "research-sec-featured-title": "Featured Research Projects",
+        "research-sec-featured-desc": "Hands-on projects bridging mathematical signal design with laboratory verification.",
+        "research-author-label": "Researchers:",
+        "research-read-blog": "Read Research Summary (Blog) →",
+        "research-full-paper": "Full Paper",
+        "research-awards-eyebrow": "AWARDS & RECOGNITION",
+        "research-awards-title": "Research Awards & Milestones",
+        "award-eecon40-title": "Best Paper Award",
+        "award-eecon40-desc": "Assoc. Prof. Dr. Kidsanapong Puntsri · Electrical Engineering Conference (EECON-40), Thailand.",
+        "award-eecon38-title": "Best Paper Award",
+        "award-eecon38-desc": "Assoc. Prof. Dr. Kidsanapong Puntsri · Electrical Engineering Conference (EECON-38), Thailand.",
+        "award-milestone-title": "128-QAM SC-FDM Optical Transmission Demonstrated",
+        "award-milestone-desc": "Laboratory verification of high-order modulation format over free-space optical channel with full constellation synchronization.",
+        "journal-sp-desc": "Top journal for signal processing algorithms and theoretical advances.",
+        "journal-cl-desc": "High-impact publication on emerging wireless and optical communication technologies.",
+        "journal-oft-desc": "International journal on optical communications, photonics, and guided wave systems.",
+        "journal-optik-desc": "International journal for light and electron optics, laser applications, and photonics.",
+        "journal-ptl-desc": "Rapid publication of novel developments in photonic and optical communication devices.",
+        "journal-thai-desc": "Serving as editorial member and peer reviewer for national engineering research.",
+        "detail-back-link": "← Back to Research Overview",
+        "detail-summary-heading": "Executive Summary & Research Implementation",
+        "detail-highlights-heading": "Technical Highlights & Engineering Advances",
+        "detail-verification-heading": "Laboratory Testbed & Hardware Verification",
+        "detail-verification-text": "This research was synthesized, tested, and validated using real physical hardware inside BON LAB (Broadband Optical Network Laboratory), Department of Electronic and Telecommunication Engineering, Faculty of Engineering, Rajamangala University of Technology Isan, Khon Kaen Campus, utilizing high-bandwidth Arbitrary Waveform Generators (AWG) and real-time oscilloscopes coupled with optical testbeds.",
+        "detail-pub-eyebrow": "OFFICIAL PUBLICATION & CITATION",
+        "detail-pub-title": "Interested in Reading the Full Academic Paper & Experimental Results?",
+        "detail-pub-desc": "This research was peer-reviewed and published in an internationally indexed journal/proceedings.",
+        "detail-read-full-doi": "Read Full Research Paper (Publisher / DOI) ↗",
+        "detail-orcid-link": "Assoc. Prof. Dr. Kidsanapong Scopus / ORCID Profile ↗",
+        "detail-specs-heading": "Research Specifications",
+        "detail-spec-field": "Field",
+        "detail-spec-hardware": "Hardware / Tech",
+        "detail-spec-pub": "Publisher",
+        "detail-spec-doi": "DOI",
+        "detail-spec-lab": "Lab",
+        "detail-spec-campus": "Campus",
+        "detail-pi-heading": "Principal Investigator",
+        "detail-other-heading": "Other BONLAB Research",
         "nav-about": "About", "nav-research": "Research", "nav-partners": "Partners", "nav-news": "News", "nav-team": "Team", "nav-contact": "Contact",
         "language-label": "Language", "theme-light": "Use light mode", "theme-dark": "Use dark mode", "menu-open": "Open menu", "menu-close": "Close menu", "researcher-name": "Assoc. Prof. Dr. Kidsanapong Puntsri",
         "hero-title": "Research built in hardware.", "hero-copy": "We turn communication theory into testable digital hardware through FPGA prototyping, laboratory experiments and academic collaboration.",
@@ -292,6 +336,50 @@ const translations = {
         "detail-side-contact-btn": "Contact BONLAB →"
     },
     th: {
+        "research-hero-eyebrow": "งานวิจัยและนวัตกรรม",
+        "research-hero-title": "เปลี่ยนทฤษฎีการสื่อสารสู่ฮาร์ดแวร์จริง",
+        "research-hero-desc": "พัฒนาระบบสื่อสารไร้สาย เชิงแสง และดิจิทัลความเร็วสูง จากแบบจำลองทางคณิตศาสตร์และการจำลองสู่ต้นแบบฮาร์ดแวร์จริงบน FPGA และชุดทดสอบในห้องปฏิบัติการ มทร.อีสาน วิทยาเขตขอนแก่น",
+        "research-sec1-eyebrow": "หัวข้องานวิจัยหลัก",
+        "research-sec1-title": "ขอบเขตงานวิจัยสำคัญ",
+        "research-sec-featured-eyebrow": "โครงการวิจัยที่ดำเนินการ",
+        "research-sec-featured-title": "โครงการวิจัยเด่น",
+        "research-sec-featured-desc": "โครงงานวิจัยภาคปฏิบัติที่ผสานการออกแบบสัญญาณทางคณิตศาสตร์เข้ากับการทดสอบในห้องปฏิบัติการจริง",
+        "research-author-label": "ผู้วิจัย:",
+        "research-read-blog": "อ่านสรุปงานวิจัย (Blog) →",
+        "research-full-paper": "ฉบับเต็ม",
+        "research-awards-eyebrow": "รางวัลและความสำเร็จ",
+        "research-awards-title": "รางวัลและก้าวสำคัญของงานวิจัย",
+        "award-eecon40-title": "รางวัลบทความวิจัยยอดเยี่ยม (Best Paper Award)",
+        "award-eecon40-desc": "รศ.ดร.กฤษณะพงศ์ พันธ์ศรี · การประชุมวิชาการทางวิศวกรรมไฟฟ้า (EECON-40) ประเทศไทย",
+        "award-eecon38-title": "รางวัลบทความวิจัยยอดเยี่ยม (Best Paper Award)",
+        "award-eecon38-desc": "รศ.ดร.กฤษณะพงศ์ พันธ์ศรี · การประชุมวิชาการทางวิศวกรรมไฟฟ้า (EECON-38) ประเทศไทย",
+        "award-milestone-title": "การสาธิตการส่งสัญญาณ 128-QAM SC-FDM ทางแสงสำเร็จ",
+        "award-milestone-desc": "การทดสอบยืนยันในห้องปฏิบัติการสำหรับการส่งสัญญาณมอดูเลชันลำดับสูงผ่านช่องสัญญาณแสง พร้อมการซิงโครไนซ์กลุ่มดาวสัญญาณอย่างสมบูรณ์",
+        "journal-sp-desc": "วารสารระดับโลกด้านอัลกอริทึมการประมวลผลสัญญาณและทฤษฎีขั้นสูง",
+        "journal-cl-desc": "วารสารยอดนิยมด้านการออกแบบ Physical Layer และเทคโนโลยีการสื่อสารไร้สายยุคใหม่",
+        "journal-oft-desc": "วารสารชั้นนำด้านระบบสื่อสารเชิงแสง ไฟเบอร์ออปติก และอุปกรณ์โฟโตนิกส์",
+        "journal-optik-desc": "วารสารนานาชาติด้านทัศนศาสตร์ เลเซอร์ และการประมวลผลสัญญาณเชิงแสง",
+        "journal-ptl-desc": "วารสารเผยแพร่นวัตกรรมด้านโฟโตนิกส์และอุปกรณ์สื่อสารเชิงแสงความเร็วสูง",
+        "journal-thai-desc": "ร่วมเป็นกองบรรณาธิการและผู้ประเมินบทความวิจัยระดับชาติด้านวิศวกรรมศาสตร์",
+        "detail-back-link": "← กลับไปหน้ารวมงานวิจัย",
+        "detail-summary-heading": "บทคัดย่อและการดำเนินงานวิจัย",
+        "detail-highlights-heading": "จุดเด่นและความก้าวหน้าทางวิศวกรรม",
+        "detail-verification-heading": "การทดสอบในห้องปฏิบัติการและฮาร์ดแวร์จริง",
+        "detail-verification-text": "งานวิจัยนี้ดำเนินการทดสอบและสังเคราะห์ระบบจริงภายในห้องปฏิบัติการ BON LAB (Broadband Optical Network Laboratory) สาขาวิชาวิศวกรรมอิเล็กทรอนิกส์และโทรคมนาคม คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน วิทยาเขตขอนแก่น โดยใช้อุปกรณ์ตรวจวัดความถี่สูง เครื่องกำเนิดสัญญาณคลื่นความถี่กว้าง (AWG) และออสซิลโลสโคปแบบ Real-time ร่วมกับชุดทดสอบออปติคอล",
+        "detail-pub-eyebrow": "เอกสารวิชาการและการอ้างอิงอย่างเป็นทางการ",
+        "detail-pub-title": "สนใจอ่านเอกสารทางวิชาการและผลการทดลองฉบับเต็ม?",
+        "detail-pub-desc": "บทความวิจัยนี้ได้รับการตรวจสอบจากผู้ทรงคุณวุฒิ (Peer-Reviewed) และตีพิมพ์เผยแพร่ในฐานข้อมูลระดับนานาชาติ",
+        "detail-read-full-doi": "อ่านบทความวิจัยฉบับเต็ม (Publisher / DOI) ↗",
+        "detail-orcid-link": "โปรไฟล์ Scopus / ORCID ของ รศ.ดร.กฤษณะพงศ์ ↗",
+        "detail-specs-heading": "ข้อมูลทางเทคนิคของงานวิจัย",
+        "detail-spec-field": "สาขา",
+        "detail-spec-hardware": "ฮาร์ดแวร์ / เทคโนโลยี",
+        "detail-spec-pub": "สำนักพิมพ์ / วารสาร",
+        "detail-spec-doi": "DOI",
+        "detail-spec-lab": "ห้องปฏิบัติการ",
+        "detail-spec-campus": "วิทยาเขต",
+        "detail-pi-heading": "หัวหน้าโครงการวิจัย",
+        "detail-other-heading": "บทความวิจัยอื่นใน BONLAB",
         "nav-about": "เกี่ยวกับเรา", "nav-research": "งานวิจัย", "nav-partners": "เครือข่าย", "nav-news": "ข่าวสาร", "nav-team": "ทีมงาน", "nav-contact": "ติดต่อ",
         "language-label": "ภาษา", "theme-light": "ใช้โหมดสว่าง", "theme-dark": "ใช้โหมดมืด", "menu-open": "เปิดเมนู", "menu-close": "ปิดเมนู", "researcher-name": "รศ.ดร.กฤษณะพงศ์ พันธ์ศรี",
         "hero-title": "งานวิจัยที่สร้างเป็นฮาร์ดแวร์จริง", "hero-copy": "เราเปลี่ยนทฤษฎีการสื่อสารให้เป็น digital hardware ที่ทดสอบได้ ผ่าน FPGA งานทดลอง และความร่วมมือทางวิชาการ",
@@ -1587,7 +1675,12 @@ if (pageHero && pageKeys[currentPage]) {
     pageHero.querySelector("p")?.setAttribute("data-i18n", pageKeys[currentPage][1]);
 }
 
-if (navContainer && menuButton) {
+// Clean up duplicate site-tools if any
+const existingTools = document.querySelectorAll(".site-tools");
+if (existingTools.length > 1) {
+    for (let i = 1; i < existingTools.length; i++) existingTools[i].remove();
+}
+if (!document.querySelector(".site-tools") && navContainer && menuButton) {
     const tools = document.createElement("div");
     tools.className = "site-tools";
     tools.innerHTML = `<label class="language-control"><span class="sr-only" data-i18n="language-label">Language</span><select class="language-select" aria-label="Language"><option value="en">EN</option><option value="th">TH</option></select></label><button class="theme-toggle" type="button" aria-label="Use dark mode" title="Use dark mode">🌙</button>`;
@@ -1602,30 +1695,42 @@ function applyLanguage(nextLanguage) {
     language = translations[nextLanguage] ? nextLanguage : "en";
     document.documentElement.lang = language;
     document.querySelectorAll("[data-i18n]").forEach(element => {
-        const value = translations[language][element.dataset.i18n] || translations.en[element.dataset.i18n];
+        const key = element.dataset.i18n;
+        const value = (translations[language] && translations[language][key]) || (translations.en && translations.en[key]);
         if (value !== undefined) element.textContent = value;
     });
     document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
-        const value = translations[language][element.dataset.i18nPlaceholder] || translations.en[element.dataset.i18nPlaceholder];
+        const key = element.dataset.i18nPlaceholder;
+        const value = (translations[language] && translations[language][key]) || (translations.en && translations.en[key]);
         if (value !== undefined) element.setAttribute("placeholder", value);
     });
-    if (languageSelect) {
-        languageSelect.value = language;
-        languageSelect.setAttribute("aria-label", translations[language]["language-label"]);
-    }
+    document.querySelectorAll("[data-en]").forEach(element => {
+        if (language === "th" && element.dataset.th) {
+            element.textContent = element.dataset.th;
+        } else if (language === "en" && element.dataset.en) {
+            element.textContent = element.dataset.en;
+        }
+    });
+    document.querySelectorAll(".language-select").forEach(sel => {
+        sel.value = language;
+        if (translations[language] && translations[language]["language-label"]) {
+            sel.setAttribute("aria-label", translations[language]["language-label"]);
+        }
+    });
     updateThemeButton(document.documentElement.dataset.theme || "light");
     updateMenuLabel();
     safeStorage.set("bonlab-language", language);
 }
 
 function updateThemeButton(theme) {
-    if (!themeButton) return;
     const dark = theme === "dark";
     const labelKey = dark ? "theme-light" : "theme-dark";
-    const label = translations[language][labelKey];
-    themeButton.textContent = dark ? "☀️" : "🌙";
-    themeButton.setAttribute("aria-label", label);
-    themeButton.title = label;
+    const label = (translations[language] && translations[language][labelKey]) || (dark ? "Use light mode" : "Use dark mode");
+    document.querySelectorAll(".theme-toggle").forEach(btn => {
+        btn.textContent = dark ? "☀️" : "🌙";
+        btn.setAttribute("aria-label", label);
+        btn.title = label;
+    });
 }
 
 function applyTheme(theme) {
@@ -1642,8 +1747,8 @@ function updateMenuLabel() {
     menuButton.setAttribute("aria-label", translations[language][open ? "menu-close" : "menu-open"]);
 }
 
-languageSelect?.addEventListener("change", event => applyLanguage(event.target.value));
-themeButton?.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+document.querySelectorAll(".language-select").forEach(sel => sel.addEventListener("change", event => applyLanguage(event.target.value)));
+document.querySelectorAll(".theme-toggle").forEach(btn => btn.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark")));
 
 menuButton?.addEventListener("click", () => {
     navigation?.classList.toggle("mobile-open");

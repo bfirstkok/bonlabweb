@@ -22,7 +22,8 @@
       "technology": "High-Power LED + PIN Photodiode",
       "hardware": "BONLAB Custom Optical Sensor Board",
       "location": "BONLAB, RMUTI Khon Kaen Campus"
-    }
+    },
+    "summaryEn": "Development of a low-cost underwater visible light communication (Underwater VLC) system for real-time water quality telemetry (pH, temperature), overcoming severe radio-frequency (RF) attenuation in aquatic environments."
   },
   {
     "id": "fpga-ofdm-mmwave",
@@ -47,7 +48,8 @@
       "platform": "FPGA Development Board (Xilinx / Altera)",
       "modulation": "16-QAM / OFDM Baseband",
       "location": "BONLAB, RMUTI Khon Kaen Campus"
-    }
+    },
+    "summaryEn": "Design and synthesis of real-time DSP architectures on FPGA (Xilinx/Intel) for high-speed multi-Gbps 16-QAM and OFDM baseband wireless transceivers."
   },
   {
     "id": "128qam-scfdm-optical",
@@ -72,7 +74,8 @@
       "modulation": "128-QAM SC-FDM",
       "testbed": "High-Bandwidth Arbitrary Waveform + Optical Channel",
       "location": "BONLAB, RMUTI Khon Kaen Campus"
-    }
+    },
+    "summaryEn": "Experimental demonstration of 128-QAM optical signals with Single-Carrier Frequency Division Multiplexing (SC-FDM) to minimize PAPR, prevent laser nonlinearity, and extend transmission reach."
   },
   {
     "id": "oran-pam4-optical",
@@ -97,6 +100,7 @@
       "standard": "O-RAN / 5G-6G Transmission",
       "algorithm": "Adaptive Lightweight Equalizer",
       "location": "BONLAB, RMUTI Khon Kaen Campus"
-    }
+    },
+    "summaryEn": "Application of lightweight Machine Learning neural equalizers for optical dispersion compensation of PAM-4 signals in 5G/6G Open-RAN front-haul architectures."
   }
 ]

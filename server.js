@@ -243,7 +243,9 @@ async function fetchAndSyncFacebookPosts() {
         let existingPosts = [];
         if (fs.existsSync(newsDataPath)) {
             try {
-                existingPosts = JSON.parse(fs.readFileSync(newsDataPath, "utf8") || "[]");
+                let raw = fs.readFileSync(newsDataPath, "utf8");
+                raw = raw.replace(/\\ud[89a-f][0-9a-f]{2}/gi, "");
+                existingPosts = JSON.parse(raw || "[]");
             } catch (e) {}
         }
 
@@ -257,9 +259,21 @@ async function fetchAndSyncFacebookPosts() {
             }
         }
 
+        const cleanMerged = merged.map(item => {
+            const clean = {};
+            for (const k in item) {
+                if (typeof item[k] === "string") {
+                    clean[k] = item[k].replace(/[\uD800-\uDFFF]/g, "").trim();
+                } else {
+                    clean[k] = item[k];
+                }
+            }
+            return clean;
+        });
+
         fs.mkdirSync(path.dirname(newsDataPath), { recursive: true });
-        fs.writeFileSync(newsDataPath, JSON.stringify(merged, null, 2), "utf8");
-        return { ok: true, count: merged.length };
+        fs.writeFileSync(newsDataPath, JSON.stringify(cleanMerged, null, 2), "utf8");
+        return { ok: true, count: cleanMerged.length };
     } catch (err) {
         console.error("Facebook sync error:", err);
         return { ok: false, error: err.message };

@@ -246,6 +246,12 @@ img {
     margin-right: 14px;
 }
 
+html[lang="en"] .thai-title,
+html[lang="en"] .thai-name,
+html[lang="en"] #detail-th-title {
+    display: none !important;
+}
+
 :root[data-theme="dark"] .button-primary,
 :root[data-theme="dark"] .main-nav .nav-button,
 :root[data-theme="dark"] .cta-box {
@@ -3128,7 +3134,7 @@ img.person-image {
 .publication-list .publication {
     position: relative;
     display: grid;
-    grid-template-columns: 56px 1fr auto;
+    grid-template-columns: 130px 1fr auto;
     gap: 20px;
     align-items: center;
     padding: 22px 26px;
@@ -3137,6 +3143,19 @@ img.person-image {
     border-radius: 16px;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
     overflow: hidden;
+}
+
+.publication-year {
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--primary);
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+:root[data-theme="dark"] .publication-year {
+    color: #79a7ff;
 }
 
 .publication-list .publication::before {
