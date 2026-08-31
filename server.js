@@ -201,11 +201,20 @@ async function fetchAndSyncFacebookPosts() {
         const items = feed.items || [];
         if (!items.length) return { ok: true, count: 0 };
 
+        const safeTrim = (str, max) => {
+            if (!str) return "";
+            const wellFormed = typeof str.toWellFormed === "function" ? str.toWellFormed() : str;
+            const arr = Array.from(wellFormed);
+            if (arr.length <= max) return arr.join("");
+            return arr.slice(0, max).join("").trim() + "...";
+        };
+
         const mappedPosts = items.map((item, index) => {
             const fullText = (item.content_text || item.title || "").trim();
             const lines = fullText.split("\n").map(l => l.trim()).filter(Boolean);
-            const title = lines[0] ? (lines[0].length > 90 ? lines[0].slice(0, 90) + "..." : lines[0]) : "BONLAB Activity";
-            const excerpt = lines.slice(1).join(" ") || lines[0] || "";
+            const title = lines[0] ? safeTrim(lines[0], 90) : "BONLAB Activity";
+            const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
+            const excerpt = safeTrim(rawExcerpt, 180);
 
             let category = "BONLAB · ACTIVITY";
             const lower = fullText.toLowerCase();
@@ -222,7 +231,7 @@ async function fetchAndSyncFacebookPosts() {
                 id: item.id || `fb-post-${index}`,
                 category,
                 title,
-                excerpt: excerpt.length > 180 ? excerpt.slice(0, 180) + "..." : excerpt,
+                excerpt,
                 date: (item.date_published || "").split("T")[0] || new Date().toISOString().split("T")[0],
                 image: item.image || "/assets/bonlab-lab-cover.jpg",
                 facebookUrl: fbUrl
