@@ -30,6 +30,14 @@ const {
     <meta name="twitter:description" content={description}>
     <meta name="twitter:image" content="/assets/bonlab-lab-cover.jpg">
     <link rel="stylesheet" href="/assets/style.css">
+    <script is:inline>
+        try {
+            const savedTheme = localStorage.getItem("bonlab-theme") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.dataset.theme = savedTheme;
+            const savedLang = localStorage.getItem("bonlab-language");
+            if (savedLang) document.documentElement.lang = savedLang;
+        } catch (e) {}
+    </script>
 </head>
 <body>
     <header class="site-header">
@@ -46,6 +54,17 @@ const {
                 <a href="team.html" class={activeNav === 'team' ? 'active' : undefined} data-i18n="nav-team">Team</a>
                 <a href="contact.html" class={`nav-button ${activeNav === 'contact' ? 'active' : ''}`.trim()} data-i18n="nav-contact">Contact</a>
             </nav>
+            <div class="site-tools">
+                <label class="language-control">
+                    <span class="sr-only" data-i18n="language-label">Language</span>
+                    <select class="language-select" aria-label="Language">
+                        <option value="en">EN</option>
+                        <option value="th">TH</option>
+                        <option value="de">DE</option>
+                    </select>
+                </label>
+                <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+            </div>
             <button class="mobile-menu-button" aria-label="Open menu">
                 ☰
             </button>
@@ -68,13 +87,13 @@ const {
                 </p>
             </div>
             <div>
-                <h4>Explore</h4>
+                <h4 data-i18n="footer-explore">Explore</h4>
                 <a href="about.html" data-i18n="nav-about">About</a>
                 <a href="research.html" data-i18n="nav-research">Research</a>
                 <a href="partners.html" data-i18n="nav-partners">Partners</a>
             </div>
             <div>
-                <h4>Information</h4>
+                <h4 data-i18n="footer-information">Information</h4>
                 <a href="news.html" data-i18n="nav-news">News</a>
                 <a href="team.html" data-i18n="nav-team">Team</a>
                 <a href="contact.html" data-i18n="nav-contact">Contact</a>

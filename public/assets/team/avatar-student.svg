@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="avatarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="personGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.85" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="24" fill="url(#avatarGrad)" />
+  <circle cx="100" cy="78" r="38" fill="url(#personGrad)" />
+  <path d="M 36 172 C 36 128 65 120 100 120 C 135 120 164 128 164 172 Z" fill="url(#personGrad)" />
+</svg>

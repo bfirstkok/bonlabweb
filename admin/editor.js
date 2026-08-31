@@ -95,6 +95,93 @@ document.querySelectorAll(".tab-button").forEach((button) => button.addEventList
 replaceImageButton.addEventListener("click", () => imageInput.click());
 imageInput.addEventListener("change", uploadSelectedImage);
 
+// Canva-style Alignment & Auto-lock to Center
+document.querySelector("#snap-center-button")?.addEventListener("click", () => {
+    const selected = editor.getSelected();
+    if (!selected) {
+        showToast("กรุณาคลิกเลือกองค์ประกอบหรือการ์ดที่ต้องการจัดกึ่งกลางก่อน");
+        return;
+    }
+    
+    // Auto Lock to Center (Canva Snap)
+    selected.addStyle({
+        "margin-left": "auto",
+        "margin-right": "auto",
+        "position": "relative",
+        "left": "0px",
+        "right": "auto",
+        "transform": "none",
+        "text-align": "center"
+    });
+
+    const el = selected.getEl();
+    if (el) {
+        // Visual Canva snap feedback
+        el.style.outline = "2px solid #3b82f6";
+        setTimeout(() => { if (el) el.style.outline = ""; }, 600);
+    }
+    
+    setDirty(true);
+    showToast("🎯 ล็อคเข้าสู่กึ่งกลาง (Auto-Locked to Center) เรียบร้อยแล้ว!");
+});
+
+document.querySelector("#align-left-button")?.addEventListener("click", () => {
+    const selected = editor.getSelected();
+    if (!selected) {
+        showToast("กรุณาคลิกเลือกองค์ประกอบก่อน");
+        return;
+    }
+    selected.addStyle({
+        "margin-left": "0px",
+        "margin-right": "auto",
+        "left": "0px",
+        "right": "auto",
+        "text-align": "left"
+    });
+    setDirty(true);
+    showToast("⬅️ จัดชิดซ้าย (Align Left) แล้ว");
+});
+
+document.querySelector("#align-right-button")?.addEventListener("click", () => {
+    const selected = editor.getSelected();
+    if (!selected) {
+        showToast("กรุณาคลิกเลือกองค์ประกอบก่อน");
+        return;
+    }
+    selected.addStyle({
+        "margin-left": "auto",
+        "margin-right": "0px",
+        "left": "auto",
+        "right": "0px",
+        "text-align": "right"
+    });
+    setDirty(true);
+    showToast("➡️ จัดชิดขวา (Align Right) แล้ว");
+});
+
+let isFreeDragMode = false;
+const freeDragButton = document.querySelector("#free-drag-button");
+freeDragButton?.addEventListener("click", () => {
+    isFreeDragMode = !isFreeDragMode;
+    freeDragButton.classList.toggle("active", isFreeDragMode);
+    
+    const selected = editor.getSelected();
+    if (selected) {
+        if (isFreeDragMode) {
+            selected.addStyle({
+                "position": "relative",
+                "z-index": "10"
+            });
+            showToast("🖐️ โหมดขยับอิสระ: คุณสามารถปรับตำแหน่งหรือลากชิ้นงานนี้ได้อย่างอิสระ");
+        } else {
+            showToast("🔒 ปิดโหมดขยับอิสระ");
+        }
+    } else {
+        showToast(isFreeDragMode ? "🖐️ เปิดโหมดขยับอิสระ: คลิกเลือกชิ้นงานเพื่อขยับ" : "🔒 ปิดโหมดขยับอิสระ");
+    }
+});
+
+
 window.addEventListener("beforeunload", (event) => {
     if (!isDirty) return;
     event.preventDefault();

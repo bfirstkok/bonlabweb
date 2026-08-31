@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import newsPosts from "../data/news.json";
 
 const title = "News & Activities — BONLAB | Broadband Optical Network Laboratory";
 const description = "Latest research news, conference awards, laboratory experiments, and student activities from BONLAB at RMUTI Khon Kaen Campus.";
@@ -71,198 +72,184 @@ const description = "Latest research news, conference awards, laboratory experim
 
         </div>
 
-        <p class="source-note">Follow our official updates on Facebook: <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener">BONLAB Facebook Page</a></p>
+        <p class="source-note">
+            <span data-i18n="news-source-note">Follow our official updates on Facebook:</span> 
+            <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener">
+                <strong>BONLAB Facebook Page ↗</strong>
+            </a>
+        </p>
 
         <div id="no-news-found" class="no-results" style="display: none;">
             <p>🔍 <span data-i18n="no-news-found">No news articles found matching your search.</span></p>
         </div>
 
-        <div class="news-card-grid">
+        <div class="news-layout-wrapper">
 
-            <article class="news-card" data-category="research">
+            <!-- MAIN COLUMN: LAB ARTICLES & NEWS -->
+            <div class="news-main-column">
+                <div class="news-card-grid">
 
-                <img class="news-card-image" src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication Success" loading="lazy">
+                    <article class="news-card" data-category="research">
 
-                <div class="news-card-content">
+                        <img class="news-card-image" src="assets/research-128qam-scfdm.jpg" alt="128-QAM SC-FDM Optical Wireless Communication Success" loading="lazy">
 
-                    <div class="news-badge news-badge-article">
-                        <span data-i18n="badge-article">Lab Article</span>
-                    </div>
+                        <div class="news-card-content">
 
-                    <span class="date">
-                        RESEARCH HIGHLIGHT · LAB MILESTONE
-                    </span>
+                            <div class="news-badge news-badge-article">
+                                <span data-i18n="badge-article">Lab Article</span>
+                            </div>
 
-                    <h2>
-                        Successful Transmission of 128-QAM SC-FDM over Optical Wireless Channel
-                    </h2>
+                            <span class="date">
+                                RESEARCH HIGHLIGHT · LAB MILESTONE
+                            </span>
 
-                    <p>
-                        BONLAB researchers achieved a breakthrough in optical wireless communications by successfully transmitting and demodulating 128-QAM Single-Carrier FDM signals using FPGA real-time DSP pipelines.
-                    </p>
+                            <h2>
+                                Successful Transmission of 128-QAM SC-FDM over Optical Wireless Channel
+                            </h2>
 
-                    <a href="news-detail.html">
-                        <span data-i18n="read-full-story">Read full story →</span>
-                    </a>
+                            <p>
+                                BONLAB researchers achieved a breakthrough in optical wireless communications by successfully transmitting and demodulating 128-QAM Single-Carrier FDM signals using FPGA real-time DSP pipelines.
+                            </p>
 
-                </div>
+                            <a href="news-detail.html">
+                                <span data-i18n="read-full-story">Read full story →</span>
+                            </a>
 
-            </article>
+                        </div>
 
-
-            <article class="news-card" data-category="awards">
-
-                <img class="news-card-image" src="assets/news-16qam.jpg" alt="Dr. Kidsanapong Puntsri receives Best Paper Award at EECON" loading="lazy">
-
-                <div class="news-card-content">
-
-                    <div class="news-badge news-badge-award">
-                        <span data-i18n="badge-award">Award & Paper</span>
-                    </div>
-
-                    <span class="date">
-                        CONFERENCE AWARD · EECON
-                    </span>
-
-                    <h2>
-                        Dr. Kidsanapong Puntsri Receives Best Paper Award at EECON Conference
-                    </h2>
-
-                    <p>
-                        Recognized for outstanding technical contribution and excellence in communication engineering research at the Electrical Engineering Conference (EECON).
-                    </p>
-
-                    <a href="news-detail.html">
-                        <span data-i18n="read-full-story">Read full story →</span>
-                    </a>
-
-                </div>
-
-            </article>
+                    </article>
 
 
-            <article class="news-card" data-category="students awards">
+                    <article class="news-card" data-category="awards">
 
-                <img class="news-card-image" src="assets/news-nursing-project.jpg" alt="National Silver Medal - Smart Photonic Vital-Sign Monitor" loading="lazy">
+                        <img class="news-card-image" src="assets/news-16qam.jpg" alt="Dr. Kidsanapong Puntsri receives Best Paper Award at EECON" loading="lazy">
 
-                <div class="news-card-content">
+                        <div class="news-card-content">
 
-                    <div class="news-badge news-badge-award">
-                        <span data-i18n="badge-award">Award & Paper</span>
-                    </div>
+                            <div class="news-badge news-badge-award">
+                                <span data-i18n="badge-award">Award & Paper</span>
+                            </div>
 
-                    <span class="date">
-                        AWARD & STUDENT MENTORING · THAILAND RESEARCH EXPO
-                    </span>
+                            <span class="date">
+                                CONFERENCE AWARD · EECON
+                            </span>
 
-                    <h2>
-                        National Silver Medal Award: Smart Photonic Vital-Sign IoT Monitor
-                    </h2>
+                            <h2>
+                                Dr. Kidsanapong Puntsri Receives Best Paper Award at EECON Conference
+                            </h2>
 
-                    <p>
-                        Undergraduate engineering team under BONLAB mentorship received the Silver Medal at the Thailand Research Expo for an IoT vital-sign telemetry monitoring system.
-                    </p>
+                            <p>
+                                Recognized for outstanding technical contribution and excellence in communication engineering research at the Electrical Engineering Conference (EECON).
+                            </p>
 
-                    <a href="research-detail.html#p4">
-                        <span data-i18n="view-project-details">View project details →</span>
-                    </a>
+                            <a href="news-detail.html">
+                                <span data-i18n="read-full-story">Read full story →</span>
+                            </a>
 
-                </div>
+                        </div>
 
-            </article>
-
-
-            <article class="news-card" data-category="students">
-
-                <img class="news-card-image" src="assets/news-nursing-project.jpg" alt="Mentoring Engineering Students on Smart Healthcare Mini-Projects" loading="lazy">
-
-                <div class="news-card-content">
-
-                    <div class="news-badge news-badge-facebook">
-                        <span data-i18n="badge-facebook">Facebook Activity</span>
-                    </div>
-
-                    <span class="date">
-                        STUDENT MENTORING · INNOVATION
-                    </span>
-
-                    <h2>
-                        Mentoring Students on Smart Healthcare & Sensor Mini-Projects
-                    </h2>
-
-                    <p>
-                        Assoc. Prof. Dr. Kidsanapong provided hands-on coaching to engineering and multidisciplinary students on Arduino microcontroller programming, electronic circuit soldering, and sensor interfacing.
-                    </p>
-
-                    <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener">
-                        <span data-i18n="view-on-fb">View on Facebook ↗</span>
-                    </a>
-
-                </div>
-
-            </article>
+                    </article>
 
 
-            <article class="news-card" data-category="seminars">
+                    <article class="news-card" data-category="students awards">
 
-                <img class="news-card-image" src="assets/news-optical-sensor.jpg" alt="Knowledge Sharing Seminar on Optical Sensors" loading="lazy">
+                        <img class="news-card-image" src="assets/news-nursing-project.jpg" alt="National Silver Medal - Smart Photonic Vital-Sign Monitor" loading="lazy">
 
-                <div class="news-card-content">
+                        <div class="news-card-content">
 
-                    <div class="news-badge news-badge-facebook">
-                        <span data-i18n="badge-facebook">Facebook Activity</span>
-                    </div>
+                            <div class="news-badge news-badge-award">
+                                <span data-i18n="badge-award">Award & Paper</span>
+                            </div>
 
-                    <span class="date">
-                        LEARNING · GUEST LECTURE
-                    </span>
+                            <span class="date">
+                                AWARD & STUDENT MENTORING · THAILAND RESEARCH EXPO
+                            </span>
 
-                    <h2>
-                        Optical Sensors & Practical Engineering Seminar
-                    </h2>
+                            <h2>
+                                National Silver Medal Award: Smart Photonic Vital-Sign IoT Monitor
+                            </h2>
 
-                    <p>
-                        A special session featuring university-network guest speakers sharing practical engineering insights, optical sensor principles, and laboratory testing methodologies.
-                    </p>
+                            <p>
+                                Undergraduate engineering team under BONLAB mentorship received the Silver Medal at the Thailand Research Expo for an IoT vital-sign telemetry monitoring system.
+                            </p>
 
-                    <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener">
-                        <span data-i18n="view-on-fb">View on Facebook ↗</span>
-                    </a>
+                            <a href="research-detail.html#p4">
+                                <span data-i18n="view-project-details">View project details →</span>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                    {newsPosts && newsPosts.map((post) => (
+                        <article class="news-card" data-category={post.category ? post.category.toLowerCase() : "seminars"}>
+                            <div class="news-card-image-wrap">
+                                <img 
+                                    class="news-card-image" 
+                                    src={post.image} 
+                                    alt={post.title}
+                                    loading="lazy"
+                                />
+                            </div>
+                            <div class="news-card-content">
+                                <div class="news-badge news-badge-facebook">
+                                    <span data-i18n="badge-facebook">Facebook Activity</span>
+                                </div>
+                                <span class="date">
+                                    {post.category}
+                                </span>
+                                <h2>
+                                    {post.title}
+                                </h2>
+                                <p>
+                                    {post.excerpt}
+                                </p>
+                                <a 
+                                    href={post.facebookUrl || "https://web.facebook.com/profile.php?id=100076231050286"} 
+                                    target="_blank" 
+                                    rel="noopener" 
+                                    class="news-card-fb-link"
+                                >
+                                    <span data-i18n="view-on-fb">View on Facebook ↗</span>
+                                </a>
+                            </div>
+                        </article>
+                    ))}
 
                 </div>
+            </div>
 
-            </article>
-
-
-            <article class="news-card" data-category="seminars research">
-
-                <img class="news-card-image" src="assets/bonlab-lab-cover.jpg" alt="Doctoral Seminar and Research Exchange at RMUTI Khon Kaen" loading="lazy">
-
-                <div class="news-card-content">
-
-                    <div class="news-badge news-badge-article">
-                        <span data-i18n="badge-article">Lab Article</span>
+            <!-- SIDEBAR: LIVE FACEBOOK FEED WIDGET -->
+            <aside class="news-sidebar">
+                <div class="fb-feed-card">
+                    <div class="fb-feed-header">
+                        <div class="fb-logo-icon" aria-hidden="true">f</div>
+                        <div class="fb-feed-header-text">
+                            <h3 data-i18n="news-fb-live-title">BONLAB Live Feed</h3>
+                            <p data-i18n="news-fb-live-desc">อัปเดตกิจกรรมสดจาก Facebook</p>
+                        </div>
                     </div>
 
-                    <span class="date">
-                        GRADUATE STUDIES · SEMINAR
-                    </span>
+                    <div class="fb-iframe-container">
+                        <iframe 
+                            src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100076231050286&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=" 
+                            width="340" 
+                            height="500" 
+                            style="border:none;overflow:hidden;width:100%;max-width:340px;height:500px;" 
+                            scrolling="no" 
+                            frameborder="0" 
+                            allowfullscreen="true" 
+                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                            loading="lazy"
+                            title="BONLAB Official Facebook Page Feed">
+                        </iframe>
+                    </div>
 
-                    <h2>
-                        Doctoral Seminar & Research Exchange at RMUTI Khon Kaen
-                    </h2>
-
-                    <p>
-                        Graduate students in the Electrical and Computer Engineering doctoral program presented progress on advanced digital transceiver design and low phase-noise PLL circuits.
-                    </p>
-
-                    <a href="about.html">
-                        <span data-i18n="read-full-story">Read full story →</span>
+                    <a href="https://web.facebook.com/profile.php?id=100076231050286" target="_blank" rel="noopener" class="fb-direct-link-btn">
+                        <span data-i18n="news-fb-open-btn">เปิดดูบน Facebook App / Web ↗</span>
                     </a>
-
                 </div>
-
-            </article>
+            </aside>
 
         </div>
 
@@ -270,3 +257,4 @@ const description = "Latest research news, conference awards, laboratory experim
 
 </section>
 </Layout>
+

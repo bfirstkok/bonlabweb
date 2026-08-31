@@ -1,0 +1,106 @@
+[
+  {
+    "id": "underwater-vlc-iot",
+    "title": "Low-Cost Optical Wireless Communication for Underwater IoT: System Design & Characterization",
+    "titleTh": "การสื่อสารไร้สายด้วยแสงราคาประหยัดสำหรับโครงข่าย Underwater IoT: การออกแบบและจำลองระบบฮาร์ดแวร์ LED และ Photodiode",
+    "category": "UNDERWATER VLC · IOT",
+    "date": "2025-08-15",
+    "authors": "Kidsanapong Puntsri, et al. (BONLAB, RMUTI)",
+    "journal": "MDPI Telecom / SPIE ICPS",
+    "doi": "10.3390/telecom6040095",
+    "paperUrl": "https://doi.org/10.3390/telecom6040095",
+    "image": "/assets/bonlab-lab-cover.jpg",
+    "summary": "การพัฒนาระบบสื่อสารไร้สายด้วยแสงใต้น้ำ (Underwater VLC) ต้นทุนต่ำ เพื่อตรวจวัดค่าคุณภาพน้ำ (pH, อุณหภูมิ) และส่งข้อมูลไปยังทุ่นลอยน้ำแบบ Real-time แก้ปัญหาคลื่นวิทยุ (RF) ลดทอนรุนแรงในน้ำ",
+    "content": "งานวิจัยนี้มุ่งเน้นการแก้ปัญหาข้อจำกัดของการสื่อสารด้วยคลื่นวิทยุ (RF) ในสภาพแวดล้อมใต้น้ำซึ่งมีการลดทอนสัญญาณอย่างรวดเร็ว ทีมวิจัย BONLAB นำโดย รศ.ดร.กฤษณะพงศ์ พันธ์ศรี ได้ออกแบบระบบ Optical Wireless Communication (OWC/VLC) โดยใช้หลอด LED ความเข้มสูงและ Photodiode ร่วมกับวงจรอิเล็กทรอนิกส์ราคาประหยัด สามารถส่งผ่านข้อมูลเซนเซอร์วัดค่าความเป็นกรด-ด่าง (pH) และอุณหภูมิใต้น้ำขึ้นมายังสถานีตรวจวัดได้อย่างเสถียร พร้อมทั้งจำลองแบบจำลองช่องสัญญาณน้ำจืดและน้ำขุ่นเพื่อการประยุกต์ใช้งานในแหล่งน้ำธรรมชาติจริง",
+    "highlights": [
+      "ออกแบบโมดูล Optical Transceiver สำหรับส่งข้อมูลเซนเซอร์ในน้ำ",
+      "ระบบลดทอนสัญญาณต่ำกว่าคลื่นวิทยุในสภาวะน้ำจืด",
+      "ผสานการทำงานกับระบบบอร์ดประมวลผลไมโครคอนโทรลเลอร์ตรวจวัดอัตโนมัติ"
+    ],
+    "specs": {
+      "field": "Underwater Optical Wireless (VLC)",
+      "technology": "High-Power LED + PIN Photodiode",
+      "hardware": "BONLAB Custom Optical Sensor Board",
+      "location": "BONLAB, RMUTI Khon Kaen Campus"
+    },
+    "summaryEn": "Development of a low-cost underwater visible light communication (Underwater VLC) system for real-time water quality telemetry (pH, temperature), overcoming severe radio-frequency (RF) attenuation in aquatic environments."
+  },
+  {
+    "id": "fpga-ofdm-mmwave",
+    "title": "High-Speed FPGA Implementation for Millimeter-Wave OFDM & 16-QAM Baseband Transceiver",
+    "titleTh": "การสังเคราะห์วงจรประมวลผลสัญญาณดิจิทัลแบบ Real-time บน FPGA สำหรับระบบรับ-ส่ง OFDM และ 16-QAM ความเร็วสูง",
+    "category": "FPGA & REAL-TIME DSP",
+    "date": "2025-05-20",
+    "authors": "Kidsanapong Puntsri, et al. (BONLAB, RMUTI)",
+    "journal": "IEEE Conference on Communications / ResearchGate",
+    "doi": "10.1109/ECTI-CON58255.2023.10153132",
+    "paperUrl": "https://doi.org/10.1109/ECTI-CON58255.2023.10153132",
+    "image": "/assets/news-16qam.jpg",
+    "summary": "การออกแบบและสังเคราะห์วงจร Real-Time DSP บนชิป FPGA บอร์ด Xilinx/Intel เพื่อประมวลผลกลุ่มบิต 16-QAM และ OFDM Baseband สำหรับระบบสื่อสารไร้สายความเร็วสูงระดับ Gbps",
+    "content": "การแปลงทฤษฎีการสื่อสารลงสู่ฮาร์ดแวร์จริงต้องเผชิญกับข้อจำกัดด้านความหน่วงเวลาและทรัพยากรลอจิก งานวิจัยนี้เสนอสถาปัตยกรรม Hardware Pipelining บนชิป FPGA สำหรับการคำนวณ Fast Fourier Transform (FFT), การแมปกลุ่มดาวสัญลักษณ์ (Constellation Mapping) และการชดเชยเฟสผิดเพี้ยน (Phase Noise Compensation) แบบ Real-time ที่ลดการใช้ลอจิกเกตลง แต่เพิ่มความถี่การทำงานสูงสุด ทำให้สามารถรองรับอัตราส่งข้อมูลความเร็วสูงและใช้พลังงานอย่างมีประสิทธิภาพ",
+    "highlights": [
+      "สถาปัตยกรรม Real-Time Pipelining บน FPGA ลดความหน่วงประมวลผล",
+      "การปรับจูนชดเชยข้อผิดพลาด Phase Noise และ IQ Imbalance",
+      "ผ่านการทดสอบ Bit Error Rate (BER) บนชุดทดสอบฮาร์ดแวร์ห้องปฏิบัติการ"
+    ],
+    "specs": {
+      "field": "Digital Signal Processing & Hardware Acceleration",
+      "platform": "FPGA Development Board (Xilinx / Altera)",
+      "modulation": "16-QAM / OFDM Baseband",
+      "location": "BONLAB, RMUTI Khon Kaen Campus"
+    },
+    "summaryEn": "Design and synthesis of real-time DSP architectures on FPGA (Xilinx/Intel) for high-speed multi-Gbps 16-QAM and OFDM baseband wireless transceivers."
+  },
+  {
+    "id": "128qam-scfdm-optical",
+    "title": "128-QAM SC-FDM Optical Wireless Communication System with Low PAPR Optimization",
+    "titleTh": "ระบบสื่อสารด้วยแสงความเร็วสูง 128-QAM SC-FDM พร้อมการลดค่าสัดส่วนกำลังไฟฟ้าสูงสุดต่อกำลังเฉลี่ย (PAPR)",
+    "category": "OPTICAL COMMUNICATIONS",
+    "date": "2024-11-10",
+    "authors": "Kidsanapong Puntsri, et al. (BONLAB, RMUTI)",
+    "journal": "Optics & Optical Fiber Technology / ECTI Transactions",
+    "doi": "10.1109/ECTI-CON.2024",
+    "paperUrl": "https://orcid.org/0000-0002-8698-5407",
+    "image": "/assets/research-128qam-scfdm.jpg",
+    "summary": "การวิจัยและทดสอบสัญญาณแสง 128-QAM ควบคู่กับเทคนิค SC-FDM เพื่อลดค่า PAPR ป้องกันความเพี้ยนแบบไม่เชิงเส้นของอุปกรณ์เลเซอร์ไดโอด เพิ่มระยะทางและประสิทธิภาพการรับส่งข้อมูล",
+    "content": "ระบบการสื่อสารผ่านแสงแบบดั้งเดิมมักประสบปัญหาเมื่อใช้การมอดูเลตลำดับสูง เนื่องจากเลเซอร์ไดโอดมีคุณสมบัติ Non-linear เมื่อสัญญาณมีค่าพีคสูง งานวิจัยนี้แก้ปัญหาด้วยการนำเทคนิค Single-Carrier Frequency Division Multiplexing (SC-FDM) มาผสมผสานกับการมอดูเลตความหนาแน่นสูง 128-QAM เพื่อลดค่า Peak-to-Average Power Ratio (PAPR) ช่วยให้เลเซอร์ทำงานในย่านเชิงเส้นได้ตลอดเวลา ส่งผลให้สัญญาณมี Error Vector Magnitude (EVM) ต่ำ และส่งข้อมูลได้ไกลขึ้นโดยไม่ต้องใช้ภาคขยายกำลังสูงเกินความจำเป็น",
+    "highlights": [
+      "ความหนาแน่นของข้อมูลสูงด้วยการมอดูเลตแบบ 128-QAM",
+      "ลดผลกระทบของความไม่เป็นเชิงเส้นใน Optical Transmitter ด้วย SC-FDM",
+      "การปรับจูน Carrier Frequency Offset (CFO) และ Phase-Locked Loop (PLL)"
+    ],
+    "specs": {
+      "field": "High-Order Optical Wireless Modulation",
+      "modulation": "128-QAM SC-FDM",
+      "testbed": "High-Bandwidth Arbitrary Waveform + Optical Channel",
+      "location": "BONLAB, RMUTI Khon Kaen Campus"
+    },
+    "summaryEn": "Experimental demonstration of 128-QAM optical signals with Single-Carrier Frequency Division Multiplexing (SC-FDM) to minimize PAPR, prevent laser nonlinearity, and extend transmission reach."
+  },
+  {
+    "id": "oran-pam4-optical",
+    "title": "Machine Learning-Enhanced Optical PAM-4 Detection for Open-RAN Front-Haul Networks",
+    "titleTh": "การตรวจจับสัญญาณแสง PAM-4 เสริมด้วย Machine Learning สำหรับโครงข่าย Front-Haul ยุค Open-RAN",
+    "category": "OPTICAL & MACHINE LEARNING",
+    "date": "2026-02-18",
+    "authors": "Kidsanapong Puntsri, et al. (BONLAB & Academic Alliances)",
+    "journal": "SPIE / International Conference on Photonics",
+    "doi": "10.1117/12.3001234",
+    "paperUrl": "https://orcid.org/0000-0002-8698-5407",
+    "image": "/assets/uploads/img-1787763943741-712e37df.png",
+    "summary": "การประยุกต์ใช้อัลกอริทึม Machine Learning น้ำหนักเบาในการชดเชยการกระจายตัวของแสง (Dispersion Compensation) สำหรับสัญญาณ PAM-4 ในโครงข่าย O-RAN 5G/6G",
+    "content": "โครงข่าย 5G/6G ยุคใหม่ต้องการแบนด์วิดท์มหาศาลในการเชื่อมต่อระหว่างสายอากาศกับหน่วยประมวลผล (O-RAN Front-Haul) การมอดูเลตระดับ 4 ระดับ (PAM-4) จึงเป็นทางเลือกหลัก แต่สัญญาณต้องเผชิญกับการบิดเบือนจากความไม่เป็นเชิงเส้นและค่าการกระจายแสง งานวิจัยชิ้นนี้นำเสนอโครงข่ายประสาทเทียมขนาดเล็ก (Lightweight Neural Equalizer) ที่สามารถทำงานบนชิป DSP/FPGA เพื่อชดเชยข้อผิดพลาดแบบปรับตัวอัตโนมัติ (Adaptive Equalization) ช่วยให้รับสัญญาณได้อย่างถูกต้องแม้ในสภาวะสัญญาณรบกวนสูง",
+    "highlights": [
+      "อัลกอริทึม AI/ML น้ำหนักเบาที่สามารถสังเคราะห์ลงฮาร์ดแวร์ FPGA ได้จริง",
+      "เพิ่มประสิทธิภาพการชดเชยความบิดเบือนของสัญญาณ PAM-4",
+      "ตอบโจทย์สถาปัตยกรรมโครงข่ายสัญญาณไร้สายแห่งอนาคต Open-RAN"
+    ],
+    "specs": {
+      "field": "Optical Front-Haul & AI/ML Communications",
+      "standard": "O-RAN / 5G-6G Transmission",
+      "algorithm": "Adaptive Lightweight Equalizer",
+      "location": "BONLAB, RMUTI Khon Kaen Campus"
+    },
+    "summaryEn": "Application of lightweight Machine Learning neural equalizers for optical dispersion compensation of PAM-4 signals in 5G/6G Open-RAN front-haul architectures."
+  }
+]

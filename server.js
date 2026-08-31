@@ -139,8 +139,29 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
         fs.writeFileSync(targetRoot, html, "utf8");
     }
 
+    // Auto-sync into src/pages/*.astro to prevent build overwriting
+    try {
+        const astroPageName = file.replace(/\.html$/i, ".astro");
+        const astroPath = path.join(rootDir, "src", "pages", astroPageName);
+        if (fs.existsSync(astroPath)) {
+            const mainMatch = html.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
+            if (mainMatch) {
+                const currentAstro = fs.readFileSync(astroPath, "utf8");
+                const frontmatterMatch = currentAstro.match(/^---[\s\S]*?---/);
+                const frontmatter = frontmatterMatch ? frontmatterMatch[0] : "";
+                if (frontmatter) {
+                    const newAstroContent = `${frontmatter}\n\n<Layout title={title} description={description}>\n<main>\n${mainMatch[1]}\n</main>\n</Layout>\n`;
+                    fs.writeFileSync(astroPath, newAstroContent, "utf8");
+                }
+            }
+        }
+    } catch (syncErr) {
+        console.error("Astro auto-sync error:", syncErr);
+    }
+
     res.json({ ok: true, savedAt: new Date().toISOString() });
 });
+
 
 app.post("/api/admin/upload", requireAdmin, (req, res) => {
     const dataUrl = String(req.body?.dataUrl || "");
@@ -167,6 +188,143 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
 
     res.json({ ok: true, url: `/assets/uploads/${filename}` });
 });
+
+// News API (Public Feed & Admin CRUD)
+const newsDataPath = path.join(rootDir, "src", "data", "news.json");
+const facebookFeedUrl = "https://rss.app/feeds/v1.1/ElM4FpwMcAN350mf.json";
+
+async function fetchAndSyncFacebookPosts() {
+    try {
+        const response = await fetch(facebookFeedUrl);
+        if (!response.ok) return { ok: false, error: "Feed status " + response.status };
+        const feed = await response.json();
+        const items = feed.items || [];
+        if (!items.length) return { ok: true, count: 0 };
+
+        const safeTrim = (str, max) => {
+            if (!str) return "";
+            const wellFormed = typeof str.toWellFormed === "function" ? str.toWellFormed() : str;
+            const arr = Array.from(wellFormed);
+            if (arr.length <= max) return arr.join("");
+            return arr.slice(0, max).join("").trim() + "...";
+        };
+
+        const mappedPosts = items.map((item, index) => {
+            const fullText = (item.content_text || item.title || "").trim();
+            const lines = fullText.split("\n").map(l => l.trim()).filter(Boolean);
+            const title = lines[0] ? safeTrim(lines[0], 90) : "BONLAB Activity";
+            const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
+            const excerpt = safeTrim(rawExcerpt, 180);
+
+            let category = "BONLAB · ACTIVITY";
+            const lower = fullText.toLowerCase();
+            if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) category = "RESEARCH & COLLABORATION";
+            else if (lower.includes("eecon") || lower.includes("16-qam")) category = "EXPERIMENTS · EECON";
+            else if (lower.includes("พยาบาล") || lower.includes("arduino")) category = "STUDENT MENTORING";
+            else if (lower.includes("fpga")) category = "TRAINING · WORKSHOP";
+            else if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) category = "SEMINAR · GUEST SPEAKER";
+
+            let fbUrl = item.url || "https://web.facebook.com/profile.php?id=100076231050286";
+            fbUrl = fbUrl.replace("https://m.facebook.com/", "https://web.facebook.com/");
+
+            return {
+                id: item.id || `fb-post-${index}`,
+                category,
+                title,
+                excerpt,
+                date: (item.date_published || "").split("T")[0] || new Date().toISOString().split("T")[0],
+                image: item.image || "/assets/bonlab-lab-cover.jpg",
+                facebookUrl: fbUrl
+            };
+        });
+
+        // Keep news purely 100% real Facebook posts from feed
+        // Accumulate new posts with existing posts without duplication
+        let existingPosts = [];
+        if (fs.existsSync(newsDataPath)) {
+            try {
+                let raw = fs.readFileSync(newsDataPath, "utf8");
+                raw = raw.replace(/\\ud[89a-f][0-9a-f]{2}/gi, "");
+                existingPosts = JSON.parse(raw || "[]");
+            } catch (e) {}
+        }
+
+        // Only keep items that have real Facebook permalinks
+        const validExisting = existingPosts.filter(p => p.facebookUrl && p.facebookUrl.includes("facebook.com") && !p.id.startsWith("research-"));
+        
+        const merged = [...mappedPosts];
+        for (const prev of validExisting) {
+            if (!merged.some(m => m.id === prev.id || m.facebookUrl === prev.facebookUrl)) {
+                merged.push(prev);
+            }
+        }
+
+        const cleanMerged = merged.map(item => {
+            const clean = {};
+            for (const k in item) {
+                if (typeof item[k] === "string") {
+                    clean[k] = item[k].replace(/[\uD800-\uDFFF]/g, "").trim();
+                } else {
+                    clean[k] = item[k];
+                }
+            }
+            return clean;
+        });
+
+        fs.mkdirSync(path.dirname(newsDataPath), { recursive: true });
+        fs.writeFileSync(newsDataPath, JSON.stringify(cleanMerged, null, 2), "utf8");
+        return { ok: true, count: cleanMerged.length };
+    } catch (err) {
+        console.error("Facebook sync error:", err);
+        return { ok: false, error: err.message };
+    }
+}
+
+
+// Auto-sync every 30 minutes
+setInterval(() => {
+    fetchAndSyncFacebookPosts().then(res => {
+        if (res.ok) console.log(`[BONLAB] Auto-synced ${res.count} posts from Facebook feed`);
+    });
+}, 30 * 60 * 1000);
+
+app.get("/api/news", (req, res) => {
+    try {
+        if (!fs.existsSync(newsDataPath)) {
+            return res.json({ posts: [] });
+        }
+        const raw = fs.readFileSync(newsDataPath, "utf8");
+        const posts = JSON.parse(raw || "[]");
+        res.json({ posts });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to load news" });
+    }
+});
+
+app.post("/api/news/sync", async (req, res) => {
+    const result = await fetchAndSyncFacebookPosts();
+    if (result.ok) {
+        res.json({ ok: true, count: result.count, message: "ซิงค์ข้อมูลจาก Facebook สำเร็จ" });
+    } else {
+        res.status(500).json({ ok: false, error: result.error });
+    }
+});
+
+app.post("/api/admin/news", requireAdmin, (req, res) => {
+    try {
+        const { posts } = req.body;
+        if (!Array.isArray(posts)) {
+            return res.status(400).json({ error: "Invalid posts format" });
+        }
+        fs.mkdirSync(path.dirname(newsDataPath), { recursive: true });
+        fs.writeFileSync(newsDataPath, JSON.stringify(posts, null, 2), "utf8");
+        res.json({ ok: true, count: posts.length });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to save news" });
+    }
+});
+
+
 
 app.get("/", (req, res) => {
     const indexPath = fs.existsSync(path.join(htmlDir, "index.html")) ? path.join(htmlDir, "index.html") : path.join(rootDir, "index.html");

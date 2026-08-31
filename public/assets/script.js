@@ -1835,4 +1835,3 @@ if (hash) {
         setTimeout(() => targetBtn.click(), 50);
     }
 }
-
