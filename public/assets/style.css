@@ -4737,3 +4737,268 @@ a.button-primary:hover,
     color: #ffffff !important;
     background: #3b82f6 !important;
 }
+
+/* =========================================================
+   VERTICAL TEAM & STUDENT LAYOUT (Minimalist Academic Theme)
+========================================================= */
+.team-vertical-container {
+    max-width: 920px;
+    margin: 0 auto 50px;
+}
+
+.team-director-vertical-card {
+    display: flex;
+    flex-direction: row;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    margin-bottom: 40px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.team-director-vertical-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 25px rgba(23, 70, 162, 0.1);
+}
+
+.team-section-heading-row {
+    margin: 36px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.team-section-heading-row h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: -0.2px;
+}
+
+.team-section-heading-row .count-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    padding: 3px 12px;
+    border-radius: 999px;
+}
+
+.student-vertical-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.student-card-vertical {
+    display: flex;
+    flex-direction: row;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.student-card-vertical:hover {
+    transform: translateY(-2px);
+    border-color: #93c5fd;
+    box-shadow: 0 8px 22px rgba(23, 70, 162, 0.08);
+}
+
+:root[data-theme="dark"] .student-card-vertical:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+}
+
+.student-photo-col {
+    width: 170px;
+    min-width: 170px;
+    background: var(--surface-soft);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+}
+
+.student-photo-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.student-card-vertical:hover .student-photo-col img,
+.team-director-vertical-card:hover .student-photo-col img {
+    transform: scale(1.03);
+}
+
+.student-content-col {
+    padding: 20px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.student-badge-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.badge-student-degree {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-radius: 6px;
+    background: rgba(23, 70, 162, 0.08);
+    color: var(--primary);
+    border: 1px solid rgba(23, 70, 162, 0.15);
+}
+
+:root[data-theme="dark"] .badge-student-degree {
+    background: rgba(121, 167, 255, 0.12);
+    color: #93c5fd;
+    border-color: rgba(121, 167, 255, 0.2);
+}
+
+.badge-grad-year {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    background: var(--surface-soft);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+.badge-program {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    background: var(--surface-soft);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+.student-header-title {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.student-name-main {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.35;
+    margin: 0;
+}
+
+.student-affiliation-text {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.student-project-box {
+    margin-top: 2px;
+    padding: 10px 14px;
+    background: var(--surface-soft);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+:root[data-theme="dark"] .student-project-box {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.student-project-heading {
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--primary);
+    margin: 0;
+}
+
+:root[data-theme="dark"] .student-project-heading {
+    color: #93c5fd;
+}
+
+.student-project-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.student-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 2px;
+}
+
+.student-pill {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.student-pill:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+@media (max-width: 720px) {
+    .student-card-vertical,
+    .team-director-vertical-card {
+        flex-direction: column;
+    }
+    .student-photo-col {
+        width: 100%;
+        min-width: 100%;
+        height: 220px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    .student-content-col {
+        padding: 16px 18px;
+    }
+    .student-name-main {
+        font-size: 17px;
+    }
+}

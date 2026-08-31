@@ -44,7 +44,7 @@ const translations = {
         "detail-spec-campus": "Campus",
         "detail-pi-heading": "Principal Investigator",
         "detail-other-heading": "Other BONLAB Research",
-        "nav-about": "About", "nav-research": "Research", "nav-partners": "Partners", "nav-news": "News", "nav-team": "Team", "nav-contact": "Contact",
+        "nav-about": "About", "nav-research": "Research", "nav-partners": "Partners", "nav-news": "News", "nav-team": "Teams", "nav-contact": "Contact",
         "language-label": "Language", "theme-light": "Use light mode", "theme-dark": "Use dark mode", "menu-open": "Open menu", "menu-close": "Close menu", "researcher-name": "Assoc. Prof. Dr. Kidsanapong Puntsri",
         "hero-title": "Research built in hardware.", "hero-copy": "We turn communication theory into testable digital hardware through FPGA prototyping, laboratory experiments and academic collaboration.",
         "latest-news": "Latest news →", "about-lab": "About BONLAB", "lab-flow": "Design → Prototype → Validate", "lab-caption": "A hands-on laboratory for communication systems and digital hardware.",
@@ -672,7 +672,7 @@ const translations = {
         "detail-side-contact-btn": "ติดต่อทีมงาน BONLAB →"
     },
     de: {
-        "nav-about": "Über uns", "nav-research": "Forschung", "nav-partners": "Partner", "nav-news": "Neuigkeiten", "nav-team": "Team", "nav-contact": "Kontakt",
+        "nav-about": "Über uns", "nav-research": "Forschung", "nav-partners": "Partner", "nav-news": "Neuigkeiten", "nav-team": "Teams", "nav-contact": "Kontakt",
         "language-label": "Sprache", "theme-light": "Hellen Modus verwenden", "theme-dark": "Dunklen Modus verwenden", "menu-open": "Menü öffnen", "menu-close": "Menü schließen", "researcher-name": "Assoc. Prof. Dr. Kidsanapong Puntsri",
         "hero-title": "Forschung als echte Hardware.", "hero-copy": "Wir übertragen Kommunikationstheorie durch FPGA-Prototypen, Laborversuche und akademische Zusammenarbeit in prüfbare digitale Hardware.",
         "latest-news": "Neuigkeiten →", "about-lab": "Über BONLAB", "lab-flow": "Entwurf → Prototyp → Prüfung", "lab-caption": "Ein praxisnahes Labor für Kommunikationssysteme und digitale Hardware.",
