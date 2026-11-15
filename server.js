@@ -11,7 +11,17 @@ const envPath = path.join(rootDir, ".env");
 if (fs.existsSync(envPath)) process.loadEnvFile(envPath);
 
 const distDir = path.join(rootDir, "dist");
-const htmlDir = fs.existsSync(path.join(distDir, "index.html")) ? distDir : rootDir;
+const builtHtmlDir = fs.existsSync(path.join(distDir, "index.html")) ? distDir : rootDir;
+
+// DATA_DIR (production/Docker): everything the site writes at runtime lives here, so it survives redeploys
+// and can be backed up as one folder. Without DATA_DIR the old local-dev behaviour is kept.
+const dataDir = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : null;
+const htmlDir = dataDir ? path.join(dataDir, "pages") : builtHtmlDir;
+const uploadDirs = dataDir
+    ? [path.join(dataDir, "uploads")]
+    : [path.join(rootDir, "public", "assets", "uploads"), path.join(distDir, "assets", "uploads")];
+const backupDir = dataDir ? path.join(dataDir, "backups") : path.join(rootDir, "backups");
+const newsDataPath = dataDir ? path.join(dataDir, "news.json") : path.join(rootDir, "src", "data", "news.json");
 
 const app = express();
 const port = Number(process.env.PORT || 8000);
@@ -32,6 +42,19 @@ const pageFiles = [
     "team.html"
 ];
 
+// First start with an empty DATA_DIR: copy the built pages + news in. Existing files are never overwritten,
+// so redeploying a new image keeps the admin's edits.
+if (dataDir) {
+    [htmlDir, ...uploadDirs, backupDir].forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
+    for (const file of pageFiles) {
+        const target = path.join(htmlDir, file);
+        const seed = path.join(builtHtmlDir, file);
+        if (!fs.existsSync(target) && fs.existsSync(seed)) fs.copyFileSync(seed, target);
+    }
+    const seedNews = path.join(rootDir, "src", "data", "news.json");
+    if (!fs.existsSync(newsDataPath) && fs.existsSync(seedNews)) fs.copyFileSync(seedNews, newsDataPath);
+}
+
 if (!adminUser || !adminPassword) {
     throw new Error("Set BONLAB_ADMIN_USER and BONLAB_ADMIN_PASSWORD in .env before starting the server.");
 }
@@ -50,6 +73,7 @@ app.use((req, res, next) => {
 app.use("/vendor/grapesjs", express.static(path.join(rootDir, "node_modules", "grapesjs", "dist")));
 app.use("/vendor/lucide", express.static(path.join(rootDir, "node_modules", "lucide", "dist", "umd")));
 app.use("/admin", express.static(path.join(rootDir, "admin"), { index: "index.html" }));
+if (dataDir) app.use("/assets/uploads", express.static(uploadDirs[0], { dotfiles: "deny" }));
 app.use("/assets", express.static(path.join(rootDir, "public", "assets"), { dotfiles: "deny" }));
 if (fs.existsSync(path.join(distDir, "assets"))) {
     app.use("/assets", express.static(path.join(distDir, "assets"), { dotfiles: "deny" }));
@@ -105,10 +129,6 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     if (Buffer.byteLength(html, "utf8") > 300_000_000) return res.status(413).json({ error: "หน้าเว็บมีขนาดใหญ่เกินไป (เกิน 300 MB)" });
 
     // Auto-extract any inline base64 images to uploads directory to keep HTML lean and fast
-    const uploadDirs = [
-        path.join(rootDir, "public", "assets", "uploads"),
-        path.join(distDir, "assets", "uploads")
-    ];
     uploadDirs.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
 
     html = html.replace(/src="data:(image\/(?:png|jpeg|webp|gif|svg\+xml));base64,([a-z0-9+/=]+)"/gi, (match, mime, b64) => {
@@ -124,7 +144,6 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
         }
     });
 
-    const backupDir = path.join(rootDir, "backups");
     fs.mkdirSync(backupDir, { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
 
@@ -135,7 +154,8 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     }
 
     const targetRoot = path.join(rootDir, file);
-    if (fs.existsSync(targetRoot) && targetRoot !== targetDist) {
+    // With DATA_DIR the volume is the only source of truth: never write back into the source tree.
+    if (!dataDir && fs.existsSync(targetRoot) && targetRoot !== targetDist) {
         fs.writeFileSync(targetRoot, html, "utf8");
     }
 
@@ -143,7 +163,7 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     try {
         const astroPageName = file.replace(/\.html$/i, ".astro");
         const astroPath = path.join(rootDir, "src", "pages", astroPageName);
-        if (fs.existsSync(astroPath)) {
+        if (!dataDir && fs.existsSync(astroPath)) {
             const mainMatch = html.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
             if (mainMatch) {
                 const currentAstro = fs.readFileSync(astroPath, "utf8");
@@ -175,11 +195,6 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
     const extensions = { "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image/gif": ".gif" };
     const cleanBase = path.basename(originalName, path.extname(originalName)).replace(/[^a-z0-9-]+/gi, "-").replace(/^-+|-+$/g, "") || "image";
     const filename = `${Date.now()}-${cleanBase.toLowerCase()}${extensions[match[1].toLowerCase()]}`;
-    
-    const uploadDirs = [
-        path.join(rootDir, "public", "assets", "uploads"),
-        path.join(distDir, "assets", "uploads")
-    ];
 
     uploadDirs.forEach(dir => {
         fs.mkdirSync(dir, { recursive: true });
@@ -190,7 +205,6 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
 });
 
 // News API (Public Feed & Facebook Graph API)
-const newsDataPath = path.join(rootDir, "src", "data", "news.json");
 const fbPageId = process.env.FB_PAGE_ID || "100076231050286";
 const fbAccessToken = process.env.FB_PAGE_ACCESS_TOKEN || "";
 const fallbackFeedUrl = process.env.FB_FEED_URL || "";
@@ -199,25 +213,19 @@ const fallbackFeedUrl = process.env.FB_FEED_URL || "";
 async function cacheFacebookImage(imageUrl, id) {
     if (!imageUrl || !imageUrl.startsWith("http")) return imageUrl || "/assets/bonlab-lab-cover.jpg";
     try {
-        const uploadDirs = [
-            path.join(rootDir, "public", "assets", "uploads"),
-            path.join(distDir, "assets", "uploads")
-        ];
         uploadDirs.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
         const cleanId = String(id).replace(/[^a-z0-9_-]/gi, "");
         const filename = `fb-${cleanId}.jpg`;
-        const localDistPath = path.join(uploadDirs[1], filename);
-        const localPublicPath = path.join(uploadDirs[0], filename);
+        const cachedPath = path.join(uploadDirs[0], filename);
 
-        if (fs.existsSync(localPublicPath) && fs.statSync(localPublicPath).size > 1000) {
+        if (fs.existsSync(cachedPath) && fs.statSync(cachedPath).size > 1000) {
             return `/assets/uploads/${filename}`;
         }
 
         const res = await fetch(imageUrl, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(10000) });
         if (!res.ok) return imageUrl;
         const buffer = Buffer.from(await res.arrayBuffer());
-        fs.writeFileSync(localPublicPath, buffer);
-        fs.writeFileSync(localDistPath, buffer);
+        uploadDirs.forEach(dir => fs.writeFileSync(path.join(dir, filename), buffer));
         return `/assets/uploads/${filename}`;
     } catch (err) {
         console.warn(`[BONLAB] Failed to cache FB image ${id}:`, err.message);
@@ -399,8 +407,8 @@ async function fetchAndSyncFacebookPosts() {
 }
 
 
-// Auto-sync every 30 minutes
-setInterval(() => {
+// Auto-sync every 30 minutes, only when a source is configured (token or feed URL)
+if (fbAccessToken || fallbackFeedUrl) setInterval(() => {
     fetchAndSyncFacebookPosts().then(res => {
         if (res.ok) console.log(`[BONLAB] Auto-synced ${res.count} posts from Facebook feed`);
     });
@@ -419,7 +427,7 @@ app.get("/api/news", (req, res) => {
     }
 });
 
-app.all("/api/news/sync", async (req, res) => {
+app.all("/api/news/sync", requireAdmin, async (req, res) => {
     const result = await fetchAndSyncFacebookPosts();
     if (result.ok) {
         res.json({ ok: true, count: result.count, latestCount: result.latestCount, message: "ซิงค์ข้อมูลจาก Facebook สำเร็จ" });
@@ -501,8 +509,11 @@ function createSessionToken(username = adminUser) {
     return `${payload}.${sign(payload)}`;
 }
 
+// COOKIE_SECURE=true once the site is served over HTTPS (keeps the admin cookie off plain HTTP).
+const cookieSecure = process.env.COOKIE_SECURE === "true" ? "; Secure" : "";
+
 function serializeSessionCookie(token) {
-    return `bonlab_admin=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionLifetimeMs / 1000}`;
+    return `bonlab_admin=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionLifetimeMs / 1000}${cookieSecure}`;
 }
 
 function clearSessionCookie() {
@@ -520,8 +531,9 @@ function safeEqual(left, right) {
 }
 
 function getLocalSessionSecret() {
-    const secretPath = path.join(rootDir, ".bonlab-session-secret");
+    const secretPath = path.join(dataDir || rootDir, ".bonlab-session-secret");
     if (fs.existsSync(secretPath)) return fs.readFileSync(secretPath, "utf8").trim();
+    fs.mkdirSync(path.dirname(secretPath), { recursive: true });
     const secret = crypto.randomBytes(48).toString("hex");
     fs.writeFileSync(secretPath, secret, { encoding: "utf8", mode: 0o600 });
     return secret;
