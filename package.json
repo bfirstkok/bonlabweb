@@ -14,10 +14,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.6",
     "express": "^5.2.1",
     "grapesjs": "^0.22.16",
     "lucide": "^0.468.0"
+  },
+  "devDependencies": {
+    "astro": "^7.2.6"
   },
   "allowScripts": {
     "esbuild": true
