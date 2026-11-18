@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BONLAB News Manager</title>
+    <style>
+        :root { --bg: #f5f6f8; --card: #fff; --ink: #1c2430; --muted: #5b6573; --line: #d9dee5; --accent: #1f5fbf; --ok: #1b7a3d; --bad: #b3261e; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font: 15px/1.5 system-ui, "Noto Sans Thai", sans-serif; background: var(--bg); color: var(--ink); }
+        header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--card); border-bottom: 1px solid var(--line); }
+        header h1 { font-size: 18px; margin: 0; }
+        main { max-width: 960px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; }
+        section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+        h2 { font-size: 16px; margin: 0 0 12px; }
+        label { display: grid; gap: 4px; font-weight: 600; font-size: 14px; }
+        input, textarea, select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; width: 100%; background: #fff; color: var(--ink); }
+        textarea { min-height: 80px; resize: vertical; }
+        .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .full { grid-column: 1 / -1; }
+        button, .button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer; text-decoration: none; }
+        button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+        button.danger { color: var(--bad); }
+        button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid #8ab4f8; outline-offset: 1px; }
+        .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .status { font-size: 14px; color: var(--muted); }
+        .status.ok { color: var(--ok); } .status.bad { color: var(--bad); }
+        .post { display: grid; grid-template-columns: 96px 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+        .post img { width: 96px; height: 64px; object-fit: cover; border-radius: 6px; background: var(--line); }
+        .post strong { display: block; }
+        .post small { color: var(--muted); }
+        .tag { font-size: 12px; padding: 1px 6px; border-radius: 4px; background: #e8eefb; color: var(--accent); }
+        .preview { max-width: 200px; max-height: 120px; border-radius: 6px; display: block; margin-top: 6px; }
+        @media (max-width: 560px) { .post { grid-template-columns: 64px 1fr; } .post img { width: 64px; height: 48px; } .post .row { grid-column: 1 / -1; } }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>จัดการข่าว Facebook</h1>
+        <div class="row"><a class="button" href="/admin/">← กลับไปหน้าแก้ไขเว็บ</a><a class="button" href="/news.html" target="_blank" rel="noopener">ดูหน้าข่าว ↗</a></div>
+    </header>
+    <main>
+        <section aria-labelledby="sync-title">
+            <h2 id="sync-title">ดึงข่าวอัตโนมัติ</h2>
+            <p id="sync-status" class="status" role="status">กำลังโหลด…</p>
+            <div class="row"><button id="sync-button" type="button">ดึงข่าวจาก Facebook ตอนนี้</button></div>
+        </section>
+
+        <section aria-labelledby="form-title">
+            <h2 id="form-title">เพิ่มโพสต์เอง</h2>
+            <p class="status">ใช้ได้ทุกเวลา แม้ระบบดึงอัตโนมัติจะใช้ไม่ได้ โพสต์ที่เพิ่มเองจะไม่ถูกการดึงอัตโนมัติเขียนทับ</p>
+            <form id="post-form" class="grid">
+                <input type="hidden" name="id">
+                <label class="full">ลิงก์โพสต์ Facebook<input name="facebookUrl" type="url" placeholder="https://www.facebook.com/..." required></label>
+                <label class="full">หัวข้อ<input name="title" maxlength="200" required></label>
+                <label class="full">รายละเอียดสั้น ๆ<textarea name="excerpt" maxlength="600"></textarea></label>
+                <label>วันที่<input name="date" type="date" required></label>
+                <label>หมวด (ใช้กับปุ่มกรอง)
+                    <select name="filter">
+                        <option value="research">งานวิจัยและการทดลอง</option>
+                        <option value="awards">รางวัล</option>
+                        <option value="students">โครงงานนักศึกษา</option>
+                        <option value="seminars" selected>สัมมนาและกิจกรรม</option>
+                    </select>
+                </label>
+                <label>ป้ายบนการ์ด<input name="category" maxlength="80" value="BONLAB · ACTIVITY"></label>
+                <label>รูปภาพ<input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><img id="image-preview" class="preview" alt="" hidden></label>
+                <input type="hidden" name="image">
+                <div class="row full"><button class="primary" type="submit" id="submit-button">เพิ่มโพสต์</button><button type="button" id="cancel-edit" hidden>ยกเลิกการแก้ไข</button><span id="form-status" class="status" role="status"></span></div>
+            </form>
+        </section>
+
+        <section aria-labelledby="list-title">
+            <h2 id="list-title">โพสต์บนหน้าข่าว (<span id="post-count">0</span>)</h2>
+            <div id="post-list"></div>
+        </section>
+    </main>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const form = $("post-form");
+        let posts = [];
+
+        async function api(url, options = {}) {
+            const res = await fetch(url, { credentials: "same-origin", headers: { "Content-Type": "application/json" }, ...options });
+            if (res.status === 401) { location.href = "/admin/"; throw new Error("ต้องเข้าสู่ระบบก่อน"); }
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+            return data;
+        }
+
+        function setStatus(el, text, kind = "") { el.textContent = text; el.className = `status ${kind}`; }
+
+        function showSync(lastSync, source) {
+            const el = $("sync-status");
+            if (source === "none") return setStatus(el, "ยังไม่ได้ตั้งค่าแหล่งข่าว (FB_PAGE_ACCESS_TOKEN หรือ FB_FEED_URL ในไฟล์ .env) ใช้การเพิ่มโพสต์เองด้านล่างไปก่อน", "bad");
+            if (!lastSync?.at) return setStatus(el, "ยังไม่ได้ดึงข่าวตั้งแต่เปิดระบบ ระบบจะดึงเองทุก 30 นาที");
+            const when = new Date(lastSync.at).toLocaleString("th-TH");
+            lastSync.ok ? setStatus(el, `ดึงข่าวสำเร็จล่าสุด ${when}`, "ok")
+                        : setStatus(el, `ดึงข่าวไม่สำเร็จ (${when}): ${lastSync.error} ข่าวเดิมยังแสดงอยู่ตามปกติ`, "bad");
+        }
+
+        function renderList() {
+            const list = $("post-list");
+            list.replaceChildren();
+            $("post-count").textContent = posts.length;
+            [...posts].sort((a, b) => String(b.date).localeCompare(String(a.date))).forEach((post) => {
+                const row = document.createElement("div");
+                row.className = "post";
+                row.innerHTML = `<img alt=""><div><strong></strong><small></small></div><div class="row"><button type="button" data-edit>แก้ไข</button><button type="button" class="danger" data-delete>ลบ</button></div>`;
+                const img = row.querySelector("img");
+                img.src = post.image || "/assets/bonlab-lab-cover.jpg";
+                img.addEventListener("error", () => { img.src = "/assets/bonlab-lab-cover.jpg"; }, { once: true });
+                row.querySelector("strong").textContent = post.title || "(ไม่มีหัวข้อ)";
+                const meta = row.querySelector("small");
+                meta.textContent = `${post.date || ""} · ${post.category || ""} `;
+                const tag = document.createElement("span");
+                tag.className = "tag";
+                tag.textContent = post.manual ? "เพิ่มเอง" : "ดึงอัตโนมัติ";
+                meta.append(tag);
+                row.querySelector("[data-edit]").addEventListener("click", () => startEdit(post));
+                row.querySelector("[data-delete]").addEventListener("click", () => removePost(post));
+                list.append(row);
+            });
+            if (!posts.length) list.textContent = "ยังไม่มีโพสต์";
+        }
+
+        async function load() {
+            const data = await api("/api/admin/news");
+            posts = data.posts || [];
+            showSync(data.lastSync, data.source);
+            $("sync-button").disabled = data.source === "none";
+            renderList();
+        }
+
+        async function saveAll(message) {
+            const data = await api("/api/admin/news", { method: "POST", body: JSON.stringify({ posts }) });
+            await load();
+            setStatus($("form-status"), `${message} (${data.count} โพสต์)`, "ok");
+        }
+
+        function resetForm() {
+            form.reset();
+            form.date.value = new Date().toISOString().split("T")[0];
+            form.id.value = ""; form.image.value = "";
+            $("image-preview").hidden = true;
+            $("submit-button").textContent = "เพิ่มโพสต์";
+            $("cancel-edit").hidden = true;
+        }
+
+        function startEdit(post) {
+            for (const name of ["id", "facebookUrl", "title", "excerpt", "date", "filter", "category", "image"]) form[name].value = post[name] || "";
+            $("image-preview").src = post.image || ""; $("image-preview").hidden = !post.image;
+            $("submit-button").textContent = "บันทึกการแก้ไข";
+            $("cancel-edit").hidden = false;
+            form.scrollIntoView({ behavior: "smooth" });
+            form.title.focus();
+        }
+
+        async function removePost(post) {
+            if (!confirm(`ลบโพสต์ "${post.title}" ออกจากหน้าข่าว?`)) return;
+            posts = posts.filter((p) => p !== post);
+            try { await saveAll("ลบแล้ว"); } catch (err) { setStatus($("form-status"), err.message, "bad"); await load(); }
+        }
+
+        $("image-file").addEventListener("change", async (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            setStatus($("form-status"), "กำลังอัปโหลดรูป…");
+            try {
+                const dataUrl = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = () => reject(new Error("อ่านไฟล์ไม่ได้"));
+                    reader.readAsDataURL(file);
+                });
+                const data = await api("/api/admin/upload", { method: "POST", body: JSON.stringify({ dataUrl, name: file.name }) });
+                form.image.value = data.url;
+                $("image-preview").src = data.url; $("image-preview").hidden = false;
+                setStatus($("form-status"), "อัปโหลดรูปแล้ว", "ok");
+            } catch (err) { setStatus($("form-status"), err.message, "bad"); }
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const entry = Object.fromEntries(new FormData(form));
+            entry.manual = true;
+            const index = entry.id ? posts.findIndex((p) => p.id === entry.id) : -1;
+            if (index >= 0) posts[index] = { ...posts[index], ...entry };
+            else posts.push({ ...entry, id: `manual-${Date.now()}` });
+            try { await saveAll(index >= 0 ? "บันทึกการแก้ไขแล้ว" : "เพิ่มโพสต์แล้ว"); resetForm(); }
+            catch (err) { setStatus($("form-status"), err.message, "bad"); }
+        });
+
+        $("cancel-edit").addEventListener("click", resetForm);
+
+        $("sync-button").addEventListener("click", async () => {
+            const button = $("sync-button");
+            button.disabled = true;
+            setStatus($("sync-status"), "กำลังดึงข่าว…");
+            try { await api("/api/news/sync", { method: "POST" }); } catch {}
+            await load().catch(() => {});
+            button.disabled = false;
+        });
+
+        resetForm();
+        load().catch((err) => setStatus($("sync-status"), err.message, "bad"));
+    </script>
+</body>
+</html>
