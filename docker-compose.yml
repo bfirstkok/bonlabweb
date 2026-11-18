@@ -1,5 +1,12 @@
+# Same file on every server. Per-server settings live in .env (SITE_ADDRESS, BONLAB_TAG, secrets).
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "3" }   # keep container logs from filling the disk
+
 services:
   web:
+    # CI pushes this image (see .github/workflows/ci.yml). `docker compose up -d --build` builds it locally instead.
+    image: ghcr.io/bfirstkok/bonlabweb:${BONLAB_TAG:-main}
     build: .
     restart: unless-stopped
     env_file: .env
@@ -9,6 +16,18 @@ services:
       - ./data:/app/data
     expose:
       - "8000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 512m
+    logging: *logging
 
   caddy:
     image: caddy:2-alpine
@@ -18,11 +37,16 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "443:443/udp"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - web
+    mem_limit: 128m
+    logging: *logging
 
 volumes:
   caddy_data:
+  caddy_config:

@@ -496,6 +496,16 @@ app.post("/api/admin/news", requireAdmin, (req, res) => {
 
 
 
+// Used by the Docker healthcheck and scripts/deploy.sh: fails if the data volume is not writable.
+app.get("/health", (req, res) => {
+    try {
+        fs.accessSync(htmlDir, fs.constants.W_OK);
+        res.json({ ok: true });
+    } catch {
+        res.status(503).json({ ok: false, error: "data directory not writable" });
+    }
+});
+
 app.get("/", (req, res) => {
     const indexPath = fs.existsSync(path.join(htmlDir, "index.html")) ? path.join(htmlDir, "index.html") : path.join(rootDir, "index.html");
     res.sendFile(indexPath);
