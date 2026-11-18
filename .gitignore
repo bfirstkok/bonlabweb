@@ -24,3 +24,7 @@ backups/
 
 # jetbrains setting folder
 .idea/
+
+# runtime data (Docker volume) and backup snapshots
+data/
+snapshots/

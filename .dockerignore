@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+.git
+.env
+.env.*
+!.env.example
+.bonlab-session-secret
+backups
+data
+*.log

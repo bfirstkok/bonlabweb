@@ -11,7 +11,17 @@ const envPath = path.join(rootDir, ".env");
 if (fs.existsSync(envPath)) process.loadEnvFile(envPath);
 
 const distDir = path.join(rootDir, "dist");
-const htmlDir = fs.existsSync(path.join(distDir, "index.html")) ? distDir : rootDir;
+const builtHtmlDir = fs.existsSync(path.join(distDir, "index.html")) ? distDir : rootDir;
+
+// DATA_DIR (production/Docker): everything the site writes at runtime lives here, so it survives redeploys
+// and can be backed up as one folder. Without DATA_DIR the old local-dev behaviour is kept.
+const dataDir = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : null;
+const htmlDir = dataDir ? path.join(dataDir, "pages") : builtHtmlDir;
+const uploadDirs = dataDir
+    ? [path.join(dataDir, "uploads")]
+    : [path.join(rootDir, "public", "assets", "uploads"), path.join(distDir, "assets", "uploads")];
+const backupDir = dataDir ? path.join(dataDir, "backups") : path.join(rootDir, "backups");
+const newsDataPath = dataDir ? path.join(dataDir, "news.json") : path.join(rootDir, "src", "data", "news.json");
 
 const app = express();
 const port = Number(process.env.PORT || 8000);
@@ -32,6 +42,19 @@ const pageFiles = [
     "team.html"
 ];
 
+// First start with an empty DATA_DIR: copy the built pages + news in. Existing files are never overwritten,
+// so redeploying a new image keeps the admin's edits.
+if (dataDir) {
+    [htmlDir, ...uploadDirs, backupDir].forEach((dir) => fs.mkdirSync(dir, { recursive: true }));
+    for (const file of pageFiles) {
+        const target = path.join(htmlDir, file);
+        const seed = path.join(builtHtmlDir, file);
+        if (!fs.existsSync(target) && fs.existsSync(seed)) fs.copyFileSync(seed, target);
+    }
+    const seedNews = path.join(rootDir, "src", "data", "news.json");
+    if (!fs.existsSync(newsDataPath) && fs.existsSync(seedNews)) fs.copyFileSync(seedNews, newsDataPath);
+}
+
 if (!adminUser || !adminPassword) {
     throw new Error("Set BONLAB_ADMIN_USER and BONLAB_ADMIN_PASSWORD in .env before starting the server.");
 }
@@ -50,6 +73,7 @@ app.use((req, res, next) => {
 app.use("/vendor/grapesjs", express.static(path.join(rootDir, "node_modules", "grapesjs", "dist")));
 app.use("/vendor/lucide", express.static(path.join(rootDir, "node_modules", "lucide", "dist", "umd")));
 app.use("/admin", express.static(path.join(rootDir, "admin"), { index: "index.html" }));
+if (dataDir) app.use("/assets/uploads", express.static(uploadDirs[0], { dotfiles: "deny" }));
 app.use("/assets", express.static(path.join(rootDir, "public", "assets"), { dotfiles: "deny" }));
 if (fs.existsSync(path.join(distDir, "assets"))) {
     app.use("/assets", express.static(path.join(distDir, "assets"), { dotfiles: "deny" }));
@@ -105,10 +129,6 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     if (Buffer.byteLength(html, "utf8") > 300_000_000) return res.status(413).json({ error: "หน้าเว็บมีขนาดใหญ่เกินไป (เกิน 300 MB)" });
 
     // Auto-extract any inline base64 images to uploads directory to keep HTML lean and fast
-    const uploadDirs = [
-        path.join(rootDir, "public", "assets", "uploads"),
-        path.join(distDir, "assets", "uploads")
-    ];
     uploadDirs.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
 
     html = html.replace(/src="data:(image\/(?:png|jpeg|webp|gif|svg\+xml));base64,([a-z0-9+/=]+)"/gi, (match, mime, b64) => {
@@ -124,7 +144,6 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
         }
     });
 
-    const backupDir = path.join(rootDir, "backups");
     fs.mkdirSync(backupDir, { recursive: true });
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
 
@@ -135,7 +154,8 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     }
 
     const targetRoot = path.join(rootDir, file);
-    if (fs.existsSync(targetRoot) && targetRoot !== targetDist) {
+    // With DATA_DIR the volume is the only source of truth: never write back into the source tree.
+    if (!dataDir && fs.existsSync(targetRoot) && targetRoot !== targetDist) {
         fs.writeFileSync(targetRoot, html, "utf8");
     }
 
@@ -143,7 +163,7 @@ app.post("/api/admin/save", requireAdmin, (req, res) => {
     try {
         const astroPageName = file.replace(/\.html$/i, ".astro");
         const astroPath = path.join(rootDir, "src", "pages", astroPageName);
-        if (fs.existsSync(astroPath)) {
+        if (!dataDir && fs.existsSync(astroPath)) {
             const mainMatch = html.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
             if (mainMatch) {
                 const currentAstro = fs.readFileSync(astroPath, "utf8");
@@ -175,11 +195,6 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
     const extensions = { "image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "image/gif": ".gif" };
     const cleanBase = path.basename(originalName, path.extname(originalName)).replace(/[^a-z0-9-]+/gi, "-").replace(/^-+|-+$/g, "") || "image";
     const filename = `${Date.now()}-${cleanBase.toLowerCase()}${extensions[match[1].toLowerCase()]}`;
-    
-    const uploadDirs = [
-        path.join(rootDir, "public", "assets", "uploads"),
-        path.join(distDir, "assets", "uploads")
-    ];
 
     uploadDirs.forEach(dir => {
         fs.mkdirSync(dir, { recursive: true });
@@ -189,67 +204,190 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
     res.json({ ok: true, url: `/assets/uploads/${filename}` });
 });
 
-// News API (Public Feed & Admin CRUD)
-const newsDataPath = path.join(rootDir, "src", "data", "news.json");
-const facebookFeedUrl = "https://rss.app/feeds/v1.1/ElM4FpwMcAN350mf.json";
+// News API (Public Feed & Facebook Graph API)
+const fbPageId = process.env.FB_PAGE_ID || "100076231050286";
+const fbAccessToken = process.env.FB_PAGE_ACCESS_TOKEN || "";
+const fallbackFeedUrl = process.env.FB_FEED_URL || "";
+
+// Cache Facebook CDN images locally to prevent broken images from signed token expiration
+async function cacheFacebookImage(imageUrl, id) {
+    if (!imageUrl || !imageUrl.startsWith("http")) return imageUrl || "/assets/bonlab-lab-cover.jpg";
+    try {
+        uploadDirs.forEach(dir => fs.mkdirSync(dir, { recursive: true }));
+        const cleanId = String(id).replace(/[^a-z0-9_-]/gi, "");
+        const filename = `fb-${cleanId}.jpg`;
+        const cachedPath = path.join(uploadDirs[0], filename);
+
+        if (fs.existsSync(cachedPath) && fs.statSync(cachedPath).size > 1000) {
+            return `/assets/uploads/${filename}`;
+        }
+
+        const res = await fetch(imageUrl, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(10000) });
+        if (!res.ok) return imageUrl;
+        const buffer = Buffer.from(await res.arrayBuffer());
+        uploadDirs.forEach(dir => fs.writeFileSync(path.join(dir, filename), buffer));
+        return `/assets/uploads/${filename}`;
+    } catch (err) {
+        console.warn(`[BONLAB] Failed to cache FB image ${id}:`, err.message);
+        return imageUrl;
+    }
+}
+
+function parseFeedContent(text) {
+    const trimmed = text.trim();
+    if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+        try {
+            const json = JSON.parse(trimmed);
+            return Array.isArray(json) ? json : (json.items || json.data || []);
+        } catch {
+            return [];
+        }
+    }
+    
+    // Parse RSS / Atom XML (e.g. FetchRSS or standard RSS feeds)
+    const items = [];
+    const itemRegex = /<(?:item|entry)[\s\S]*?<\/(?:item|entry)>/gi;
+    const matches = trimmed.match(itemRegex) || [];
+    
+    for (const rawItem of matches) {
+        const getTag = (tag) => {
+            const m = rawItem.match(new RegExp(`<${tag}[^>]*>(?:<\\!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${tag}>`, "i"));
+            return m ? m[1].trim() : "";
+        };
+
+        const title = getTag("title");
+        const content = getTag("description") || getTag("content:encoded") || getTag("summary") || getTag("content");
+        const link = getTag("link") || rawItem.match(/<link[^>]+href=["']([^"']+)["']/i)?.[1] || "";
+        const date = getTag("pubDate") || getTag("published") || getTag("updated") || getTag("dc:date");
+        
+        let image = "";
+        const encMatch = rawItem.match(/<enclosure[^>]+url=["']([^"']+)["']/i);
+        const mediaMatch = rawItem.match(/<media:(?:content|thumbnail)[^>]+url=["']([^"']+)["']/i);
+        const imgTagMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+        
+        if (encMatch) image = encMatch[1];
+        else if (mediaMatch) image = mediaMatch[1];
+        else if (imgTagMatch) image = imgTagMatch[1];
+
+        const cleanContent = content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+
+        items.push({
+            id: link || Buffer.from(title || "post").toString("hex").slice(0, 16),
+            title: title.replace(/<[^>]+>/g, "").trim(),
+            content_text: cleanContent,
+            url: link,
+            date_published: date,
+            image: image
+        });
+    }
+    return items;
+}
 
 async function fetchAndSyncFacebookPosts() {
     try {
-        const response = await fetch(facebookFeedUrl);
-        if (!response.ok) return { ok: false, error: "Feed status " + response.status };
-        const feed = await response.json();
-        const items = feed.items || [];
-        if (!items.length) return { ok: true, count: 0 };
+        let mappedPosts = [];
 
-        const safeTrim = (str, max) => {
-            if (!str) return "";
-            const wellFormed = typeof str.toWellFormed === "function" ? str.toWellFormed() : str;
-            const arr = Array.from(wellFormed);
-            if (arr.length <= max) return arr.join("");
-            return arr.slice(0, max).join("").trim() + "...";
-        };
+        // 1. If Facebook Graph API token is provided, use the official Meta Graph API
+        if (fbAccessToken) {
+            console.log(`[BONLAB] Fetching posts via Facebook Graph API for Page: ${fbPageId}...`);
+            const apiUrl = `https://graph.facebook.com/v20.0/${fbPageId}/posts?fields=id,message,created_time,full_picture,permalink_url&limit=25&access_token=${fbAccessToken}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
-        const mappedPosts = items.map((item, index) => {
-            const fullText = (item.content_text || item.title || "").trim();
-            const lines = fullText.split("\n").map(l => l.trim()).filter(Boolean);
-            const title = lines[0] ? safeTrim(lines[0], 90) : "BONLAB Activity";
-            const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
-            const excerpt = safeTrim(rawExcerpt, 180);
+            if (!response.ok || data.error) {
+                const errMsg = data.error?.message || `Graph API error status: ${response.status}`;
+                console.error("[BONLAB] Facebook Graph API error:", errMsg);
+                return { ok: false, error: errMsg };
+            }
 
-            let category = "BONLAB · ACTIVITY";
-            const lower = fullText.toLowerCase();
-            if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) category = "RESEARCH & COLLABORATION";
-            else if (lower.includes("eecon") || lower.includes("16-qam")) category = "EXPERIMENTS · EECON";
-            else if (lower.includes("พยาบาล") || lower.includes("arduino")) category = "STUDENT MENTORING";
-            else if (lower.includes("fpga")) category = "TRAINING · WORKSHOP";
-            else if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) category = "SEMINAR · GUEST SPEAKER";
+            const items = data.data || [];
+            console.log(`[BONLAB] Received ${items.length} posts from Facebook Graph API`);
 
-            let fbUrl = item.url || "https://web.facebook.com/profile.php?id=100076231050286";
-            fbUrl = fbUrl.replace("https://m.facebook.com/", "https://web.facebook.com/");
+            for (const item of items) {
+                const message = (item.message || "").trim();
+                const lines = message.split("\n").map(l => l.trim()).filter(Boolean);
+                const title = lines[0] ? (lines[0].length > 90 ? lines[0].slice(0, 90) + "..." : lines[0]) : "BONLAB Activity";
+                const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
+                const excerpt = rawExcerpt.length > 180 ? rawExcerpt.slice(0, 180) + "..." : rawExcerpt;
 
+                let category = "BONLAB · ACTIVITY";
+                const lower = message.toLowerCase();
+                if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) category = "RESEARCH & COLLABORATION";
+                else if (lower.includes("eecon") || lower.includes("16-qam")) category = "EXPERIMENTS · EECON";
+                else if (lower.includes("พยาบาล") || lower.includes("arduino")) category = "STUDENT MENTORING";
+                else if (lower.includes("fpga")) category = "TRAINING · WORKSHOP";
+                else if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) category = "SEMINAR · GUEST SPEAKER";
+
+                const localImage = await cacheFacebookImage(item.full_picture, item.id);
+
+                mappedPosts.push({
+                    id: item.id,
+                    category,
+                    title,
+                    excerpt,
+                    date: (item.created_time || "").split("T")[0] || new Date().toISOString().split("T")[0],
+                    image: localImage,
+                    facebookUrl: item.permalink_url || `https://web.facebook.com/profile.php?id=${fbPageId}`
+                });
+            }
+        } 
+        // 2. If fallback feed URL is provided (supports both JSON and XML RSS feeds like FetchRSS)
+        else if (fallbackFeedUrl) {
+            console.log(`[BONLAB] Fetching posts via Feed URL: ${fallbackFeedUrl}...`);
+            const response = await fetch(fallbackFeedUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+            if (!response.ok) return { ok: false, error: "Feed status " + response.status };
+            const rawText = await response.text();
+            const items = parseFeedContent(rawText);
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const fullText = (item.content_text || item.title || "").trim();
+                const lines = fullText.split("\n").map(l => l.trim()).filter(Boolean);
+                const title = lines[0] ? (lines[0].length > 90 ? lines[0].slice(0, 90) + "..." : lines[0]) : "BONLAB Activity";
+                const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
+                const excerpt = rawExcerpt.length > 180 ? rawExcerpt.slice(0, 180) + "..." : rawExcerpt;
+
+                let category = "BONLAB · ACTIVITY";
+                const lower = fullText.toLowerCase();
+                if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) category = "RESEARCH & COLLABORATION";
+                else if (lower.includes("eecon") || lower.includes("16-qam")) category = "EXPERIMENTS · EECON";
+                else if (lower.includes("พยาบาล") || lower.includes("arduino")) category = "STUDENT MENTORING";
+                else if (lower.includes("fpga")) category = "TRAINING · WORKSHOP";
+                else if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) category = "SEMINAR · GUEST SPEAKER";
+
+                const cleanId = item.id || `feed-post-${i}`;
+                const localImage = await cacheFacebookImage(item.image, cleanId);
+
+                let fbUrl = item.url || `https://web.facebook.com/profile.php?id=${fbPageId}`;
+                fbUrl = fbUrl.replace("https://m.facebook.com/", "https://web.facebook.com/");
+
+                mappedPosts.push({
+                    id: cleanId,
+                    category,
+                    title,
+                    excerpt,
+                    date: (item.date_published || "").split("T")[0] || new Date().toISOString().split("T")[0],
+                    image: localImage,
+                    facebookUrl: fbUrl
+                });
+            }
+        } else {
             return {
-                id: item.id || `fb-post-${index}`,
-                category,
-                title,
-                excerpt,
-                date: (item.date_published || "").split("T")[0] || new Date().toISOString().split("T")[0],
-                image: item.image || "/assets/bonlab-lab-cover.jpg",
-                facebookUrl: fbUrl
+                ok: false,
+                error: "กรุณาระบุ FB_PAGE_ACCESS_TOKEN หรือ FB_FEED_URL ในไฟล์ .env"
             };
-        });
+        }
 
-        // Keep news purely 100% real Facebook posts from feed
+        if (!mappedPosts.length) return { ok: true, count: 0 };
+
         // Accumulate new posts with existing posts without duplication
         let existingPosts = [];
         if (fs.existsSync(newsDataPath)) {
             try {
-                let raw = fs.readFileSync(newsDataPath, "utf8");
-                raw = raw.replace(/\\ud[89a-f][0-9a-f]{2}/gi, "");
+                const raw = fs.readFileSync(newsDataPath, "utf8");
                 existingPosts = JSON.parse(raw || "[]");
             } catch (e) {}
         }
 
-        // Only keep items that have real Facebook permalinks
         const validExisting = existingPosts.filter(p => p.facebookUrl && p.facebookUrl.includes("facebook.com") && !p.id.startsWith("research-"));
         
         const merged = [...mappedPosts];
@@ -259,21 +397,9 @@ async function fetchAndSyncFacebookPosts() {
             }
         }
 
-        const cleanMerged = merged.map(item => {
-            const clean = {};
-            for (const k in item) {
-                if (typeof item[k] === "string") {
-                    clean[k] = item[k].replace(/[\uD800-\uDFFF]/g, "").trim();
-                } else {
-                    clean[k] = item[k];
-                }
-            }
-            return clean;
-        });
-
         fs.mkdirSync(path.dirname(newsDataPath), { recursive: true });
-        fs.writeFileSync(newsDataPath, JSON.stringify(cleanMerged, null, 2), "utf8");
-        return { ok: true, count: cleanMerged.length };
+        fs.writeFileSync(newsDataPath, JSON.stringify(merged, null, 2), "utf8");
+        return { ok: true, count: merged.length, latestCount: mappedPosts.length };
     } catch (err) {
         console.error("Facebook sync error:", err);
         return { ok: false, error: err.message };
@@ -281,8 +407,8 @@ async function fetchAndSyncFacebookPosts() {
 }
 
 
-// Auto-sync every 30 minutes
-setInterval(() => {
+// Auto-sync every 30 minutes, only when a source is configured (token or feed URL)
+if (fbAccessToken || fallbackFeedUrl) setInterval(() => {
     fetchAndSyncFacebookPosts().then(res => {
         if (res.ok) console.log(`[BONLAB] Auto-synced ${res.count} posts from Facebook feed`);
     });
@@ -301,10 +427,10 @@ app.get("/api/news", (req, res) => {
     }
 });
 
-app.post("/api/news/sync", async (req, res) => {
+app.all("/api/news/sync", requireAdmin, async (req, res) => {
     const result = await fetchAndSyncFacebookPosts();
     if (result.ok) {
-        res.json({ ok: true, count: result.count, message: "ซิงค์ข้อมูลจาก Facebook สำเร็จ" });
+        res.json({ ok: true, count: result.count, latestCount: result.latestCount, message: "ซิงค์ข้อมูลจาก Facebook สำเร็จ" });
     } else {
         res.status(500).json({ ok: false, error: result.error });
     }
@@ -383,8 +509,11 @@ function createSessionToken(username = adminUser) {
     return `${payload}.${sign(payload)}`;
 }
 
+// COOKIE_SECURE=true once the site is served over HTTPS (keeps the admin cookie off plain HTTP).
+const cookieSecure = process.env.COOKIE_SECURE === "true" ? "; Secure" : "";
+
 function serializeSessionCookie(token) {
-    return `bonlab_admin=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionLifetimeMs / 1000}`;
+    return `bonlab_admin=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${sessionLifetimeMs / 1000}${cookieSecure}`;
 }
 
 function clearSessionCookie() {
@@ -402,8 +531,9 @@ function safeEqual(left, right) {
 }
 
 function getLocalSessionSecret() {
-    const secretPath = path.join(rootDir, ".bonlab-session-secret");
+    const secretPath = path.join(dataDir || rootDir, ".bonlab-session-secret");
     if (fs.existsSync(secretPath)) return fs.readFileSync(secretPath, "utf8").trim();
+    fs.mkdirSync(path.dirname(secretPath), { recursive: true });
     const secret = crypto.randomBytes(48).toString("hex");
     fs.writeFileSync(secretPath, secret, { encoding: "utf8", mode: 0o600 });
     return secret;
