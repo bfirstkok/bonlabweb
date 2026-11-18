@@ -44,11 +44,12 @@ git clone https://github.com/bfirstkok/bonlabweb /opt/bonlab
 cd /opt/bonlab
 cp .env.example .env
 nano .env        # admin password, BONLAB_SESSION_SECRET (openssl rand -hex 32), SITE_ADDRESS, BONLAB_TAG
-mkdir -p data && sudo chown 1000:1000 data
+mkdir -p data snapshots && sudo chown 1000:1000 data   # cron writes its logs into snapshots/
 
 docker compose up -d
 docker compose ps   # web must show "healthy"
 
+sudo apt-get install -y cron   # minimal Ubuntu images ship without cron
 crontab -e
 #   */5 * * * * cd /opt/bonlab && sh scripts/deploy.sh >> snapshots/deploy.log 2>&1
 #   0 3 * * *   cd /opt/bonlab && sh scripts/backup.sh >> snapshots/backup.log 2>&1
