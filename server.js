@@ -233,6 +233,17 @@ async function cacheFacebookImage(imageUrl, id) {
     }
 }
 
+function guessCategory(text) {
+    const lower = String(text).toLowerCase();
+    if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) return { category: "RESEARCH & COLLABORATION", filter: "research" };
+    if (lower.includes("eecon") || lower.includes("16-qam")) return { category: "EXPERIMENTS · EECON", filter: "research" };
+    if (lower.includes("รางวัล") || lower.includes("award")) return { category: "AWARD", filter: "awards" };
+    if (lower.includes("พยาบาล") || lower.includes("arduino")) return { category: "STUDENT MENTORING", filter: "students" };
+    if (lower.includes("fpga")) return { category: "TRAINING · WORKSHOP", filter: "seminars" };
+    if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) return { category: "SEMINAR · GUEST SPEAKER", filter: "seminars" };
+    return { category: "BONLAB · ACTIVITY", filter: "seminars" };
+}
+
 function parseFeedContent(text) {
     const trimmed = text.trim();
     if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
@@ -283,7 +294,15 @@ function parseFeedContent(text) {
     return items;
 }
 
+let lastSync = { at: null, ok: null, error: fbAccessToken || fallbackFeedUrl ? "" : "ยังไม่ได้ตั้งค่า FB_PAGE_ACCESS_TOKEN หรือ FB_FEED_URL" };
+
 async function fetchAndSyncFacebookPosts() {
+    const result = await syncFacebookPostsOnce();
+    lastSync = { at: new Date().toISOString(), ok: result.ok, error: result.error || "" };
+    return result;
+}
+
+async function syncFacebookPostsOnce() {
     try {
         let mappedPosts = [];
 
@@ -291,7 +310,7 @@ async function fetchAndSyncFacebookPosts() {
         if (fbAccessToken) {
             console.log(`[BONLAB] Fetching posts via Facebook Graph API for Page: ${fbPageId}...`);
             const apiUrl = `https://graph.facebook.com/v20.0/${fbPageId}/posts?fields=id,message,created_time,full_picture,permalink_url&limit=25&access_token=${fbAccessToken}`;
-            const response = await fetch(apiUrl);
+            const response = await fetch(apiUrl, { signal: AbortSignal.timeout(20000) });
             const data = await response.json();
 
             if (!response.ok || data.error) {
@@ -310,19 +329,14 @@ async function fetchAndSyncFacebookPosts() {
                 const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
                 const excerpt = rawExcerpt.length > 180 ? rawExcerpt.slice(0, 180) + "..." : rawExcerpt;
 
-                let category = "BONLAB · ACTIVITY";
-                const lower = message.toLowerCase();
-                if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) category = "RESEARCH & COLLABORATION";
-                else if (lower.includes("eecon") || lower.includes("16-qam")) category = "EXPERIMENTS · EECON";
-                else if (lower.includes("พยาบาล") || lower.includes("arduino")) category = "STUDENT MENTORING";
-                else if (lower.includes("fpga")) category = "TRAINING · WORKSHOP";
-                else if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) category = "SEMINAR · GUEST SPEAKER";
+                const { category, filter } = guessCategory(message);
 
                 const localImage = await cacheFacebookImage(item.full_picture, item.id);
 
                 mappedPosts.push({
                     id: item.id,
                     category,
+                    filter,
                     title,
                     excerpt,
                     date: (item.created_time || "").split("T")[0] || new Date().toISOString().split("T")[0],
@@ -334,7 +348,7 @@ async function fetchAndSyncFacebookPosts() {
         // 2. If fallback feed URL is provided (supports both JSON and XML RSS feeds like FetchRSS)
         else if (fallbackFeedUrl) {
             console.log(`[BONLAB] Fetching posts via Feed URL: ${fallbackFeedUrl}...`);
-            const response = await fetch(fallbackFeedUrl, { headers: { "User-Agent": "Mozilla/5.0" } });
+            const response = await fetch(fallbackFeedUrl, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(20000) });
             if (!response.ok) return { ok: false, error: "Feed status " + response.status };
             const rawText = await response.text();
             const items = parseFeedContent(rawText);
@@ -346,13 +360,7 @@ async function fetchAndSyncFacebookPosts() {
                 const rawExcerpt = lines.slice(1).join(" ") || lines[0] || "";
                 const excerpt = rawExcerpt.length > 180 ? rawExcerpt.slice(0, 180) + "..." : rawExcerpt;
 
-                let category = "BONLAB · ACTIVITY";
-                const lower = fullText.toLowerCase();
-                if (lower.includes("narit") || lower.includes("ดาราศาสตร์") || lower.includes("ฉางเอ๋อ")) category = "RESEARCH & COLLABORATION";
-                else if (lower.includes("eecon") || lower.includes("16-qam")) category = "EXPERIMENTS · EECON";
-                else if (lower.includes("พยาบาล") || lower.includes("arduino")) category = "STUDENT MENTORING";
-                else if (lower.includes("fpga")) category = "TRAINING · WORKSHOP";
-                else if (lower.includes("แรงบันดาลใจ") || lower.includes("พะเยา")) category = "SEMINAR · GUEST SPEAKER";
+                const { category, filter } = guessCategory(fullText);
 
                 const cleanId = item.id || `feed-post-${i}`;
                 const localImage = await cacheFacebookImage(item.image, cleanId);
@@ -363,6 +371,7 @@ async function fetchAndSyncFacebookPosts() {
                 mappedPosts.push({
                     id: cleanId,
                     category,
+                    filter,
                     title,
                     excerpt,
                     date: (item.date_published || "").split("T")[0] || new Date().toISOString().split("T")[0],
@@ -388,9 +397,13 @@ async function fetchAndSyncFacebookPosts() {
             } catch (e) {}
         }
 
-        const validExisting = existingPosts.filter(p => p.facebookUrl && p.facebookUrl.includes("facebook.com") && !p.id.startsWith("research-"));
+        const validExisting = existingPosts.filter(p => !p.manual && p.facebookUrl && p.facebookUrl.includes("facebook.com") && !p.id.startsWith("research-"));
         
-        const merged = [...mappedPosts];
+        const manual = existingPosts.filter(p => p.manual);
+        const merged = [...manual];
+        for (const post of mappedPosts) {
+            if (!merged.some(m => m.id === post.id || m.facebookUrl === post.facebookUrl)) merged.push(post);
+        }
         for (const prev of validExisting) {
             if (!merged.some(m => m.id === prev.id || m.facebookUrl === prev.facebookUrl)) {
                 merged.push(prev);
@@ -408,11 +421,16 @@ async function fetchAndSyncFacebookPosts() {
 
 
 // Auto-sync every 30 minutes, only when a source is configured (token or feed URL)
-if (fbAccessToken || fallbackFeedUrl) setInterval(() => {
+function autoSync() {
     fetchAndSyncFacebookPosts().then(res => {
         if (res.ok) console.log(`[BONLAB] Auto-synced ${res.count} posts from Facebook feed`);
+        else console.warn(`[BONLAB] Auto-sync failed, keeping existing news: ${res.error}`);
     });
-}, 30 * 60 * 1000);
+}
+if (fbAccessToken || fallbackFeedUrl) {
+    setTimeout(autoSync, 10_000);
+    setInterval(autoSync, 30 * 60 * 1000);
+}
 
 app.get("/api/news", (req, res) => {
     try {
@@ -436,11 +454,37 @@ app.all("/api/news/sync", requireAdmin, async (req, res) => {
     }
 });
 
+app.get("/api/admin/news", requireAdmin, (req, res) => {
+    let posts = [];
+    try { posts = JSON.parse(fs.readFileSync(newsDataPath, "utf8") || "[]"); } catch {}
+    res.json({ posts, lastSync, source: fbAccessToken ? "graph" : fallbackFeedUrl ? "feed" : "none" });
+});
+
+const newsFilters = ["research", "awards", "students", "seminars"];
+const cleanUrl = (value) => /^(https?:\/\/|\/)/i.test(String(value || "")) ? String(value).slice(0, 2000) : "";
+function cleanNewsPost(p, i) {
+    return {
+        id: String(p.id || `manual-${Date.now()}-${i}`).slice(0, 200),
+        manual: Boolean(p.manual),
+        category: String(p.category || "BONLAB · ACTIVITY").slice(0, 80),
+        filter: newsFilters.includes(p.filter) ? p.filter : "seminars",
+        title: String(p.title || "").slice(0, 200),
+        excerpt: String(p.excerpt || "").slice(0, 600),
+        date: /^\d{4}-\d{2}-\d{2}$/.test(p.date) ? p.date : new Date().toISOString().split("T")[0],
+        image: cleanUrl(p.image) || "/assets/bonlab-lab-cover.jpg",
+        facebookUrl: cleanUrl(p.facebookUrl)
+    };
+}
+
 app.post("/api/admin/news", requireAdmin, (req, res) => {
     try {
-        const { posts } = req.body;
-        if (!Array.isArray(posts)) {
+        if (!Array.isArray(req.body?.posts)) {
             return res.status(400).json({ error: "Invalid posts format" });
+        }
+        const posts = req.body.posts.slice(0, 200).map(cleanNewsPost);
+        if (fs.existsSync(newsDataPath)) {
+            fs.mkdirSync(backupDir, { recursive: true });
+            fs.copyFileSync(newsDataPath, path.join(backupDir, `news.json.${new Date().toISOString().replace(/[:.]/g, "-")}.bak`));
         }
         fs.mkdirSync(path.dirname(newsDataPath), { recursive: true });
         fs.writeFileSync(newsDataPath, JSON.stringify(posts, null, 2), "utf8");

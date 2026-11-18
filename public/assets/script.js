@@ -1734,3 +1734,55 @@ if (hash) {
         setTimeout(() => targetBtn.click(), 50);
     }
 }
+
+// Facebook news cards: the build-time cards are only a snapshot. Replace them with the live list
+// from /api/news (auto-sync or posts the admin added in /admin/news.html). On any error the snapshot stays.
+const FB_PAGE_URL = "https://www.facebook.com/profile.php?id=100076231050286";
+const FALLBACK_IMAGE = "/assets/bonlab-lab-cover.jpg";
+const safeUrl = (value, fallback) => /^(https?:\/\/|\/)/i.test(String(value || "")) ? String(value) : fallback;
+
+function useFallbackImage(img) {
+    img.addEventListener("error", () => { if (!img.src.endsWith(FALLBACK_IMAGE)) img.src = FALLBACK_IMAGE; }, { once: true });
+}
+
+function renderFacebookCard(post) {
+    const card = document.createElement("article");
+    card.className = "news-card";
+    card.dataset.category = post.filter || "seminars";
+    card.innerHTML = `
+        <div class="news-card-image-wrap"><img class="news-card-image" loading="lazy"></div>
+        <div class="news-card-content">
+            <div class="news-badge news-badge-facebook"><span data-i18n="badge-facebook">Facebook Activity</span></div>
+            <span class="date"></span><h2></h2><p></p>
+            <a target="_blank" rel="noopener" class="news-card-fb-link"><span data-i18n="view-on-fb">View on Facebook ↗</span></a>
+        </div>`;
+    const img = card.querySelector("img");
+    useFallbackImage(img);
+    img.src = safeUrl(post.image, FALLBACK_IMAGE);
+    img.alt = post.title || "";
+    card.querySelector(".date").textContent = [post.category, post.date].filter(Boolean).join(" · ");
+    card.querySelector("h2").textContent = post.title || "";
+    card.querySelector("p").textContent = post.excerpt || "";
+    card.querySelector("a").href = safeUrl(post.facebookUrl, FB_PAGE_URL);
+    return card;
+}
+
+(async () => {
+    const grid = document.querySelector(".news-card-grid");
+    if (!grid) return;
+    grid.querySelectorAll(".news-card-image").forEach(useFallbackImage);
+    try {
+        const res = await fetch("/api/news", { cache: "no-store" });
+        if (!res.ok) return;
+        const { posts } = await res.json();
+        if (!Array.isArray(posts)) return;
+        grid.querySelectorAll(".news-badge-facebook").forEach(badge => badge.closest(".news-card")?.remove());
+        [...posts]
+            .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))
+            .forEach(post => grid.appendChild(renderFacebookCard(post)));
+        applyLanguage(language);
+        updateNewsFilterAndSearch();
+    } catch {
+        // Static hosting or API down: keep the build-time cards.
+    }
+})();
