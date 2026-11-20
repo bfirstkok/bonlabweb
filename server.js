@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
+import { fetchApifyItems } from "./apify.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -208,6 +209,9 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
 const fbPageId = process.env.FB_PAGE_ID || "100076231050286";
 const fbAccessToken = process.env.FB_PAGE_ACCESS_TOKEN || "";
 const fallbackFeedUrl = process.env.FB_FEED_URL || "";
+const apifyToken = process.env.APIFY_TOKEN || "";
+const apifyActor = process.env.APIFY_ACTOR || "apify~facebook-posts-scraper";
+const newsSource = fbAccessToken ? "graph" : apifyToken ? "apify" : fallbackFeedUrl ? "feed" : "none";
 
 // Cache Facebook CDN images locally to prevent broken images from signed token expiration
 async function cacheFacebookImage(imageUrl, id) {
@@ -294,7 +298,7 @@ function parseFeedContent(text) {
     return items;
 }
 
-let lastSync = { at: null, ok: null, error: fbAccessToken || fallbackFeedUrl ? "" : "ยังไม่ได้ตั้งค่า FB_PAGE_ACCESS_TOKEN หรือ FB_FEED_URL" };
+let lastSync = { at: null, ok: null, error: newsSource !== "none" ? "" : "ยังไม่ได้ตั้งค่า FB_PAGE_ACCESS_TOKEN, APIFY_TOKEN หรือ FB_FEED_URL" };
 
 async function fetchAndSyncFacebookPosts() {
     const result = await syncFacebookPostsOnce();
@@ -345,13 +349,20 @@ async function syncFacebookPostsOnce() {
                 });
             }
         } 
-        // 2. If fallback feed URL is provided (supports both JSON and XML RSS feeds like FetchRSS)
-        else if (fallbackFeedUrl) {
-            console.log(`[BONLAB] Fetching posts via Feed URL: ${fallbackFeedUrl}...`);
-            const response = await fetch(fallbackFeedUrl, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(20000) });
-            if (!response.ok) return { ok: false, error: "Feed status " + response.status };
-            const rawText = await response.text();
-            const items = parseFeedContent(rawText);
+        // 2. Apify Actor dataset (scheduled in Apify Console), or 3. a JSON/XML feed URL. Both map to the same item shape.
+        else if (apifyToken || fallbackFeedUrl) {
+            let items;
+            if (apifyToken) {
+                console.log(`[BONLAB] Fetching posts via Apify Actor ${apifyActor}...`);
+                const result = await fetchApifyItems(apifyToken, apifyActor, fbPageId);
+                if (!result.ok) return result;
+                items = result.items;
+            } else {
+                console.log(`[BONLAB] Fetching posts via Feed URL: ${fallbackFeedUrl}...`);
+                const response = await fetch(fallbackFeedUrl, { headers: { "User-Agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(20000) });
+                if (!response.ok) return { ok: false, error: "Feed status " + response.status };
+                items = parseFeedContent(await response.text());
+            }
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const fullText = (item.content_text || item.title || "").trim();
@@ -382,7 +393,7 @@ async function syncFacebookPostsOnce() {
         } else {
             return {
                 ok: false,
-                error: "กรุณาระบุ FB_PAGE_ACCESS_TOKEN หรือ FB_FEED_URL ในไฟล์ .env"
+                error: "กรุณาระบุ FB_PAGE_ACCESS_TOKEN, APIFY_TOKEN หรือ FB_FEED_URL ในไฟล์ .env"
             };
         }
 
@@ -427,7 +438,7 @@ function autoSync() {
         else console.warn(`[BONLAB] Auto-sync failed, keeping existing news: ${res.error}`);
     });
 }
-if (fbAccessToken || fallbackFeedUrl) {
+if (newsSource !== "none") {
     setTimeout(autoSync, 10_000);
     setInterval(autoSync, 30 * 60 * 1000);
 }
@@ -457,7 +468,7 @@ app.all("/api/news/sync", requireAdmin, async (req, res) => {
 app.get("/api/admin/news", requireAdmin, (req, res) => {
     let posts = [];
     try { posts = JSON.parse(fs.readFileSync(newsDataPath, "utf8") || "[]"); } catch {}
-    res.json({ posts, lastSync, source: fbAccessToken ? "graph" : fallbackFeedUrl ? "feed" : "none" });
+    res.json({ posts, lastSync, source: newsSource });
 });
 
 const newsFilters = ["research", "awards", "students", "seminars"];

@@ -93,7 +93,7 @@
 
         function showSync(lastSync, source) {
             const el = $("sync-status");
-            if (source === "none") return setStatus(el, "ยังไม่ได้ตั้งค่าแหล่งข่าว (FB_PAGE_ACCESS_TOKEN หรือ FB_FEED_URL ในไฟล์ .env) ใช้การเพิ่มโพสต์เองด้านล่างไปก่อน", "bad");
+            if (source === "none") return setStatus(el, "ยังไม่ได้ตั้งค่าแหล่งข่าว (FB_PAGE_ACCESS_TOKEN, APIFY_TOKEN หรือ FB_FEED_URL ในไฟล์ .env) ใช้การเพิ่มโพสต์เองด้านล่างไปก่อน", "bad");
             if (!lastSync?.at) return setStatus(el, "ยังไม่ได้ดึงข่าวตั้งแต่เปิดระบบ ระบบจะดึงเองทุก 30 นาที");
             const when = new Date(lastSync.at).toLocaleString("th-TH");
             lastSync.ok ? setStatus(el, `ดึงข่าวสำเร็จล่าสุด ${when}`, "ok")
