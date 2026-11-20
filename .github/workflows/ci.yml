@@ -22,6 +22,7 @@ jobs:
       - run: npm run build
       - run: node --check server.js
       - run: node scripts/test-apify.mjs
+      - run: node scripts/test-news.mjs
       - name: Smoke test (server in DATA_DIR mode)
         env:
           DATA_DIR: ${{ runner.temp }}/data
