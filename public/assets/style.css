@@ -5340,3 +5340,14 @@ a.button-primary:hover,
         font-size: 17px;
     }
 }
+
+/* =========================================================
+   CARD FIXES
+========================================================= */
+
+/* Highlight cards in news.html put the image straight in the card (no .news-card-image-wrap), so it kept its natural height. */
+.news-card > .news-card-image {
+    height: 220px;
+    flex: none;
+}
+
