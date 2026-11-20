@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import { fetchApifyItems } from "./apify.js";
+import { toIsoDate, sortNewestFirst } from "./news.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -343,7 +344,7 @@ async function syncFacebookPostsOnce() {
                     filter,
                     title,
                     excerpt,
-                    date: (item.created_time || "").split("T")[0] || new Date().toISOString().split("T")[0],
+                    date: toIsoDate(item.created_time),
                     image: localImage,
                     facebookUrl: item.permalink_url || `https://web.facebook.com/profile.php?id=${fbPageId}`
                 });
@@ -385,7 +386,7 @@ async function syncFacebookPostsOnce() {
                     filter,
                     title,
                     excerpt,
-                    date: (item.date_published || "").split("T")[0] || new Date().toISOString().split("T")[0],
+                    date: toIsoDate(item.date_published),
                     image: localImage,
                     facebookUrl: fbUrl
                 });
@@ -422,7 +423,7 @@ async function syncFacebookPostsOnce() {
         }
 
         fs.mkdirSync(path.dirname(newsDataPath), { recursive: true });
-        fs.writeFileSync(newsDataPath, JSON.stringify(merged, null, 2), "utf8");
+        fs.writeFileSync(newsDataPath, JSON.stringify(sortNewestFirst(merged), null, 2), "utf8");
         return { ok: true, count: merged.length, latestCount: mappedPosts.length };
     } catch (err) {
         console.error("Facebook sync error:", err);
@@ -449,7 +450,7 @@ app.get("/api/news", (req, res) => {
             return res.json({ posts: [] });
         }
         const raw = fs.readFileSync(newsDataPath, "utf8");
-        const posts = JSON.parse(raw || "[]");
+        const posts = sortNewestFirst(JSON.parse(raw || "[]"));
         res.json({ posts });
     } catch (err) {
         res.status(500).json({ error: "Failed to load news" });
@@ -467,7 +468,7 @@ app.all("/api/news/sync", requireAdmin, async (req, res) => {
 
 app.get("/api/admin/news", requireAdmin, (req, res) => {
     let posts = [];
-    try { posts = JSON.parse(fs.readFileSync(newsDataPath, "utf8") || "[]"); } catch {}
+    try { posts = sortNewestFirst(JSON.parse(fs.readFileSync(newsDataPath, "utf8") || "[]")); } catch {}
     res.json({ posts, lastSync, source: newsSource });
 });
 
@@ -481,7 +482,7 @@ function cleanNewsPost(p, i) {
         filter: newsFilters.includes(p.filter) ? p.filter : "seminars",
         title: String(p.title || "").slice(0, 200),
         excerpt: String(p.excerpt || "").slice(0, 600),
-        date: /^\d{4}-\d{2}-\d{2}$/.test(p.date) ? p.date : new Date().toISOString().split("T")[0],
+        date: toIsoDate(p.date) || new Date().toISOString().slice(0, 10),
         image: cleanUrl(p.image) || "/assets/bonlab-lab-cover.jpg",
         facebookUrl: cleanUrl(p.facebookUrl)
     };

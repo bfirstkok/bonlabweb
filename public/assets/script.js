@@ -1777,9 +1777,12 @@ function renderFacebookCard(post) {
         const { posts } = await res.json();
         if (!Array.isArray(posts)) return;
         grid.querySelectorAll(".news-badge-facebook").forEach(badge => badge.closest(".news-card")?.remove());
+        // Dated posts go first, newest on top; the undated highlight cards from the page stay below them.
+        const cards = document.createDocumentFragment();
         [...posts]
             .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))
-            .forEach(post => grid.appendChild(renderFacebookCard(post)));
+            .forEach(post => cards.appendChild(renderFacebookCard(post)));
+        grid.prepend(cards);
         applyLanguage(language);
         updateNewsFilterAndSearch();
     } catch {
