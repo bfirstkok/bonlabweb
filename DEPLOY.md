@@ -72,10 +72,18 @@ On the production server, set `BONLAB_TAG=v1.0.0` in `.env`. The next cron run d
 
 - Automatic: if the new container is not healthy within 90 seconds, `deploy.sh` restarts the previous image and skips the bad one until a newer image is pushed. Read `snapshots/deploy.log`.
 - Manual: set `BONLAB_TAG` to an older release (or `sha-xxxxxxx` from the GitHub Packages page) and run `sh scripts/deploy.sh`.
-- Data: every deploy and every night writes `snapshots/bonlab-data-*.tgz`. To restore one:
+- Data: every deploy and every night writes `snapshots/bonlab-data-*.tgz`. To restore one (the current data is moved aside, not deleted, so the restore can be undone; Caddy keeps running, the site is down for about 30 seconds):
   ```bash
-  docker compose down && rm -rf data && tar xzf snapshots/<file>.tgz && sudo chown -R 1000:1000 data && docker compose up -d
+  cd /opt/bonlab
+  docker compose stop web
+  mv data data.before-restore
+  tar xzf snapshots/<file>.tgz          # type snapshots/bonlab then press Tab to complete the name
+  sudo chown -R 1000:1000 data
+  docker compose start web && docker compose ps   # wait for (healthy)
   ```
+  Undo: `docker compose stop web && sudo rm -rf data && mv data.before-restore data && docker compose start web`. When the site is fine for a day or two, delete `data.before-restore`.
+  Do not restore while `deploy.sh` is deploying a new image: check `tail snapshots/deploy.log` first.
+- Drill: take a snapshot, add a test post in `/admin/news.html`, restore the snapshot. The test post must be gone and everything else back. Last drill on staging: 2026-11-20, passed.
 
 ## Moving to another server
 
